@@ -1,0 +1,11 @@
+# IDE settings
+.idea
+.vscode
+
+# VitePress build output
+blog/.vitepress/cache
+blog/.vitepress/dist
+
+# Node.js
+pnpm-lock.yaml
+node_modules
