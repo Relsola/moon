@@ -17,10 +17,11 @@ export default defineConfig({
     sidebar: {
       '/JavaScript/': [
         { text: 'JavaScript', link: '/JavaScript/javascript' },
+        { text: 'ES6+', link: '/JavaScript/es6' },
         { text: 'TypeScript', link: '/JavaScript/typescript' },
         { text: 'Vue', link: '/JavaScript/vue' },
         { text: 'React', link: '/JavaScript/react' },
-        { text: 'Function', link: '/JavaScript/function' },
+        { text: 'JavaScript 工具函数', link: '/JavaScript/function' },
         { text: 'indexedDE 数据库', link: '/JavaScript/indexedDE' }
       ],
       '/Java/': [
