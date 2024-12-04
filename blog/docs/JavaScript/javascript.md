@@ -521,8 +521,6 @@ axios.interceptors.response.use(
 );
 ```
 
-## class
-
 ## 正则表达式
 
 ## 位运算
