@@ -22,7 +22,8 @@ export default defineConfig({
         { text: 'Vue', link: '/JavaScript/vue' },
         { text: 'React', link: '/JavaScript/react' },
         { text: 'JavaScript 工具函数', link: '/JavaScript/function' },
-        { text: 'indexedDE 数据库', link: '/JavaScript/indexedDE' }
+        { text: 'indexedDE 数据库', link: '/JavaScript/indexedDE' },
+        { text: '手写系列', link: '/JavaScript/handwritten' }
       ],
       '/Java/': [
         { text: 'Java', link: '/' },
