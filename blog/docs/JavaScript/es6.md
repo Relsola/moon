@@ -278,6 +278,167 @@ console.log(byd);
 console.log(byd.__proto__.__proto__.hasOwnProperty('running')); // true
 ```
 
+## Promise
+
+ES6 提出了 promise 主要是为了解决异步问题
+
+- 异步问题具体是指
+- 异步代码和同步代码 先执行同步代码 后执行异步代码
+- 所以 一旦一个代码块中出现了异步代码，代码的执行顺序就和我们代码的书写顺序不一样
+- 所以实际上我们想解决的问题是 书写顺序和执行顺序不一致的问题
+
+每个 Promise 对象有三种状态：等待态 成功态 失败态  
+对于一个 promise 对象来说，当我们成功或失败后 不能再对其进行转换 只能从等待态到成功态，或者失败态
+
+Promise 的立即执行函数有两个参数 `resolve` 和 `reject`
+
+- 第一个参数(resolve) 将 promise 变成成功态
+- 第二个参数(reject) 将 promise 变成失败态
+
+resolve 的参数有三种情况
+
+1. 普通的数据 会让 `promise` 对象变成成功态 数据就是终值
+2. `promise` 对象 此时 `promise` 成功还是失败 取决于内部 `promise` 是成功还是失败
+3. `thenable` (当做一个不完整的 `promise` 对象) 外面的 p1 是成功还是失败 取决于内部的 `thenable` 是成功还是失败
+
+`then` 函数
+
+- 可以用来处理我们成功态的 promise 或者失败的 promise 的后续工作
+- 每一个 promise 对象都有一个 then 函数
+- 这个 then 函数有两个参数，都是函数
+- 第一个函数表示成功后的回调函数
+- 第二个函数表示失败后的回调函数
+- 这两个参数函数都有一个阐述，表示接受终值
+- 当你的 promise 对象不出现状态改变的时候 就不会有后续的操作
+- then 的返回值也是一个 promise 对象
+
+```js
+const result = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve({
+      then(resolve, reject) {
+        resolve('成功');
+      }
+    });
+  }, 2000);
+});
+
+result
+  .then(
+    res => {
+      throw res;
+    },
+    err => {
+      console.log('err...', err);
+    }
+  )
+  .then(
+    res => {
+      console.log('res...', res);
+    },
+    err => {
+      console.log('err...', err);
+    }
+  );
+
+// catch 捕获失败的promise
+result
+  .then(res => {
+    throw res;
+  })
+  .catch(err => {
+    console.log('err...', err);
+  });
+
+// Promise 其他方法
+
+result.finally(() => {}); // 不管你成功还是失败 最终都会执行
+
+Promise.resolve(); // 创建一个成功的promise对象
+
+Promise.reject(); // 创建一个失败的promise对象
+
+Promise.all([]).then(); // 所有的promise都成功后得到所有的promise成功的结果
+
+Promise.allSettled([]).then(); // 得到所有promise的结果 不管成功还是失败
+
+Promise.race([]).then(); // 等待第一个promise有结果 不管成功或失败
+
+Promise.any(); // 得到最先成功的promise 或者得到所有promise都失败
+```
+
+### async-await
+
+使用 async 修饰一个函数后，这个函数的返回值就变成了一个 `promise` 对象
+
+任务环 先同步 后异步  
+异步代码里也分顺序
+定时器 监听 promise.then
+
+异步代码分两种  
+宏任务： 定时器 事件监听  
+微任务 promise.then
+
+```js
+async function fun1() {
+  return 123;
+}
+
+console.log(fun1()); // Promise { 123 }
+fun1().then(res => {
+  console.log(res);
+}); // 123
+
+async function fun2() {
+  return new Promise(resolve => {
+    resolve('321');
+  });
+}
+console.log(fun2()); // Promise { <pending> }
+fun2().then(res => {
+  console.log(res);
+}); // 321
+
+async function fun3() {
+  return {
+    then(resolve, reject) {
+      reject('777');
+    }
+  };
+}
+console.log(fun3()); // Promise { <pending> }
+fun3().catch(err => {
+  console.log(err);
+}); // 777
+
+async function fun4() {
+  throw 'aaa';
+}
+console.log(fun4()); // Promise { <rejected> 'aaa' }
+fun4().catch(err => {
+  console.log(err);
+}); // aaa
+
+console.log(1);
+setImmediate(() => {
+  console.log(2);
+});
+const fn = async () => {
+  const result = await new Promise(resolve => {
+    setTimeout(() => {
+      console.log(3);
+      resolve(4);
+    }, 2000);
+  });
+  console.log(result);
+  console.log(5);
+};
+fn();
+console.log(6);
+
+// 1 6 2 3 4 5
+```
+
 ## 其余特性
 
 1. `Array.includes()` 判断元素是否在数组里 返回布尔
