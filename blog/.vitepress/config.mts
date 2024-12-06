@@ -23,7 +23,8 @@ export default defineConfig({
         { text: 'React', link: '/JavaScript/react' },
         { text: 'JavaScript 工具函数', link: '/JavaScript/function' },
         { text: 'indexedDE 数据库', link: '/JavaScript/indexedDE' },
-        { text: '手写系列', link: '/JavaScript/handwritten' }
+        { text: '手写系列', link: '/JavaScript/handwritten' },
+        { text: '正则表达式', link: '/JavaScript/regexp' }
       ],
       '/Java/': [
         { text: 'Java', link: '/' },
