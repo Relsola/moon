@@ -622,295 +622,360 @@ const fn = () => {
 
 ## 位运算
 
-## 常见配置
+## 高级
 
-### .prettierrc
+### 作用域链和变量提升
 
-```json
+代码段：
+
+- 一个页面里面可以引入多个代码段
+- 一个 script 标签就是一个代码段
+- 代码段相互独立（代码的出错会阻塞当前代码段下面的代码执行）并不影响
+- 靠前的代码段声明的变量后面的代码段可以使用
+- 靠后的代码段声明的变量后面的代码段无法使用
+
+作用域链：
+
+- 一个变量的作用范围就是作用域
+- 找不到变量的时候往外找 外指的是定义时的外面
+
+预解析：
+
+- 浏览器在执行 JS 代码的时候，会分成 2 部分进行操作，预编译和逐步执行代码
+- 预编译：用 var 声明的变量会提升，用 function 声明的也会提升
+- 提升是以函数为界限。提升不可能提升到函数外面
+
+同步和异步：
+
+- JS 代码分两种：同步代码 异步代码
+- 同步代码就是我们正常书写的 从上往下依次执行的代码
+- 异步代码：事件绑定 定时器 promise ajax
+- 异步代码就是我们需要他执行的时候，他才执行
+- 异步代码在同步代码之后执行
+
+JS 中执行上下文
+
+- 代码执行前，浏览器的 Js 引擎先会创建代码执行的环境来处理此 Js 代码的转换和执行，代码的执行环境称为执行上下文。
+- 执行上下文是一个抽象概念，包含当前正在运行的代码以及帮助其执行的所有内容。
+- 执行上下文主要分为三类： 1. 全局执行上下文 —— 全局代码所处的环境，不在函数内部代码都在全局执行。 2. 函数执行上下文 —— 在函数调用时创建的上下文。 3. Eval 执行上下文 —— 运行在 Eval 函数中代码时创建的环境，Eval 由于性能问题在我们平时开发中很少用到，所有这里我们不在讨论。
+- 全局执行上下文： 1. 将 window 作为全局执行上下文对象 2. 创建 this，this 指向 window 3. 给变量和函数安排内存空间 4. 变量赋值 undefined，函数声明放入内存 5. 放入作用域链
+  全局与函数执行上下文不同： 1. 全局：在文件执行前创建；函数：在函数调用时创建 2. 全局：只创建一次；函数：调用几次创建几次 3. 将 window 作为全局对象；函数：创建参数对象 arguments，this 指向调用者
+
+闭包：
+
+- 一个本该被销毁的变量内存空间 ，由于外部的引用导致其无法被销毁，那么他就会形成闭包
+- 延长了变量的生命周期 扩大了变量的作用范围 保护了变量
+- 但会造成内存泄露
+- 节流、防抖就是利用了闭包
+- 常见应用：
+- 模拟私有变量 柯里化 偏函数 防抖 节流
+- 常见的内存泄漏：
+- 全局变量 遗忘清理的计时器 遗忘清理的 dom 元素引用
+
+垃圾回收:
+
+- 引用计数法:
+- 当我们创建一个变量，对应的也就创建了一个针对这个值的引用。
+- 在引用这块计数法的机制下，内存中每一个值都会对应一个引用计数
+- 当垃圾收集器感知到某个值的引用计数为 0 时，就判断它“没用”了，随即这块内存就会被释放。
+- 无法甄别循环引用场景下的“垃圾”
+
+标记清除法
+
+- 在标记清除算法中，一个变量是否被需要的判断标准，是它是否可抵达  。
+- 这个算法有两个阶段，分别是标记阶段和清除阶段：
+- 标记阶段：垃圾收集器会先找到根对象，在浏览器里，根对象是 Window；在 Node 里，根对象是 Global
+- 从根对象出发，垃圾收集器会扫描所有可以通过根对象触及的变量，这些对象会被标记为“可抵达 ”。
+- 清除阶段： 没有被标记为“可抵达” 的变量，就会被认为是不需要的变量，这波变量会被清除
+
+高阶函数：
+
+- 当一个函数 如果它的参数是函数 或者它的返回值是函数 那么我们叫这个函数为高阶函数
+- ob 2 进制 0o 8 进制 0x 16 进制 00 开头 8 进制
+- 浏览器打印其他进制的数据时，会自动的帮你转换成 10 进制
+
+### let 和 const
+
+1. var 声明的变量预编译阶段会提升，不加 var 的不会提升
+2. 不管加不加 var 全局变量都会挂载到 GO 上，也就是 window/global 上
+3. 加 var 的既可以是全局变量，也可以是局部变量 不加 var 的是全局变量（第一次出现）
+4. 局部变量不会挂载到 GO 上
+5. 你在使用 var 的时候，声明提升到了最前面并且初始化值为 undefined
+6. let 声明变量，在全局 let 就是全局变量，在局部 let 就是局部的，不会初始化（提升分两个阶段 1.把声明提升到代码的最前面 2.对变量的初始化）
+7. let 和{}会形成块级作用域（块级作用域是 ES6 提出的概念）
+8. 使用 let 声明的全局变量不会挂载到 GO 上
+9. 使用 let 不能重复使用声明
+
+使用 const 声明的是常量
+
+1. 使用 const 声明的量不能修改(栈空间)
+2. 使用 const 声明的量不会提升（实际上是不会初始化）
+3. 使用 const 声明的量必须赋值
+4. 使用 const 和{}也会形成块级作用域(暂存性死区)
+5. const 声明的量也不会挂载到 GO 上
+
+`in` 运算符就是看一个属性是否属于某个对象
+
+if 和 function 连用的时候  
+function 只会把声明提升到最外面 2.当你进入到 if 后，做的第一件事就是给 fn 赋函数体
+
+```js
+console.log(fn); // undefined
+if (true) {
+  fn(); // fn...
+  function fn() {
+    console.log('fn...');
+  }
+}
+console.log(fn); // Function
+```
+
+立即执行函数：
+
+- 第一种 `(function(){})()`
+- 第二种 `;(function (){})()`
+- 第三种 `;(function (){}())`
+- 第四种 `+function (){}()`
+- 第五种 `-function (){}()`
+- 第六种 `!function (){}()`
+
+with 破化了作用域链  
+with 作用是 扩大了放入数据的作用域  
+当 with 传入的值非常复杂的时候 即使 obj 他是非常复杂的嵌套结果，with 也会让代码看起来简洁
+
+```js
+const obj = {
+  name: '张三',
+  stu: {
+    names: 'one'
+  }
+};
+let newname;
+with (obj.stu) {
+  newname = names;
+}
+console.log(newname);
+```
+
+### this 和 new
+
+当一个函数被调用时，会创建一个执行上下文，其中 this 就是执行上下文的一个属性，this 是函数在调用时 JS 引擎向函数内部传递的一个隐含参数
+
+this 指向完全是由它的调用位置决定，而不是声明位置。除箭头函数外，this 指向最后调用它的那个对象
+
+1. 全局作用域中，无论是否严格模式都指向 window/global
+2. 普通函数调用，指向 window/global，严格模式下指向 undefined
+3. 对象方法使用，该方法所属对象
+4. 构造函数调用，指向实例化对象
+5. 匿名函数中，指向 window/global
+6. 计时器中，指向 window/global
+7. 事件绑定方法，指向事件源
+8. 箭头函数指向其上下文中 this
+9. call bind apply 取决于参数
+10. 内置的高级函数 取决于参数
+
+this 的绑定：
+
+1. 默认绑定 当一个函数独立调用的时候 this 指向是 window/global
+2. 隐式绑定 对于对象使用方法 this 隐式绑定该对象
+3. 显示绑定 call bind apply
+4. new 绑定 显示绑定优先级高于隐式绑定 new 优先级别高于隐式
+
+call、apply、bind
+
+1. call、apply 和 bind，都是用来改变 this 指向的，三者是属于大写  Function 原型上的方法，只要是函数都可以使用。
+2. call 和 apply 的区别，体现在对入参的要求不同，call 的实参是一个一个传递，apply 的实参需要封装到一个数组中传递。
+3. call、apply 相比 bind 方法，函数不会执行，所以我们需要定义一个变量去接收执行。
+
+new 运算符 1.在构造器函数内部创建了一个对象 2.把构造器内部的 this 指向了这个对象 3.执行函数 4.返回了这个对象
+
+返回值情况
+
+1. 如果构造器函数返回的是基本数据类型，外边得到的是新创建的对象
+2. 如果构造器函数返回的是引用数据类型，外边得到的是构造器函数返回值
+
+私有属性和共有属性
+
+1. 针对于类来说的 不是针对于对象来说
+2. 私有是指 只能在构造器内部访问的属性
+
+### 构造器
+
+```js
+/* 
+    构造器的本质式函数 构造器也叫类
+    作用：统一的创建对象 ，创建出来的对象有共同的特点
+*/
+
+// 创建一个没有原型对象的对象
+Object.create(null);
+
+// 原型继承
 {
-  "printWidth": 120,
-  "tabWidth": 2,
-  "useTabs": false,
-  "semi": true,
-  "singleQuote": true,
-  "trailingComma": "none",
-  "bracketSameLine": false,
-  "arrowParens": "avoid",
-  "htmlWhitespaceSensitivity": "ignore",
-  "endOfLine": "crlf",
-  "eslintIntegration": false
+  function Car(color) {
+    this.tireNum = 4;
+    this.color = color;
+    say = function () {
+      console.log('say..');
+    };
+  }
+
+  function Tesla(color, energy) {
+    this.tireNum = 4;
+    this.color = color;
+    this.energy = energy;
+  }
+
+  Tesla.prototype = new Car();
+  Tesla.prototype.constructor = Tesla;
+}
+
+// call继承
+{
+  function father(name, age) {
+    this.name = name;
+    this.age = age;
+  }
+  function son(name, age, sex) {
+    this.sex = sex;
+    //this指向son1
+    father.call(this, name, age);
+    //改变this指向 执行函数
+  }
+  father.prototype.say = function () {
+    console.log('say..');
+  };
+}
+
+// 组合继承
+{
+  //组合继承就是把原型继承和call继承的核心代码都写一遍
+  function father(name, age) {
+    this.name = name;
+    this, (age = age);
+  }
+  father.prototype.say = function () {
+    console.log('say..');
+  };
+
+  function son(name, age, sex) {
+    this.sex = sex;
+    father.call(this, name, age);
+  }
+
+  //原型继承的核心就是把子类的原型对象换成父类的实例化对象
+  son.prototype = new father();
+  son.prototype.constructor = son;
+  let son1 = new son('张三', 19, '男');
+  console.log(son1);
+  son1.say();
+}
+
+// 寄生继承
+{
+  function father(name, age) {
+    this.name = name;
+    this, (age = age);
+  }
+  father.prototype.say = function () {
+    console.log('say..');
+  };
+
+  function son(name, age, sex) {
+    this.sex = sex;
+    father.call(this, name, age);
+  }
+  //利用Object.create创建一个新对象并且让其原型对象指向father的原型对象
+  son.prototype = Object.create(father.prototype);
+  son.prototype.constructor = son;
+  let son1 = new son('张三', 19, '男');
+  console.log(son1);
+  son1.say();
+}
+
+// extends 继承
+{
+  class student {
+    //在class声明的类中有一个函数叫constructor
+    //他就是构造器函数
+    constructor(name, age) {
+      this.name = name;
+      this.age = age;
+      //私有
+    }
+    //共有的
+    syaHello() {
+      console.log('say..');
+    }
+  }
+  let f1 = new student('张三', 18);
+  console.log(f1);
+
+  //想继承父类需要一个关键字 叫extends
+  class son extends student {
+    constructor(name, age, sex) {
+      super(name, age);
+      this.sex = sex;
+    }
+    sayGoodbye() {
+      console.log('goodBye');
+    }
+  }
+  let son1 = new son('向往', 18, '男');
+  son1.syaHello();
+  console.log(son1);
 }
 ```
 
-### vscode 配置文件
+### 原型和原型链
 
-```json
+- 一切都是对象
+- 属性分共有和私有
+- 每一个对象身上都有一个隐式原型**proto**
+- 每一个构造器身上都有一个 prototype 显示原型
+- 一个对象的隐式原型和其构造器对应的显示原型指向的是一样的
+- 每一个原型对象都有一个叫 constructor 指向构造器
+
+  为什么要有原型？
+
+- 构造函数中的实例每调用一次方法，就会在内存中开辟一块空间，从而造成内存浪费
+- 在函数对象中，有一个属性 prototype，它指向了一个对象，这个对象就是原型对象
+- 这个对象的所有属性和方法，都会被构造函数所拥有
+- 普通函数调用，prototype 没有任何作用
+- 构造函数调用，该类所有实例有隐藏一个属性（proto）指向函数的 prototype
+- 实例的隐式原型指向类的显示原型
+- 原型就相当于一个公共区域，可以被类和该类的所有实例访问到
+
+优点: 资源共享，节省内存；改变原型指向，实现继承  
+缺点：查找数据的时候有的时候不是在自身对象中查找。
+
+原型链:实际上是指隐式原型链,从对象的**proto**开始，连接所有的对象，就是对象查找属性或方法的过程。
+
+1. 当访问一个对象属性时，先往实例化对象在自身中寻找，找到则是使用。
+2. 找不到（通过*proto*属性）去它的原型对象中找，找到则是使用。
+3. 没有找到再去原型对象的原型（Object 原型对象）中寻找，直到找到 Object 为止，如果依然没有找到，则返回 undefined。
+
+### 错误和抛出
+
+常见错误类型：
+
+1. 未定义
+2. 不是一个函数
+3. let 不能在初始化之前使用
+4. 常量值不能改变
+5. 超出最大执行栈
+6. 无效参数
+7. const 声明没有赋值错误
+
+```js
+// 抛出错误 和 捕获错误
 {
-  "workbench.settings.applyToAllProfiles": [
-    "workbench.colorTheme",
-    "workbench.iconTheme",
-    "editor.fontFamily",
-    "window.zoomLevel",
-    "editor.fontSize",
-    "editor.formatOnSave",
-    "editor.formatOnPaste",
-    "window.dialogStyle",
-    "editor.mouseWheelZoom",
-    "files.autoSave",
-    "files.autoSaveDelay",
-    "editor.fontLigatures",
-    "cSpell.userWords",
-    "editor.smoothScrolling",
-    "workbench.list.smoothScrolling",
-    "terminal.integrated.smoothScrolling",
-    "editor.cursorBlinking",
-    "editor.formatOnType",
-    "editor.suggest.snippetsPreventQuickSuggestions",
-    "editor.cursorSmoothCaretAnimation",
-    "terminal.integrated.defaultProfile.windows",
-    "files.autoGuessEncoding",
-    "explorer.confirmDelete",
-    "explorer.confirmDragAndDrop",
-    "debug.showBreakpointsInOverviewRuler",
-    "window.menuBarVisibility"
-  ],
-  // 全局设置
-  "workbench.colorTheme": "One Dark Pro",
-  "workbench.iconTheme": "material-icon-theme",
-  "editor.fontFamily": "JetBrainsMono",
-  "window.zoomLevel": -1,
-  "editor.fontSize": 16,
-  "editor.formatOnSave": true,
-  "editor.formatOnPaste": true,
-  "window.dialogStyle": "custom",
-  "editor.mouseWheelZoom": true,
-  "files.autoSave": "afterDelay",
-  "files.autoSaveDelay": 1000,
-  "editor.fontLigatures": false,
-  "editor.smoothScrolling": true,
-  "workbench.list.smoothScrolling": true,
-  "terminal.integrated.smoothScrolling": true,
-  "editor.cursorBlinking": "smooth",
-  "editor.formatOnType": true,
-  "editor.suggest.snippetsPreventQuickSuggestions": false,
-  "editor.cursorSmoothCaretAnimation": "explicit",
-  "terminal.integrated.defaultProfile.windows": "Command Prompt",
-  "files.autoGuessEncoding": true,
-  "explorer.confirmDelete": false,
-  "explorer.confirmDragAndDrop": false,
-  "debug.showBreakpointsInOverviewRuler": true,
-  "window.menuBarVisibility": "visible",
-
-  // 全局单词错误忽视
-  "cSpell.userWords": ["Relsola", "Parens", "esbenp"],
-
-  // 将在视区宽度处换行
-  "editor.wordWrap": "on",
-  // 是否应以紧凑形式呈现文件夹
-  "explorer.compactFolders": false,
-
-  "security.workspace.trust.untrustedFiles": "open",
-  "editor.unicodeHighlight.allowedLocales": {
-    "zh-hans": true
-  },
-  "liveServer.settings.donotShowInfoMsg": true,
-
-  "editor.suggestSelection": "first",
-  "liveServer.settings.donotVerifyTags": true,
-  "workbench.editorAssociations": {
-    "*.pdf": "default"
-  },
-  "git.confirmSync": false,
-  "git.enableSmartCommit": true,
-
-  "editor.acceptSuggestionOnEnter": "smart",
-  "code-runner.runInTerminal": true,
-  "code-runner.saveAllFilesBeforeRun": true,
-  "code-runner.saveFileBeforeRun": true,
-  "projectManager.sortList": "Name",
-
-  "editor.tabCompletion": "on", //启用Tab补全
-  "editor.detectIndentation": false, //不基于文件内容选择缩进用制表符还是空格 因为有时候VSCode的判断是错误的
-
-  "editor.insertSpaces": true, //敲下Tab键时插入4个空格而不是制表符
-  "editor.copyWithSyntaxHighlighting": false, //复制代码时复制纯文本而不是连语法高亮都复制了
-  "editor.stickyTabStops": true, //在缩进上移动光标时四个空格一组来移动，就仿佛它们是制表符(\t)一样
-  "editor.wordBasedSuggestions": false, //关闭基于文件中单词来联想的功能（语言自带的联想就够了，开了这个会导致用vscode写MarkDown时的中文引号异常联想）
-  "editor.renderControlCharacters": true, // 编辑器中显示不可见的控制字符
-  /*terminal*/
-
-  "terminal.integrated.cursorBlinking": false, // 终端光标闪烁
-  "terminal.integrated.rightClickBehavior": "default", //在终端中右键时显示菜单而不是粘贴（个人喜好）
-  /*files*/
-  "files.exclude": {
-    //隐藏一些碍眼的文件夹
-    "**/.git": true,
-    "**/.svn": true,
-    "**/.hg": true,
-    "**/CVS": true,
-    "**/.DS_Store": true,
-    "**/tmp": true,
-    "**/node_modules": true,
-    "**/bower_components": true
-  },
-  "files.watcherExclude": {
-    //不索引一些不必要索引的大文件夹以减少内存和CPU消耗
-    "**/.git/objects/**": true,
-    "**/.git/subtree-cache/**": true,
-    "**/node_modules/**": true,
-    "**/tmp/**": true,
-    "**/bower_components/**": true,
-    "**/dist/**": true
-  },
-  /*workbench*/
-  "workbench.editor.enablePreview": false, //打开文件时不是“预览”模式，即在编辑一个文件时打开编辑另一个文件不会覆盖当前编辑的文件而是新建一个标签页
-  "workbench.editor.wrapTabs": true, // 编辑器标签页在空间不足时以多行显示
-  /*explorer*/
-
-  /*search*/
-  "search.followSymlinks": false, //据说可以减少vscode的CPU和内存占用
-  /*debug*/
-  "debug.internalConsoleOptions": "openOnSessionStart", //每次调试都打开调试控制台，方便调试
-
-  "debug.toolBarLocation": "docked", //固定调试时工具条的位置，防止遮挡代码内容（个人喜好）
-  "debug.saveBeforeStart": "nonUntitledEditorsInActiveGroup", //在启动调试会话前保存除了无标题文档以外的文档（毕竟你创建了无标题文档就说明你根本没有想保存它的意思（至少我是这样的。））
-  "debug.onTaskErrors": "showErrors", //预启动任务出错后显示错误，并不启动调试
-
-  "Codegeex.Privacy": true,
-  "Codegeex.Comment.LanguagePreference": "zh-CN",
-  "bitoAI.codeCompletion.setAutoCompletionTriggerLogic": 250,
-  // 头部注释
-  "fileheader.customMade": {
-    "Description": "",
-    "Version": "V1.0.0",
-    "Author": "git config user.name && git config user.email",
-    "Date": "Do not edit",
-    "LastEditors": "git config user.name && git config user.email",
-    "LastEditTime": "Do not edit",
-    "FilePath": "only file name",
-    "custom_string_obkoro1_date": "Do not edit", // 版权时间
-    "custom_string_obkoro1_copyright": "Copyright ${now_year} Marvin, All Rights Reserved. "
-  },
-  // 函数注释
-  "fileheader.cursorMode": {
-    "description": "",
-    "param": "",
-    "return": ""
-  },
-  // 插件配置选项
-  "fileheader.configObj": {
-    "createFileTime": false,
-    "autoAdd": false, // 自动添加头部注释是否开启，默认为true
-    "autoAddLine": 100,
-    "autoAlready": true,
-    "annotationStr": {
-      "head": "/*",
-      "middle": " * @",
-      "end": " */",
-      "use": false
-    },
-    "headInsertLine": {
-      "php": 2,
-      "sh": 2
-    },
-    "beforeAnnotation": {
-      "文件后缀": "该文件后缀的头部注释之前添加某些内容"
-    },
-    "afterAnnotation": {
-      "文件后缀": "该文件后缀的头部注释之后添加某些内容"
-    },
-    "specialOptions": {
-      "特殊字段": "自定义比如LastEditTime/LastEditors"
-    },
-    "switch": {
-      "newlineAddAnnotation": true
-    },
-    "supportAutoLanguage": [],
-    "prohibitAutoAdd": ["json", "md"], // 禁止自动添加头部注释的文件类型
-    "folderBlacklist": ["node_modules", "文件夹禁止自动添加头部注释"],
-    "prohibitItemAutoAdd": [
-      "项目的全称, 整个项目禁止自动添加头部注释, 可以使用快捷键添加"
-    ],
-    "moveCursor": true,
-    "dateFormat": "YYYY-MM-DD HH:mm:ss",
-    "atSymbol": ["@", "@"],
-    "atSymbolObj": {
-      "文件后缀": ["头部注释@符号", "函数注释@符号"]
-    },
-    "colon": [": ", ": "],
-    "colonObj": {
-      "文件后缀": ["头部注释冒号", "函数注释冒号"]
-    },
-    "filePathColon": "路径分隔符替换",
-    "showErrorMessage": false,
-    "writeLog": false,
-    "wideSame": true,
-    "wideNum": 13, // 头部注释自动对齐的宽度
-    "functionWideNum": 15, // 函数注释自动对齐宽度
-    "CheckFileChange": true,
-    "createHeader": false,
-    "useWorker": false,
-    "designAddHead": false,
-    "headDesignName": "random", // 头部图案注释，默认随机
-    "headDesign": false, // 默认关闭 开启后,所有生成头部注释的场景都会生成图案注释
-    "cursorModeInternalAll": {},
-    "openFunctionParamsCheck": true,
-    "functionParamsShape": ["{", "}"],
-    "functionBlankSpaceAll": {},
-    "functionTypeSymbol": " ", // 参数没有类型时的默认值
-    "typeParamOrder": "type param",
-    "customHasHeadEnd": {},
-    "throttleTime": 60000,
-    "functionParamAddStr": ""
-  },
-  "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[html]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[javascriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[markdown]": {
-    "editor.defaultFormatter": null
-  },
-  "workbench.layoutControl.enabled": false,
-  "[less]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-
-  // prettier 选项配置
-  "prettier.printWidth": 150,
-  "prettier.tabWidth": 2,
-  "prettier.useTabs": false,
-  "prettier.semi": true,
-  "prettier.singleQuote": true,
-  "prettier.quoteProps": "as-needed",
-  "prettier.jsxSingleQuote": false,
-  "prettier.trailingComma": "none",
-  "prettier.bracketSpacing": true,
-  "prettier.bracketSameLine": true,
-  "prettier.arrowParens": "avoid",
-  "prettier.proseWrap": "preserve",
-  "prettier.htmlWhitespaceSensitivity": "ignore",
-  "prettier.vueIndentScriptAndStyle": false,
-  "prettier.endOfLine": "crlf",
-  "prettier.embeddedLanguageFormatting": "auto",
-
-  "[jsonc]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "material-icon-theme.activeIconPack": "angular",
-  "material-icon-theme.folders.theme": "specific"
+  try {
+    const str = '这是一个错误';
+    throw str; // 抛出
+  } catch (error) {
+    // catch捕获
+    console.log(error);
+  }
 }
 ```
