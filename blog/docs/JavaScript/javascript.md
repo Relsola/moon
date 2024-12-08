@@ -618,9 +618,672 @@ const fn = () => {
 // console.createTask(window.toString()).run(fn);
 ```
 
-## 正则表达式
+## Proxy 代理
+
+```js
+console.log(typeof Proxy); // function
+
+const obj = {
+  name: 'alice',
+  showName() {
+    console.log(`my name is ${this.name}`);
+  }
+};
+
+// 增删改查
+obj.age = 17;
+console.log('age' in obj); // true
+delete obj.age;
+
+// 遍历对象的所有属性
+console.log(Object.getOwnPropertyNames(obj)); // [ 'name', 'showName' ]
+console.log(Object.getOwnPropertySymbols(obj)); // []
+console.log(Object.keys(obj)); // [ 'name', 'showName' ]
+for (const key in obj) console.log(key); // name showName
+
+// 获取对象的某个属性的描述对象
+console.log(Object.getOwnPropertyDescriptor(obj, 'name'));
+// { value: 'alice', writable: true, enumerable: true, configurable: true }
+
+// 使用Object身上的方法，为某个对象添加一个或多个属性
+Object.defineProperty(obj, 'age', {
+  value: 17,
+  writable: true,
+  enumerable: true,
+  configurable: true
+});
+
+Object.defineProperties(obj, {
+  showAge: {
+    value: function () {
+      console.log(`my age is ${this.age}`);
+    },
+    writable: true,
+    enumerable: true,
+    configurable: true
+  },
+  showInfo: {
+    value: function () {
+      console.log(`我叫${this.name}，今年${this.age}岁`);
+    },
+    writable: true,
+    enumerable: true,
+    configurable: true
+  }
+});
+obj.showInfo(); // 我叫alice，今年17岁
+
+// 获取一个对象的原型对象
+Object.getPrototypeOf(obj);
+console.log(Object.getPrototypeOf(obj) === obj.__proto__); // true
+
+// 设置某个对象的原型属性对象
+Object.setPrototypeOf(obj, null);
+
+// 让一个对象变得不可扩展，即不能添加新的属性 查看一个对象是不是可扩展的
+Object.preventExtensions(obj);
+console.log(Object.isExtensible(obj)); // false
+
+// 如果对象为function类型，function类型的对象可以执行被执行符号()以及.call()和.apply()执行
+function fn(...args) {
+  console.log(this, args);
+}
+fn(1, 2, 3);
+fn.call(obj, 1, 2, 3);
+fn.apply(obj, [1, 2, 3]);
+
+// 一切皆是对象。如果对象作为构造函数时，则该对象可以用new生成出新的对象
+function Person() {}
+let p1 = new Person();
+
+// ---------------------------------------------------------------------
+
+const person = { name: 'Alice' };
+
+const proxy = new Proxy(person, {
+  // 1. get方法 接受3个参数 target, propKey, receiver，
+  // 要代理的目标对象 对象上的属性 代理对象
+  // 该方法用于拦截某个属性的读取操作
+  get: function (target, propKey, receiver) {
+    console.log(proxy === receiver); // true
+    if (propKey in target) return target[propKey];
+    else throw new ReferenceError(`Prop name ${propKey} does not exist.`);
+  },
+
+  // 2. set方法 接受4个参数 target, propKey, value, receiver
+  // 要代理的目标对象 对象上的属性 属性对应的值 代理对象
+  // 该方法用于拦截对象属性操作
+  set: function (target, propKey, value, receiver) {
+    console.log(`设置 ${target} 的${propKey} 属性，值为${value}`);
+    target[propKey] = value;
+  },
+
+  // 3. has方法 接受 target, propKey
+  // 用于拦截 propKey in proxy的操作
+  // 返回一个布尔值，表示属性是否存在
+  has: function (target, propKey) {
+    return propKey in target;
+  },
+
+  // 4. deleteProperty方法 可接收target, propKey，
+  // 用于拦截delete操作，
+  // 返回一个布尔值，表示是否删除成功
+  deleteProperty(target, propKey) {
+    return delete target[propKey];
+  },
+
+  /* 
+       5. ownKeys方法
+          接收target
+          用于拦截Object.getOwnPropertyNames(proxy)、Object.getOwnPropertySymbols(proxy)、Object.keys(proxy)、for...in循环等类似操作
+          返回一个数组，表示对象所拥有的keys
+    */
+  ownKeys(target) {
+    return Object.getOwnPropertyNames(target); // 为了省事
+  },
+
+  /* 
+       6. getOwnPropertyDescriptor方法 
+          接收target和propKey，
+          用于拦截 Object.getOwnPropertyDescriptor(proxy, propKey)
+          返回属性的描述对象
+    */
+  getOwnPropertyDescriptor(target, propKey) {
+    return Object.getOwnPropertyDescriptor(target, propKey);
+  },
+
+  /* 
+       7. defineProperty方法
+          接收target, propKey, propDesc，
+          目标对象、目标对象的属性，以及属性描述配置
+          用于拦截 Object.defineProperty() 和 Object.defineProperties()
+    */
+  defineProperty(target, propKey, propKeyPropDesc) {
+    return Object.defineProperty(target, propKey, propKeyPropDesc);
+  },
+
+  /* 
+       8. preventExtensions 方法 
+         可接收target
+         用于拦截 Object.preventExtensions(proxy)操作
+    */
+  preventExtensions(target) {
+    return Object.preventExtensions(target);
+  },
+
+  /* 
+       9. getPrototypeOf(target) 
+          在使用Object.getPrototypeOf(proxy)会触发调用
+          返回一个对象
+    */
+  getPrototypeOf(target) {
+    return Object.getPrototypeOf(target);
+  },
+
+  /* 
+      10. isExtensible(target) 
+          当使用Object.isExtensible(proxy)时会触发调用
+          返回一个布尔值，表示是否可扩展
+    */
+  isExtensible(target) {
+    return Object.isExtensible(target);
+  },
+
+  /* 
+      11. setPrototypeOf(target, proto) 
+          当调用Object.setPrototypeOf(proxy, proto)会触发该函数调用
+    */
+  setPrototypeOf(target, proto) {
+    console.log(`设置${target}的原型为${proto}`);
+    return Object.setPrototypeOf(target, proto);
+  },
+
+  /* 
+      12. apply(target, object, args)
+      接收三个参数 target, object, args
+      目标对象 调用函数是的this指向 参数列表
+      当Proxy实例作为函数调用时触发
+      比如proxy(...args)、proxy.call(object, ...args)、proxy.apply(...)
+    */
+  apply(target, object, args) {
+    console.log(`调用了f`);
+    return target.call(object, ...args);
+  },
+
+  /* 
+       13. construct(target, args) 
+          接收target和args，
+          目标函数  参数列表
+          当 Proxy 实例作为构造函数时触发该函数调用
+          比如new proxy(...args)
+    */
+  construct(target, args) {
+    console.log(`调用了construct`);
+    return new target(...args);
+  }
+});
+
+function Proxy(target, handler) {
+  //...
+}
+
+/* 
+   总结：
+      1. 代理对象不等于目标对象，他是目标对象的包装品
+      2. 目标对象既可以直接操作，也可以被代理对象操作，且两者相互关联
+      3. 如果直接操作目标对象，则会绕过代理定义的各种拦截行为
+      4. 如果用了代理，那肯定是希望给对象的操作嵌入我们定义的特殊行为，所以一般就操作代理对象就好
+
+*/
+```
 
 ## 位运算
+
+### 位运算知识
+
+```js
+{
+  // 按位非 ～ -------------------------------------------------------
+  // 按位非操作符用波浪符（~）表示，它的作用是返回数值的一补数。按位非是 ECMAScript 中为数 不多的几个二进制数学操作符之一。看下面的例子：
+  let num1 = 25; // 二进制 00000000000000000000000000011001
+  let num2 = ~num1; // 二进制 11111111111111111111111111100110
+  console.log(num2);
+
+  // 由此可以看出，按位非的最终效果是对 数值取反并减 1
+  let a = -10;
+  console.log(~a + 1); // 10
+}
+
+{
+  // 按位与 & ------------------------------------------------------
+  // 按位与操作符用和号（&）表示，有两个操作数。本质上，按位与就是将两个数的每一个位对齐， 然后基于真值表中的规则，对每一位执行相应的与操作。
+  /*
+    第一个数值的位  第二个数值的位   结果
+          1              1           1
+          1              0           0
+          0              1           0
+          0              0           0
+    */
+  // 按位与操作在两个位都是 1 时返回 1，在任何一位是 0 时返回 0。 下面看一个例子，我们对数值 25 和 3 求与操作，如下所示：
+  let result = 25 & 3;
+  console.log(result); // 1
+  /* 
+    25 = 0000 0000 0000 0000 0000 0000 0001 1001
+     3 = 0000 0000 0000 0000 0000 0000 0000 0011
+    res= 0000 0000 0000 0000 0000 0000 0000 0001
+    */
+}
+
+{
+  // 按位或 ｜ -------------------------------------------------------
+  // 按位或操作符用管道符（|）表示，同样有两个操作数。按位或遵循如下真值表：
+  /*
+    第一个数值的位  第二个数值的位   结果
+          1              1           1
+          1              0           1
+          0              1           1
+          0              0           0
+    */
+  // 按位或操作在至少一位是 1 时返回 1，两位都是 0 时返回 0。 仍然用按位与的示例，如果对 25 和 3 执行按位或，代码如下所示：
+  let result = 25 | 3;
+  console.log(result); // 27
+  /*
+    25 = 0000 0000 0000 0000 0000 0000 0001 1001
+     3 = 0000 0000 0000 0000 0000 0000 0000 0011
+    res= 0000 0000 0000 0000 0000 0000 0001 1011
+    */
+}
+
+{
+  // 按位异或 ^ -------------------------------------------------------
+  // 按位异或用脱字符（^）表示，同样有两个操作数。下面是按位异或的真值表:
+  /*
+    第一个数值的位  第二个数值的位   结果
+          1              1           0
+          1              0           1
+          0              1           1
+          0              0           0
+    */
+  // 按位异或与按位或的区别是，它只在一位上是 1 的时候返回 1（两位都是 1 或 0，则返回 0）。 对数值 25 和 3 执行按位异或操作：
+  let result = 25 ^ 3;
+  console.log(result); // 26
+  /*
+    25 = 0000 0000 0000 0000 0000 0000 0001 1001
+     3 = 0000 0000 0000 0000 0000 0000 0000 0011
+    res= 0000 0000 0000 0000 0000 0000 0001 1010
+    */
+}
+
+{
+  // 左移 << -------------------------------------------------------
+  let oldValue = 2; // 二进制 10
+  let newValue = oldValue << 5; // 二进制 1000000
+  console.log(newValue); // 64
+  // 注意在移位后，数值右端会空出 5 位。左移会以 0 填充这些空位，让结果是完整的 32 位数值。
+  // 注意，左移会保留它所操作数值的符号。比如，如果-2 左移 5 位，将得到-64，而不是正 64。
+}
+
+{
+  // 有符号右移 >> --------------------------------------------------
+  // 有符号右移由两个大于号（>>）表示，会将数值的所有 32 位都向右移，同时保留符号（正或负）。 有符号右移实际上是左移的逆运算。比如，如果将 64 右移 5 位，那就是 2：
+  let oldValue = 64; // 二进制 1000000
+  let newValue = oldValue >> 5; // 二进制 10
+  console.log(newValue); // 2
+}
+
+{
+  // 无符号右移 >>> -------------------------------------------------
+  // 无符号右移用 3 个大于号表示（>>>），会将数值的所有 32 位都向右移。对于正数，无符号右移与 有符号右移结果相同。仍然以前面有符号右移的例子为例，64 向右移动 5 位，会变成 2：
+  console.log(64 >>> 5);
+
+  // 对于负数，有时候差异会非常大。与有符号右移不同，无符号右移会给空位补 0，而不管符号位是 什么。对正数来说，这跟有符号右移效果相同。但对负数来说，结果就差太多了。无符号右移操作符将负数的二进制表示当成正数的二进制表示来处理。因为负数是其绝对值的二补数，所以右移之后结果变 得非常之大，如下面的例子所示：
+  let oldValue = -64; // 二进制 11111111111111111111111111000000
+  let newValue = oldValue >>> 5; // 二进制 00000111111111111111111111111110
+  console.log(newValue); // 134 217 726。
+}
+
+// ----------------------------------------------------------------------
+// 实战妙用 持续更新
+
+{
+  // 1.判断奇偶数 -------------------------------------------------------
+  // 偶数 & 1 = 0
+  // 奇数 & 1 = 1
+  console.log('2 & 1 偶数为0', 2 & 1); // 0
+  console.log('3 & 1 奇数为1', 3 & 1); // 1
+}
+
+{
+  // 2. 使用^来完成值的交换 ------------------------------------------------
+  let a = 2;
+  let b = 5;
+  a ^= b;
+  b ^= a;
+  a ^= b;
+  console.log('a = 2 ,b = 5 交换后', a, b);
+}
+
+{
+  // 3. 使用~进行判断 ------------------------------------------------------
+  // 常用判断
+  const arr = [1, 2, 3];
+  if (arr.indexOf(2) > -1) {
+  }
+  // 按位非    ~-1 = -(-1) - 1 取反再 -1 === 0
+  if (~arr.indexOf(3)) {
+    console.log('~-1 === 0');
+  }
+}
+
+{
+  // 4. 使用&, >>, |来完成rgb值和16进制颜色值之间的转换 ------------------------
+  /**
+   * 16进制颜色值转RGB
+   * @param  {String} hex 16进制颜色字符串
+   * @return {String}     RGB颜色字符串
+   */
+  function hexToRGB(color) {
+    color = color.replace('#', '0x');
+    const r = color >> 16;
+    const g = (color >> 8) & 0xff;
+    const b = color & 0xff;
+    return `rgb(${r}, ${g}, ${b})`;
+  }
+
+  /**
+   * RGB颜色转16进制颜色
+   * @param  {String} rgb RGB进制颜色字符串
+   * @return {String}     16进制颜色字符串
+   */
+  function RGBToHex(rgb) {
+    var rgbArr = rgb.split(/[^\d]+/);
+    var color = (rgbArr[1] << 16) | (rgbArr[2] << 8) | rgbArr[3];
+    return '#' + color.toString(16);
+  }
+
+  console.log(hexToRGB('#ffffff')); // 'rgb(255,255,255)'
+  console.log(RGBToHex('rgb(255,255,255)')); // '#ffffff'
+}
+
+{
+  // 5. 使用 ~~ 取整 >>1 除2  <<1 乘2 --------------------------------------
+  console.log(~~3.1415); // 3
+  console.log(5 >> 1); // 奇数会向下取整
+  console.log(4 >> 1);
+  console.log(5 << 1);
+  console.log(4 << 1);
+}
+
+{
+  // 6. 使用按位异或 ^ 切换 0 和 1 -----------------------------------------
+  // 常用 toggle
+  let toggle = 0;
+  toggle = toggle ? 0 : 1;
+  console.log('toggle', toggle);
+
+  // 按位异或
+  toggle ^= 1;
+  console.log('toggle', toggle);
+}
+```
+
+### 位运算权限设计
+
+```js
+// 1. 添加权限----------------------------------------------------------
+{
+  let r = 0b100; // 4 读
+  let w = 0b010; // 2 写
+  let x = 0b001; // 1 执行
+
+  // 给用户赋全部权限（ | ）
+  let user = r | w | x;
+
+  console.log(user);
+  // 7
+
+  console.log(user.toString(2));
+  // 111
+
+  //     r = 0b100
+  //     w = 0b010
+  //     r = 0b001
+  // r|w|x = 0b111
+}
+
+// 2. 校验权限-------------------------------------------------------------
+{
+  let r = 0b100;
+  let w = 0b010;
+  let x = 0b001;
+
+  // 给用户赋 r w 两个权限
+  let user = r | w;
+  // user = 6
+  // user = 0b110 (二进制)
+
+  console.log((user & r) === r); // true  有 r 权限
+  console.log((user & w) === w); // true  有 w 权限
+  console.log((user & x) === x); // false 没有 x 权限
+}
+
+// 3. 删除权限-------------------------------------------------------------
+{
+  let r = 0b100;
+  let w = 0b010;
+  let x = 0b001;
+  let user = 0b110; // 有 r w 两个权限
+
+  // 执行异或操作，删除 r 权限
+  user = user ^ r;
+
+  console.log((user & r) === r); // false 没有 r 权限
+  console.log((user & w) === w); // true  有 w 权限
+  console.log((user & x) === x); // false 没有 x 权限
+
+  console.log(user.toString(2)); // 现在 user 是 0b010
+
+  // 再执行一次异或操作
+  user = user ^ r;
+
+  console.log((user & r) === r); // true  有 r 权限
+  console.log((user & w) === w); // true  有 w 权限
+  console.log((user & x) === x); // false 没有 x 权限
+
+  console.log(user.toString(2)); // 现在 user 又变回 0b110
+
+  // 那么如果单纯的想删除权限（而不是无则增，有则减）怎么办呢？答案是执行 &(~code)，先取反，再执行与操作：
+
+  // 再执行一次
+  user = user & ~r;
+
+  console.log((user & r) === r); // false 没有 r 权限
+  console.log((user & w) === w); // true  有 w 权限
+  console.log((user & x) === x); // false 没有 x 权限
+
+  console.log(user.toString(2)); // 现在 user 还是 0b010，并不会新增
+}
+
+// 局限性和解决办法------------------------------------------------------------
+/* 
+上述的所有都有前提条件：1、每种权限码都是唯一的；2、每个权限码的二进制数形式，有且只有一位值为 1（2^n）。也就是说，权限码只能是 1, 2, 4, 8,...,1024,...而上文提到，一个数字的范围只能在 -(2^53 -1) 和 2^53 -1 之间，JavaScript 的按位操作符又是将其操作数当作 32 位比特序列的。那么同一个应用下可用的权限数就非常有限了。这也是该方案的局限性。
+
+  为了突破这个限制，这里提出一个叫“权限空间”的概念，既然权限数有限，那么不妨就多开辟几个空间来存放。
+  基于权限空间，我们定义两个格式：
+
+  1. 权限 code，字符串，形如 index,pos。其中 pos 表示 32 位二进制数中 1 的位置（其余全是 0）； index 表示权限空间，用于突破 JavaScript 数字位数的限制，是从 0 开始的正整数，每个权限code都要归属于一个权限空间。index 和 pos 使用英文逗号隔开。
+  2. 用户权限，字符串，形如 1,16,16。英文逗号分隔每一个权限空间的权限值。例如 1,16,16 的意思就是，权限空间 0 的权限值是 1，权限空间 1 的权限值是 16，权限空间 2 的权限是 16。
+*/
+
+{
+  // 用户的权限 code
+  let userCode = '';
+
+  // 假设系统里有这些权限
+  // 纯模拟，正常情况下是按顺序的，如 0,0 0,1 0,2 ...，尽可能占满一个权限空间，再使用下一个
+  const permissions = {
+    SYS_SETTING: {
+      value: '0,0', // index = 0, pos = 0
+      info: '系统权限'
+    },
+    DATA_ADMIN: {
+      value: '0,8',
+      info: '数据库权限'
+    },
+    USER_ADD: {
+      value: '0,22',
+      info: '用户新增权限'
+    },
+    USER_EDIT: {
+      value: '0,30',
+      info: '用户编辑权限'
+    },
+    USER_VIEW: {
+      value: '1,2', // index = 1, pos = 2
+      info: '用户查看权限'
+    },
+    USER_DELETE: {
+      value: '1,17',
+      info: '用户删除权限'
+    },
+    POST_ADD: {
+      value: '1,28',
+      info: '文章新增权限'
+    },
+    POST_EDIT: {
+      value: '2,4',
+      info: '文章编辑权限'
+    },
+    POST_VIEW: {
+      value: '2,19',
+      info: '文章查看权限'
+    },
+    POST_DELETE: {
+      value: '2,26',
+      info: '文章删除权限'
+    }
+  };
+
+  // 添加权限
+  const addPermission = (userCode, permission) => {
+    const userPermission = userCode ? userCode.split(',') : [];
+    const [index, pos] = permission.value.split(',');
+
+    userPermission[index] = (userPermission[index] || 0) | Math.pow(2, pos);
+
+    return userPermission.join(',');
+  };
+
+  // 删除权限
+  const delPermission = (userCode, permission) => {
+    const userPermission = userCode ? userCode.split(',') : [];
+    const [index, pos] = permission.value.split(',');
+
+    userPermission[index] = (userPermission[index] || 0) & ~Math.pow(2, pos);
+
+    return userPermission.join(',');
+  };
+
+  // 判断是否有权限
+  const hasPermission = (userCode, permission) => {
+    const userPermission = userCode ? userCode.split(',') : [];
+    const [index, pos] = permission.value.split(',');
+    const permissionValue = Math.pow(2, pos);
+
+    return (userPermission[index] & permissionValue) === permissionValue;
+  };
+
+  // 列出用户拥有的全部权限
+  const listPermission = userCode => {
+    const results = [];
+
+    if (!userCode) {
+      return results;
+    }
+
+    Object.values(permissions).forEach(permission => {
+      if (hasPermission(userCode, permission)) {
+        results.push(permission.info);
+      }
+    });
+
+    return results;
+  };
+
+  const log = () => {
+    console.log(`userCode: ${JSON.stringify(userCode, null, ' ')}`);
+    console.log(`权限列表: ${listPermission(userCode).join('; ')}`);
+    console.log('');
+  };
+
+  userCode = addPermission(userCode, permissions.SYS_SETTING);
+  log();
+  // userCode: "1"
+  // 权限列表: 系统权限
+
+  userCode = addPermission(userCode, permissions.POST_EDIT);
+  log();
+  // userCode: "1,,16"
+  // 权限列表: 系统权限; 文章编辑权限
+
+  userCode = addPermission(userCode, permissions.USER_EDIT);
+  log();
+  // userCode: "1073741825,,16"
+  // 权限列表: 系统权限; 用户编辑权限; 文章编辑权限
+
+  userCode = addPermission(userCode, permissions.USER_DELETE);
+  log();
+  // userCode: "1073741825,131072,16"
+  // 权限列表: 系统权限; 用户编辑权限; 用户删除权限; 文章编辑权限
+
+  userCode = delPermission(userCode, permissions.USER_EDIT);
+  log();
+  // userCode: "1,131072,16"
+  // 权限列表: 系统权限; 用户删除权限; 文章编辑权限
+
+  userCode = delPermission(userCode, permissions.USER_EDIT);
+  log();
+  // userCode: "1,131072,16"
+  // 权限列表: 系统权限; 用户删除权限; 文章编辑权限
+
+  userCode = delPermission(userCode, permissions.USER_DELETE);
+  userCode = delPermission(userCode, permissions.SYS_SETTING);
+  userCode = delPermission(userCode, permissions.POST_EDIT);
+  log();
+  // userCode: "0,0,0"
+  // 权限列表:
+
+  userCode = addPermission(userCode, permissions.SYS_SETTING);
+  log();
+  // userCode: "1,0,0"
+  // 权限列表: 系统权限
+}
+
+// 除了通过引入权限空间的概念突破二进制运算的位数限制，还可以使用 math.js 的 bigNumber，直接运算超过 32 位的二进制数，具体可以看它的文档，这里就不细说了。
+
+/* 
+如果按照当前使用最广泛的 RBAC 模型设计权限系统，那么一般会有这么几个实体：应用，权限，角色，用户。用户权限可以直接来自权限，也可以来自角色：
+
+一个应用下有多个权限
+权限和角色是多对多的关系
+用户和角色是多对多的关系
+用户和权限是多对多的关系
+
+在此种模型下，一般会有用户与权限，用户与角色，角色与权限的对应关系表。想象一个商城后台权限管理系统，可能会有上万，甚至十几万店铺（应用），每个店铺可能会有数十个用户，角色，权限。随着业务的不断发展，刚才提到的那三张对应关系表会越来越大，越来越难以维护。
+而进制转换的方法则可以省略对应关系表，减少查询，节省空间。当然，省略掉对应关系不是没有坏处的，例如下面几个问题：
+
+如何高效的查找我的权限？
+如何高效的查找拥有某权限的所有用户？
+如何控制权限的有效期？
+
+所以进制转换的方案比较适合刚才提到的应用极其多，而每个应用中用户，权限，角色数量较少的场景。
+
+其他方案-------------------------------------------------------------------------------------
+
+除了二进制方案，当然还有其他方案可以达到类似的效果，例如直接使用一个1和0组成的字符串，权限点对应index，1表示拥有权限，0表示没有权限。举个例子：添加 0、删除 1、编辑 2，用户A拥有添加和编辑的权限，则 userCode 为 101；用户B拥有全部权限，userCode 为 111。这种方案比二进制转换简单，但是浪费空间。
+还有利用质数的方案，权限点全部为质数，用户权限为他所拥有的全部权限点的乘积。如：权限点是 2、3、5、7、11，用户权限是 5 * 7 * 11 = 385。这种方案麻烦的地方在于获取质数（新增权限点）和质因数分解（判断权限），权限点特别多的时候就快成 RSA 了，如果只有增删改查个别几个权限，倒是可以考虑。
+*/
+```
 
 ## 高级
 
@@ -977,5 +1640,479 @@ Object.create(null);
     // catch捕获
     console.log(error);
   }
+}
+```
+
+## 由浅入深掌握 Javascript
+
+```js
+{
+  /* 
+    对JS的理解
+      动态类型语言：代码在执行过程中，才知道这个变量属于的类型。
+      弱类型：数据类型不固定，可以随时改变。
+      解释型：一边执行，一边编译，不需要程序在运行之前需要整体先编译。
+      基于对象：最终所有对象都指向Object。
+      脚本语言：一般都是可以嵌在其它编程语言当中执行。
+      单线程：依次执行，前面代码执行完后面才执行。
+
+  ECMAscript	                DOM	                      BOM  
+  JavaScript的语法部分  	    文档对象模型	           浏览器对象模型
+  主要包含JavaScript语言语法  主要用来操作页面元素和样式 主要用来操作浏览器相关功能
+  */
+}
+
+{
+  // JS数据类型有哪些？值是如何存储的？
+  // 基本数据类型:
+  Number;
+  String;
+  Boolean;
+  undefined;
+  null;
+  Symbol; // ES6新增，表示独一无二的值
+  BigInt; // ES6新增，以n结尾，表示超长数据
+
+  // 对象：
+  Object;
+  Function;
+  Array;
+  Date;
+  RegExp;
+  Error;
+
+  /* 
+    基本数据类型值是不可变的，多次赋值，只取最后一个。
+    基本数据类型存储在栈中，占据空间小
+    引用数据类型存储在堆中。引用数据类型占据空间大
+    引用数据类型在栈中存储了指针，该指针指向堆中该实体的起始地址。当解释器寻找引用值时，会首先检索其在栈中的地址，取得地址后从堆中获得实体。
+  */
+}
+
+{
+  /* 
+    4. Null、undefined、undeclared 的 区别
+       null表示空的，什么都没有，不存在的对象，他的数据类型是object。 初始值赋值为null，表示将要赋值为对象， 不再使用的值设为null，浏览器会自动回收。
+       
+       undefined表示未定义，常见的为undefined情况： 一是变量声明未赋值， 二是数组声明未赋值； 三是函数执行但没有明确的返回值； 四是获取一个对象上不存在的属性或方法。
+         变量声明未赋值，是 undefined。
+         未声明的变量，是 undeclared。浏览器会报错a is not defined ，ReferenceError。
+  */
+  null, undefined;
+}
+
+{
+  /* 
+    JS数据类型转换 JS的显式数据类型转换一共有三种
+      转字符串：.toString() String() 
+      Sting()函数相可以将null和undefined转化为字符串，toString()转化会报错。
+
+      转数值：Number() parseInt()  parseFloat()
+      Number()函数  字符串合法数字则转化成数字 不合法则转化为NAN 
+                    空串转化为0  null和undefined转0和NAN true转1 false转0
+      parseInt()是从左向右获取一个字符串的合法整数位
+      parseFloat()获取字符串的所有合法小数位
+
+      转布尔：像false、0、空串、null、undefined和NaN这6种会转化为false
+      
+
+     常用的隐式类型转换有：任意值+空串转字符串、+a转数值、a-0 转数值等。
+  */
+  String(), toString();
+  Number(), parseInt(), parseFloat();
+  Boolean();
+  0 + '', +'10', !!null;
+}
+
+{
+  // 数据类型的判断
+  // 1. typeof的返回值有八种，返回值是字符串，不能判断数组和null的数据类型，返回object。
+  typeof ''; // string
+  typeof 1; // number
+  typeof true; // boolean
+  typeof undefined; // undefined
+  typeof Symbol(); // bigint
+  typeof 1n; // symbol
+  typeof new Function(); // function
+
+  typeof null; //object 无效   这个是一个设计缺陷，造成的
+  typeof []; //object 无效
+
+  // 2.  instanceof  检查对象原型链上有没有该构造函数，可以精准判断引用数据类型
+  ({}) instanceof Object; //true
+  new Date() instanceof Date; //true
+  new RegExp() instanceof RegExp; //true
+  new Error() instanceof Error; //true
+
+  [] instanceof Array; //true
+  [] instanceof Object; //true
+
+  (() => {}) instanceof Function; // true
+  (() => {}) instanceof Object; // true
+
+  // 3. constructor 访问它的构造函数。既可以检测基本类型又可以检测对象，但不能检测null和undefined
+  // 注意函数的 constructor 是不稳定，如果把函数的原型进行重写，这样检测出来的结果会不准确
+  (10).constructor === Number; // true
+  [].constructor === Array; // true
+  new RegExp().constructor === RegExp; // true
+  new RegExp().constructor === Object; // false
+
+  function Fn() {}
+  Fn.prototype = new Array();
+  new Fn().constructor; // [Function: Array]
+  (() => {}).constructor; // [Function: Function]
+
+  // 4. 最准确方式 —— Object.prototype.toString.call()
+  /*
+    获取Object原型上的toString方法，让方法执行
+    让toString方法中的this指向第一个参数的值，最准确方式。
+    
+    第一个object：当前实例是对象数据类型的(object)
+    第二个Object：数据类型。
+  */
+  Object.prototype.toString.call(''); // [object String]
+  Object.prototype.toString.call(1); // [object Number]
+  Object.prototype.toString.call(true); // [object Boolean]
+  Object.prototype.toString.call(undefined); // [object Undefined]
+  Object.prototype.toString.call(null); // [object Null]
+  Object.prototype.toString.call(new Function()); // [object Function]
+  Object.prototype.toString.call(new Date()); // [object Date]
+  Object.prototype.toString.call([]); // [object Array]
+  Object.prototype.toString.call(new RegExp()); // [object RegExp]
+  Object.prototype.toString.call(new Error()); // [object Error]
+}
+
+{
+  // 0.1+0.2 === 0.3吗
+  console.log(0.1 + 0.2 === 0.3); // false
+  console.log((0.1 + 0.2).toFixed(2)); // 0.30  toFixed为四舍五入
+  /*
+    计算机是通过二进制的方式存储数据的
+    所以计算机计算0.1+0.2的时候，实际上是计算的两个数的二进制的和
+    0.1的二进制是0.0001100110011001100...（1100循环）
+    0.2的二进制是：0.00110011001100...（1100循环）
+
+    这两个数的二进制都是无限循环的数,那JavaScript是如何处理无限循环的二进制小数呢？
+    一般我们认为数字包括整数和小数
+    但是在 JavaScript 中只有一种数字类型：Number
+    它的实现遵循IEEE 754标准，使用64位固定长度来表示，也就是标准的double双精度浮点数
+    在二进制科学表示法中，双精度浮点数的小数部分最多只能保留52位
+    再加上前面的1，其实就是保留53位有效数字，剩余的需要舍去，遵从“0舍1入”的原则
+    根据这个原则，0.1和0.2的二进制数相加，再转化为十进制数就是：0.30000000000000004。
+  */
+}
+
+{
+  // JS的作用域和作用域链
+  /*
+    作用域就是变量起作用的范围和区域  作用域的目的是隔离变量，保证不同作用域下同名变量不会冲突
+
+    JS中，作用域分为三种，全局作用域、函数作用域和块级作用域。 
+      全局作用域在script标签对中，无论在哪都能访问到。
+      在函数内部定义的变量，拥有函数作用域。
+      块级作用域则是使用let和const声明的变量，如果被一个大括号括住，那么这个大括号括住的变量区域就形成了一个块级作用域。
+
+    作用域层层嵌套，形成的关系叫做作用域链，
+    作用域链也就是查找变量的过程: 查找变量的过程：当前作用域 ->上一级作用域 ->上一级作用域 .... ->直到找到全局作用域 ->还没有，则会报错。
+    
+    作用域链是用来保证——变量和函数在执行环境中有序访问。
+  */
+  // LHS和RHS查询
+  /*
+    LHS和RHS查询是JS引擎查找变量的两种方式
+    这里的“Left”和“Right”，是相对于赋值操作来说
+      当变量出现在赋值操作左侧时，执行LHS操作 意味着变量赋值或写入内存，,他强调是写入这个动作。
+        let name = '小明';
+      当变量出现在赋值操作右侧或没有赋值操作时，是RHS。
+        let myName = name;
+  */
+  //  词法作用域和动态作用域
+  /*
+    Js底层遵循的是词法作用域，从语言的层面来说，作用域模型分两种：
+      词法作用域：也称静态作用域，是最为普遍的一种作用域模型
+      动态作用域：相对“冷门”，bash脚本、Perl等语言采纳的是动态作用域
+      
+      词法作用域：在代码书写时完成划分，作用域沿着它定义的位置往外延伸。
+      动态作用域：在代码运行时完成划分，作用域链沿着他的调用栈往外延伸。
+  */
+}
+
+{
+  // Js的事件轮询
+  /*
+    JS是单线程运行，同一时间只能干一件事情
+    异步要基于回调实现。事件轮询就是异步回调实现的原理。
+    
+    首先来说JS从前到后一行一行执行，当遇到代码报错，后面的代码将不再执行
+    先把同步代码执行完，在执行异步。
+    
+    event loop过程：
+      1. 同步代码，一行一行放入调用栈中执行。
+      2. 遇到异步，先记录下来，等待时机。（例如计时器放入到web APIs里）。
+      3. 时机到了就会移动到callback Queue中。
+      4. 同步代码执行完（call stack为空），event loop开始工作。
+      5. event loop 轮训查找callback queue,如果有则移动到call stack执行。如果没有，继续轮训查找。（像永动机一样）。
+  */
+  // 宏任务 微任务
+  /*
+    宏任务：script ajax请求、计时器、DOM事件 postMessage、MessageChannel
+    微任务：promise/async await MutationObserver  process.nextTick（Node.js）
+    微任务执行时机比宏任务早
+  */
+  // 事件轮询和DOM渲染问题
+  /*
+    JS是单线程的，而且和DOM渲染公用一个线程，JS执行的时候，得留一些时机供DOM渲染。
+      1. 每次调用栈清空，同步任务执行完
+      3. 都是DOM重新渲染的机会，DOM结构如有改变则重新渲染
+      4. 然后去触发下一次event loop
+
+    为什么微任务比宏任务执行更早
+      1. 微任务：dom渲染前触发
+      2. 宏任务：dom渲染后触发
+  */
+}
+
+{
+  // 函数
+  {
+    /* 
+          匿名函数 也叫一次性函数，没有名字
+          在定义时执行，且执行一次，不存在预解析（函数内部执行的时候会发生）。
+          
+          匿名函数的作用有：
+            1. 对项目的初始化，页面加载时调用，保证页面有效的写入Js，不会造成全局变量污染
+            2. 防止外部命名空间污染
+            3. 隐藏内部代码暴露接口
+        */
+    (function () {})();
+
+    (function () {})();
+
+    //  使用多种运算符开头，一般是用!
+    !(function () {})();
+  }
+
+  {
+    /* 
+          回调函数  一段可执行的代码段
+          它作为一个参数传递给其他的代码，其作用是在需要的调用这段回调函数
+        */
+
+    // 例 点击事件的回调函数  异步请求的回调函数 计时器
+    setTimeout(function () {
+      console.log('hello');
+    }, 1000);
+  }
+
+  {
+    /* 
+          构造函数
+            在ES6之前，我们都是通过构造函数创建类，从而生成对象实例
+            构造函数就是一个函数，只不过通常我们把构造函数的名字写成大驼峰
+            构造函数通过new关键字进行调用，普通函数直接调用。
+        */
+    // 创建一个类（函数）
+    function Person(name, age) {
+      this.name = name;
+      this.age = age;
+      this.eat = function () {
+        console.log('我爱吃');
+      };
+    }
+    // 普通函数调用
+    const result = Person('张三', 18);
+    console.log(result);
+
+    // 构造函数调用
+    const p = new Person('李四', 16);
+    console.log(p);
+  }
+
+  {
+    /* 
+          函数中arguments 的对象
+            函数在调用时JS引擎会向函数中传递两个的隐含参数
+            一个是this，另一个是arguments
+            arguments是一个伪数组，用于获取函数中在调用时传入的实参。
+        */
+    function add() {
+      console.log(Array.isArray(arguments));
+    }
+  }
+}
+
+{
+  // 字符串
+  {
+    /* 
+          列举常用字符串方法:
+          charAt()	返回指定索引的字符
+
+          charCodeAt()	返回指定索引的字符编码
+
+          concat()	将原字符串和指定字符串拼接，不指定相当于复制一个字符串
+
+          String.fromCharCode()	返回指定编码的字符
+
+          indexOf()	查询并返回指定子串的索引，不存在返回-1
+
+          lastIndexOf()	反向查询并返回指定子串的索引，不存在返回-1
+
+          localeCompare()	比较原串和指定字符串：原串大返回1,原串小返回-1，相等返回0
+
+          slice()	截取指定位置的字符串，并返回。包含起始位置但是不包含结束位置，位置可以是负数
+
+          substr()	截取指定起始位置固定长度的字符串
+
+          substring()	截取指定位置的字符串，类似slice。起始位置和结束位置可以互换并且不能是负数
+
+          split()	将字符串切割转化为数组返回
+
+          toLowerCase()	将字符串转化为小写
+
+          toUpperCase()	将字符串转化为大写
+
+          valueOf()	返回字符串包装对象的原始值
+
+          toString()	直接转为字符串并返回
+
+          includes()	判断是否包含指定的字符串
+
+          startsWith()	 判断是否以指定字符串开头
+
+          endsWith()	判断是否以指定字符串结尾
+
+          repeat()	重复指定次数
+        */
+  }
+}
+
+{
+  // 数组
+  {
+    /* 
+           列举常用数组方法：
+           concat()	合并数组，并返回合并之后的数据
+
+           join()	使用分隔符，将数组转为字符串并返回
+
+           pop()	删除最后一位，并返回删除的数据，在原数组
+
+           shift()	删除第一位，并返回删除的数据，在原数组
+
+           unshift()	在第一位新增一或多个数据，返回长度，在原数组
+
+           push()	在最后一位新增一或多个数据，返回长度
+
+           reverse()	反转数组，返回结果，在原数组
+
+           slice()	截取指定位置的数组，并返回
+
+           sort()	排序（字符规则），返回结果，在原数组
+
+           splice()	删除指定位置，并替换，返回删除的数据
+
+           toString()	直接转为字符串，并返回
+
+           valueOf()	返回数组对象的原始值
+
+           indexOf()	查询并返回数据的索引
+
+           lastIndexOf()	反向查询并返回数据的索引
+
+           forEach()	参数为回调函数，会遍历数组所有的项，回调函数接受三个参数，分别为value，index，self；forEach没有返回值
+
+           map()	同forEach，同时回调函数返回数据，组成新数组由map返回
+
+           filter()	同forEach，同时回调函数返回布尔值，为true的数据组成新数组由filter返回
+
+           Array.from()	将伪数组对象或可遍历对象转换为真数组
+
+           Array.of()	将一系列值转换成数组
+
+           find	找出第一个满足条件返回true的元素
+
+           findIndex	找出第一个满足条件返回true的元素下标
+        */
+  }
+}
+
+{
+  // 对象
+  {
+    /* 
+          对象常用方法:
+          Object.assign()  浅拷贝
+
+          Object.create()  需要传入一个参数，作为新建对象的原型对象
+
+          Object.is()  判断两个值是否相等
+
+          Object.keys() 获取给定对象的自身可枚举属性的属性名（键）
+
+          Object.values() 获取给定对象的自身可枚举属性的属性值（值）
+
+          Object.entries() 返回键值对数组
+
+          Object.fromEntries()  将键值对数组转换为对象
+          
+          Object.defineProperty() 给对象定义新属性、修改现有属性
+          Object.defineProperties() 可一次性处理多个属性
+
+          Object.proxy() Proxy是一个构造函数，用它来代理某些操作
+
+          Object.getOwnPropertyDescription() 获取对象上的一个自有属性的属性描述
+          Object.getOwnPropertyDescriptors() 获取对象的所有自身属性的描述符
+
+          Object.getOwnPropertyNames() 获取对象自身拥有的可枚举属性和不可枚举属性的属性名，返回一个数组
+
+          Object.prototype.hasOwnProperty() 判断对象自身属性是否含有指定的属性，不包括从原型链上继承的属性
+
+          Object.getPrototypeOf()  返回指定对象的原型，如果没有则返回null
+
+          Object.setPrototypeOf() 设置指定对象的新原型
+
+          Object.prototype.isPrototypeOf() 检测一个对象是否存在于另一个对象的原型链上
+
+          Object.toString() 每个对象都有这个方法，用于返回一个表示该对象的字符串，不同类型的数据都重写了toString方法，因此返回的值不一样
+
+          Object.toLocaleString() 将对象根据语言环境来转换字符串
+        */
+  }
+}
+
+{
+  // Math常用方法
+  Math.abs(); // 绝对值
+
+  Math.ceil(); // 向上取整
+
+  Math.floor(); // 向下取整
+
+  Math.max(); // 最大值
+
+  Math.min(); // 最小值
+
+  Math.round(); // 四舍五入
+
+  Math.random(); // 随机数
+
+  Math.pow(); // 指数运算
+
+  Math.sqrt(); // 平方根
+
+  Math.log(); // 返回以e为底的自然对数值
+
+  Math.exp(); // 返回常数e的参数次方
+
+  // Math属性  只读，不可修改
+  Math.E; // 2.718281828459045  常数e
+  Math.LN2; // 0.6931471805599453   2的自然对数
+  Math.LN10; // 2.302585092994046   10的自然对数
+  Math.LOG2E; // 1.4426950408889634  以2为底的e的对数
+  Math.LOG10E; // 0.4342944819032518  以10为底的e的对数
+  Math.PI; // 3.141592653589793 常数π
+  Math.SQRT1_2; // 0.7071067811865476  0.5的平方根
+  Math.SQRT2; // 1.4142135623730951  2 的平方根
 }
 ```
