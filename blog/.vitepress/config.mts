@@ -5,6 +5,8 @@ export default defineConfig({
   description: "Relsola's blog.",
   srcDir: 'docs/',
 
+  head: [['link', { rel: 'icon', href: '/favicon.jpg' }]],
+
   themeConfig: {
     nav: [
       { text: 'Home', link: '/' },
@@ -43,6 +45,11 @@ export default defineConfig({
         { text: 'Unity', link: '/' },
         { text: 'Unreal', link: '/' }
       ]
+    },
+
+    outline: {
+      level: 'deep',
+      label: '页面导航'
     },
 
     socialLinks: [{ icon: 'github', link: 'https://github.com/Relsola' }]
