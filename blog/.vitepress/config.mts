@@ -5,7 +5,7 @@ export default defineConfig({
   description: "Relsola's blog.",
   srcDir: 'docs/',
   base: '/moon/',
-  head: [['link', { rel: 'icon', href: '/favicon.jpg' }]],
+  head: [['link', { rel: 'icon', href: '/moon/favicon.jpg' }]],
 
   themeConfig: {
     nav: [
