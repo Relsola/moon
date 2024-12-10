@@ -24,9 +24,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Change to blog directory
-        run: cd blog
-
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -40,20 +37,23 @@ jobs:
         with:
           node-version: 20
           cache: pnpm
+          cache-dependency-path: blog/pnpm-lock.yaml
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
       - name: Install dependencies
         run: pnpm install
+        working-directory: ./blog
 
       - name: Build with VitePress
         run: pnpm build
+        working-directory: ./blog
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .vitepress/dist
+          path: blog/.vitepress/dist
 
   # 部署工作
   deploy:
