@@ -9,17 +9,29 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: blog/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/blog/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - uses: actions/setup-node@v3
         with:
-          node-version: 'lts/*'
+          node-version: '22.12.0'
+          cache: 'pnpm'
+
       - run: npm i pnpm -g
         working-directory: ./blog
+
       - run: pnpm install --no-frozen-lockfile
         working-directory: ./blog
 
       - name: Build
-        run: pnpm docs:build
+        run: pnpm build
         working-directory: ./blog
 
       - name: Deploy
