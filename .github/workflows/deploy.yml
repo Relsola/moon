@@ -24,6 +24,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Change working directory
+        run: cd blog
+
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -42,16 +45,14 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
-        working-directory: ./blog
 
       - name: Build with VitePress
         run: pnpm build
-        working-directory: ./blog
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: blog/.vitepress/dist
+          path: vitepress/dist
 
   # 部署工作
   deploy:
