@@ -15,7 +15,7 @@ jobs:
           node-version: 'lts/*'
       - run: npm i pnpm -g
         working-directory: ./blog
-      - run: pnpm install --frozen-lockfile
+      - run: pnpm install --no-frozen-lockfile
         working-directory: ./blog
 
       - name: Build
