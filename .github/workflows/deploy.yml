@@ -1,0 +1,29 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: npm i pnpm -g
+        working-directory: ./blog
+      - run: pnpm install --frozen-lockfile
+        working-directory: ./blog
+
+      - name: Build
+        run: pnpm docs:build
+        working-directory: ./blog
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: blog/docs/.vitepress/dist
