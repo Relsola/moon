@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Change working directory
-        run: cd blog
+        run: cd ./blog
 
       - name: Checkout
         uses: actions/checkout@v4
@@ -52,7 +52,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: vitepress/dist
+          path: .vitepress/dist
 
   # 部署工作
   deploy:
