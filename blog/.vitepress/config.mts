@@ -12,8 +12,9 @@ export default defineConfig({
       { text: 'Home', link: '/' },
       { text: 'JavaScript', link: 'JavaScript/javascript' },
       { text: 'Java', link: 'Java/java' },
-      { text: 'C++', link: 'C++/note' },
-      { text: 'Game', link: 'Game/cs' }
+      { text: 'C/C++', link: 'C++/note' },
+      { text: 'Game', link: 'Game/cs' },
+      { text: 'GitHub', link: 'GitHub/index' }
     ],
 
     sidebar: {
@@ -24,6 +25,7 @@ export default defineConfig({
         { text: 'Vue', link: '/JavaScript/vue' },
         { text: 'React', link: '/JavaScript/react' },
         { text: 'JavaScript 工具函数', link: '/JavaScript/function' },
+        { text: '位运算', link: '/JavaScript/bit' },
         { text: 'indexedDE 数据库', link: '/JavaScript/indexedDE' },
         { text: '手写系列', link: '/JavaScript/handwritten' },
         { text: '正则表达式', link: '/JavaScript/regexp' },
@@ -35,10 +37,11 @@ export default defineConfig({
         { text: 'SQL', link: '/Java/sql' }
       ],
       '/C++/': [
-        { text: 'C++', link: '/' },
+        { text: 'C++ 学习笔记', link: '/' },
         { text: 'STL', link: '/' },
         { text: 'OpenGL', link: '/' },
-        { text: 'DirectX', link: '/' }
+        { text: 'DirectX', link: '/' },
+        { text: 'C 学习笔记', link: '/' }
       ],
       '/Game/': [
         { text: 'Game', link: '/' },
