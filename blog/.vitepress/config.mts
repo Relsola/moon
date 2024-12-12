@@ -11,7 +11,7 @@ export default defineConfig({
     nav: [
       { text: 'Home', link: '/' },
       { text: 'JavaScript', link: 'JavaScript/javascript' },
-      { text: 'Java', link: 'Java/note' },
+      { text: 'Java', link: 'Java/java' },
       { text: 'C++', link: 'C++/note' },
       { text: 'Game', link: 'Game/cs' }
     ],
@@ -30,9 +30,9 @@ export default defineConfig({
         { text: '设计模式', link: '/JavaScript/designPattern' }
       ],
       '/Java/': [
-        { text: 'Java', link: '/' },
+        { text: 'Java', link: '/Java/java' },
         { text: 'Spring Boot', link: '/' },
-        { text: 'SQL', link: '/' }
+        { text: 'SQL', link: '/Java/sql' }
       ],
       '/C++/': [
         { text: 'C++', link: '/' },
