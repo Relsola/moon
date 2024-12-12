@@ -10,8 +10,12 @@ hero:
 
 features:
   - icon: 📖
-    title: 阮一峰 《TypeScript 教程》
-    link: 'https://wangdoc.com/typescript/'
+    title: MDN
+    link: 'https://developer.mozilla.org/zh-CN/'
+
+  - icon: 🗨️
+    title: LeetCode 刷题攻略
+    link: 'https://github.com/youngyangyang04/leetcode-master'
 
   - icon: 🗨️
     title: TS 类型挑战通关手册
@@ -24,10 +28,6 @@ features:
   - icon: ☪️
     title: React.js 官方文档
     link: 'https://react.docschina.org/'
-
-  - icon: ☂️
-    title: Rollup 官方文档
-    link: 'https://www.rollupjs.com/'
 
   - icon: 📓
     title: Next.js 官方文档
@@ -44,4 +44,3 @@ margin-top: 50px;
 }
 
 </style>
-
