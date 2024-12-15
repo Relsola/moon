@@ -63,8 +63,7 @@ using point_value_t = struct point_value_t {
   State state;
 };
 
-class CPointSort
-{
+class CPointSort {
 public:
   bool operator()(const point_t& lhs, const point_t& rhs) const
   {

@@ -1,5 +1,4 @@
 #include "i18n.h"
-#include <string>
 
 #include <cassert>
 

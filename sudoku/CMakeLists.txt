@@ -12,7 +12,7 @@ endif()
 project ("sudoku")
 
 # 将源代码添加到此项目的可执行文件。
-add_executable (sudoku "src/main.cpp"  "src/utility.inl" "src/i18n.h" "src/I18n.cpp")
+add_executable (sudoku "src/main.cpp"  "src/utility.inl" "src/i18n.h" "src/i18n.cpp" "src/input.h" "src/common.h" "src/input.cpp" "src/color.h" "src/block.h" "src/block.cpp" "src/display_symbol.h" "src/scene.h" "src/command.h" "src/scene.cpp" "src/command.cpp")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET sudoku PROPERTY CXX_STANDARD 20)
