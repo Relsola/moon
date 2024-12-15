@@ -2,27 +2,16 @@
 
 static const unsigned int UNSELECTED = 0;
 
-enum class Difficulty : int
-{
-  EASY = 1,
-  NORMAL,
-  HARD
-};
+enum class Difficulty : int { EASY = 1, NORMAL, HARD };
 
-enum class State : int
-{
+enum class State : int {
   INITED = 0,
   ERASED,
 };
 
-enum class KeyMode : int
-{
-  NORMAL = 1,
-  VIM
-};
+enum class KeyMode : int { NORMAL = 1, VIM };
 
-struct KeyMap
-{
+struct KeyMap {
   const char ESC = 0x1B;
   const char U = 0x75;
   char UP;
@@ -32,10 +21,8 @@ struct KeyMap
   const char ENTER = 0x0D;
 };
 
-struct Normal : KeyMap
-{
-  Normal()
-  {
+struct Normal : KeyMap {
+  Normal() {
     UP = 0x77;
     LEFT = 0x61;
     DOWN = 0x73;
@@ -44,8 +31,7 @@ struct Normal : KeyMap
 };
 
 struct Vim : KeyMap {
-  Vim()
-  {
+  Vim() {
     UP = 0x6B;
     LEFT = 0x68;
     DOWN = 0x6A;
@@ -63,11 +49,9 @@ using point_value_t = struct point_value_t {
   State state;
 };
 
-class CPointSort
-{
-public:
-  bool operator()(const point_t& lhs, const point_t& rhs) const
-  {
+class CPointSort {
+ public:
+  bool operator()(const point_t& lhs, const point_t& rhs) const {
     if ((lhs.x == rhs.x) && (lhs.y == rhs.y))
       return false;
     else
