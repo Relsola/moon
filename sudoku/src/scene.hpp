@@ -1,14 +1,16 @@
 #pragma once
 
-#include "block.h"
-#include "command.h"
-#include "common.h"
 #include <iostream>
+#include <sstream>
 #include <vector>
 
-//数独场景类
+#include "block.hpp"
+#include "command.hpp"
+#include "common.hpp"
+
+// 数独场景类
 class CScene {
-public:
+ public:
   CScene(int index = 3);
   virtual ~CScene();
 
@@ -28,13 +30,13 @@ public:
 
   void setMode(KeyMode mode);
 
-private:
-  void init(); // 将每个格子的指针放到block里面
+ private:
+  void init();  // 将每个格子的指针放到block里面
   void setValue(const int);
   void setValue(const point_t&, const int);
-  void printUnderline(int line_no = -1) const;
+  void printUnderline(std::ostringstream& buffer, int line_no = -1) const;
 
-private:
+ private:
   KeyMap* keyMap{};
   int _max_column;
   point_t _cur_point;

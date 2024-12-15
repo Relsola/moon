@@ -1,7 +1,6 @@
 #pragma once
 
-
-#include "common.h"
+#include "common.hpp"
 
 int inputDifficulty();
 KeyMode inputKeyMode();

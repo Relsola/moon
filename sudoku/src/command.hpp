@@ -1,11 +1,12 @@
 #pragma once
 
-#include "common.h"
 #include <memory>
+
+#include "common.hpp"
 
 class CScene;
 class CCommand {
-public:
+ public:
   CCommand(CScene* pOwner);
   CCommand(CScene* pOwner, const point_t& point, int preValue, int curValue);
   CCommand(const CCommand&);
@@ -20,7 +21,7 @@ public:
   void setPreValue(int preValue) { _nPreValue = preValue; }
   void setCurValue(int curValue) { _nCurValue = curValue; }
 
-private:
+ private:
   CScene* _pOwner;
   point_t _stPoint;
   int _nPreValue;

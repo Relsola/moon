@@ -1,8 +1,8 @@
 #include <iostream>
 #include <string>
 
-#include "common.h"
-#include "i18n.h"
+#include "common.hpp"
+#include "i18n.hpp"
 #include "utility.inl"
 
 // return number of grids to be erased
@@ -11,35 +11,29 @@ int inputDifficulty() {
 
   std::string cmd;
   int need_erase_grids = 0;
-  while (true)
-  {
+  while (true) {
     message(I18n::Instance().Get(I18n::Key::ASK_DIFFICULTY));
 
     std::cin >> cmd;
 
-    try
-    {
+    try {
       Difficulty difficulty = static_cast<Difficulty>(std::stoi(cmd));
-      switch (difficulty)
-      {
-      case Difficulty::EASY:
-        need_erase_grids = 20;
-        break;
-      case Difficulty::NORMAL:
-        need_erase_grids = 35;
-        break;
-      case Difficulty::HARD:
-        need_erase_grids = 50;
-        break;
+      switch (difficulty) {
+        case Difficulty::EASY:
+          need_erase_grids = 20;
+          break;
+        case Difficulty::NORMAL:
+          need_erase_grids = 35;
+          break;
+        case Difficulty::HARD:
+          need_erase_grids = 50;
+          break;
       }
-    }
-    catch (...)
-    {
+    } catch (...) {
       need_erase_grids = 0;
     }
 
-    if (need_erase_grids > 0)
-      break;
+    if (need_erase_grids > 0) break;
 
     message(I18n::Instance().Get(I18n::Key::INPUT_ERROR));
   }
@@ -57,8 +51,7 @@ KeyMode inputKeyMode() {
     try {
       KeyMode kmd = static_cast<KeyMode>(std::stoi(mode));
       return kmd;
-    }
-    catch (...) {
+    } catch (...) {
     }
 
     message(I18n::Instance().Get(I18n::Key::INPUT_ERROR));
@@ -77,8 +70,7 @@ void InputLanguage() {
         I18n::Instance().SetLanguage(l);
         return;
       }
-    }
-    catch (...) {
+    } catch (...) {
     }
 
     message(I18n::Instance().Get(I18n::Key::INPUT_ERROR));

@@ -1,4 +1,4 @@
-#include "i18n.h"
+#include "i18n.hpp"
 
 #include <cassert>
 
@@ -41,15 +41,15 @@ I18n& I18n::Instance() {
 
 void I18n::SetLanguage(Language language) {
   switch (language) {
-  case Language::ENGLISH:
-    dict_ = &english;
-    break;
-  case Language::CHINESE:
-    dict_ = &chinese;
-    break;
-  case Language::MAX:
-  default:
-    assert(false);
+    case Language::ENGLISH:
+      dict_ = &english;
+      break;
+    case Language::CHINESE:
+      dict_ = &chinese;
+      break;
+    case Language::MAX:
+    default:
+      assert(false);
   }
 }
 
