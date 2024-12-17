@@ -206,6 +206,58 @@ Optional<Integer> opt = Optional.ofNullable("Relsola").map(String::length);
 
 ## Lambda 表达式
 
+Lambda 表达式描述了一个代码块（或者叫匿名方法），可以将其作为参数传递给构造方法或者普通方法以便后续执行。
+
+### Lambda 的使用
+
+> Lambda 语法 `( parameter-list ) -> { expression-or-statements }`
+
+1. 为变量赋值
+
+```java
+Runnable r = () -> { System.out.println("Relsola"); };
+r.run();
+```
+
+2. 作为 `return` 返回值
+
+```java
+static FileFilter getFilter(String text)
+{
+    return (pathname) -> pathname.toString().endsWith(text);
+}
+```
+
+3. 作为数组元素
+
+```java
+final PathMatcher matchers[] =
+{
+    (path) -> path.toString().endsWith("txt"),
+    (path) -> path.toString().endsWith("java")
+};
+```
+
+4. 作为普通方法或者构造方法的参数
+
+```java
+new Thread(() -> System.out.println("Relsola")).start();
+```
+
+### `Lambda` 表达式的作用域范围
+
+- `Lambda` 表达式并不会引入新的作用域，这一点和匿名内部类是不同的  
+  也就是说，`Lambda` 表达式主体内使用的 `this` 关键字和其所在的类实例相同
+
+- `Lambda` 表达式中要用到的，但又未在 `Lambda` 表达式中声明的变量  
+  必须声明为 `final` 或者是 `effectively final`，否则就会出现编译错误
+
+在 `Lambda` 表达式中修改变量的值
+
+1. 把变量声明为 `static`
+2. 把变量声明为 `AtomicInteger` 使用 `set()` 和 `get()`
+3. 使用数组
+
 ## 异常处理
 
 ## Java 常用工具类
