@@ -37,11 +37,11 @@ export default defineConfig({
         { text: 'SQL', link: '/Java/sql' }
       ],
       '/C++/': [
-        { text: 'C++ 学习笔记', link: '/' },
+        { text: 'C 知识笔记', link: '/C++/c' },
+        { text: 'C++ 知识笔记', link: '/C++/cpp' },
         { text: 'STL', link: '/' },
         { text: 'OpenGL', link: '/' },
-        { text: 'DirectX', link: '/' },
-        { text: 'C 学习笔记', link: '/' }
+        { text: 'DirectX', link: '/' }
       ],
       '/Game/': [
         { text: 'Game', link: '/' },
