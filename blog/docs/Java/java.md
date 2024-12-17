@@ -258,9 +258,56 @@ new Thread(() -> System.out.println("Relsola")).start();
 2. 把变量声明为 `AtomicInteger` 使用 `set()` 和 `get()`
 3. 使用数组
 
-## 异常处理
+## 异常处理最佳实践
+
+1. 尽量不要捕获 `RuntimeException`
+
+> 尽量不要 catch RuntimeException，比如 NullPointerException、IndexOutOfBoundsException 等等，应该用预检查的方式来规避。
+
+```java
+if (obj != null) {
+    //...
+}
+```
+
+2. 尽量使用 `try-with-resource` 来关闭资源
+
+> 当需要关闭资源时，尽量不要使用 try-catch-finally，禁止在 try 块中直接关闭资源。
+
+```java
+try (FileInputStream inputStream = new FileInputStream(file);) {
+} catch (FileNotFoundException e) {
+    log.error(e);
+} catch (IOException e) {
+    log.error(e);
+}
+
+// 没有实现 AutoCloseable 接口，在 finally 块关闭流
+try {
+    File file = new File("./hello.txt");
+    inputStream = new FileInputStream(file);
+} catch (FileNotFoundException e) {
+    log.error(e);
+} finally {
+    if (inputStream != null) {
+        try {
+            inputStream.close();
+        } catch (IOException e) {
+            log.error(e);
+        }
+    }
+}
+```
 
 ## Java 常用工具类
+
+### StringUtils
+
+### Objects
+
+### Hutool
+
+### Guava
 
 ## 并发编程
 
