@@ -12,7 +12,7 @@ export default defineConfig({
       { text: 'Home', link: '/' },
       { text: 'JavaScript', link: 'JavaScript/javascript' },
       { text: 'Java', link: 'Java/java' },
-      { text: 'C/C++', link: 'C++/note' },
+      { text: 'C/C++', link: 'C++/c' },
       { text: 'Game', link: 'Game/cs' },
       { text: 'GitHub', link: 'GitHub/index' }
     ],
