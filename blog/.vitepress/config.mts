@@ -49,7 +49,7 @@ export default defineConfig({
     },
 
     outline: {
-      level: 'deep',
+      level: 2,
       label: '页面导航'
     },
 
