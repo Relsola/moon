@@ -12,8 +12,8 @@ export default defineConfig({
       { text: 'Home', link: '/' },
       { text: 'JavaScript', link: 'JavaScript/javascript' },
       { text: 'Java', link: 'Java/java' },
-      { text: 'C/C++', link: 'C++/note' },
-      { text: 'Game', link: 'Game/cs' },
+      { text: 'C/C++', link: 'C++/c' },
+      { text: 'Game', link: 'Game/index' },
       { text: 'GitHub', link: 'GitHub/index' }
     ],
 
@@ -39,14 +39,12 @@ export default defineConfig({
       '/C++/': [
         { text: 'C 知识笔记', link: '/C++/c' },
         { text: 'C++ 知识笔记', link: '/C++/cpp' },
-        { text: 'STL', link: '/' },
-        { text: 'OpenGL', link: '/' },
-        { text: 'DirectX', link: '/' }
+        { text: 'STL', link: '/' }
       ],
       '/Game/': [
-        { text: 'Game', link: '/' },
-        { text: 'Unity', link: '/' },
-        { text: 'Unreal', link: '/' }
+        { text: 'My Game', link: '/Game/index' },
+        { text: 'CS2', link: '/Game/CS2' },
+        { text: 'Godot 知识笔记', link: '/Game/godot' }
       ]
     },
 

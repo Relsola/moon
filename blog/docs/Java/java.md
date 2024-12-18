@@ -123,7 +123,7 @@ String str = list.stream().collect(Collectors.joining(", ")).toString();
 
 Optional 类提供了一种用于表示可选值而非空引用的类级别解决方案。
 
-![alt text](image.png)
+![alt text](/image/Java/java-optional.png)
 
 ### 创建 Optional 对象
 
