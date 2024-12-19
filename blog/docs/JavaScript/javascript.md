@@ -2,6 +2,202 @@
 
 > JavaScript 详细权威知识参考 MDN 文档
 
+## 判断数据类型
+
+1. `typeof`
+
+> typeof 的返回值有八种，返回值是字符串，不能判断数组和 null 的数据类型
+
+```js
+typeof ''; // string
+typeof 1; // number
+typeof true; // boolean
+typeof undefined; // undefined
+typeof Symbol(); // symbol
+typeof 1n; // bigint
+typeof new Function(); // function
+typeof {}; // object
+
+typeof null; // object 无效, 这个是一个设计缺陷，造成的
+typeof []; // object 无效
+```
+
+2. `instanceof`
+
+> instanceof 检查对象原型链上有没有该构造函数, 可以精准判断引用数据类型
+
+```js
+({}) instanceof Object; //true
+new Date() instanceof Date; //true
+new RegExp() instanceof RegExp; //true
+new Error() instanceof Error; //true
+
+[] instanceof Array; //true
+[] instanceof Object; //true
+
+(() => {}) instanceof Function; // true
+(() => {}) instanceof Object; // true
+```
+
+3. `constructor`
+
+> constructor 访问它的构造函数检测基本类型和对象, 但不能检测 null 和 undefined  
+> 注意函数原的型可以进行重写, 导致 constructor 是不稳定的
+
+```js
+(10).constructor === Number; // true
+[].constructor === Array; // true
+new RegExp().constructor === RegExp; // true
+new RegExp().constructor === Object; // false
+
+function Fn() {}
+Fn.prototype = new Array();
+new Fn().constructor; // [Function: Array]
+(() => {}).constructor; // [Function: Function]
+```
+
+4. `Object.prototype.toString.call`
+
+> 让 Object 原型上的 toString 方法中的 this 指向第一个参数的值并执行, 是最准确的方式
+
+```js
+Object.prototype.toString.call(''); // [object String]
+Object.prototype.toString.call(1); // [object Number]
+Object.prototype.toString.call(true); // [object Boolean]
+Object.prototype.toString.call(undefined); // [object Undefined]
+Object.prototype.toString.call(null); // [object Null]
+Object.prototype.toString.call(new Function()); // [object Function]
+Object.prototype.toString.call(new Date()); // [object Date]
+Object.prototype.toString.call([]); // [object Array]
+Object.prototype.toString.call(new RegExp()); // [object RegExp]
+Object.prototype.toString.call(new Error()); // [object Error]
+```
+
+## String 字符串
+
+          列举常用字符串方法:
+          charAt()	返回指定索引的字符
+
+          charCodeAt()	返回指定索引的字符编码
+
+          concat()	将原字符串和指定字符串拼接，不指定相当于复制一个字符串
+
+          String.fromCharCode()	返回指定编码的字符
+
+          indexOf()	查询并返回指定子串的索引，不存在返回-1
+
+          lastIndexOf()	反向查询并返回指定子串的索引，不存在返回-1
+
+          localeCompare()	比较原串和指定字符串：原串大返回1,原串小返回-1，相等返回0
+
+          slice()	截取指定位置的字符串，并返回。包含起始位置但是不包含结束位置，位置可以是负数
+
+          substr()	截取指定起始位置固定长度的字符串
+
+          substring()	截取指定位置的字符串，类似slice。起始位置和结束位置可以互换并且不能是负数
+
+          split()	将字符串切割转化为数组返回
+
+          toLowerCase()	将字符串转化为小写
+
+          toUpperCase()	将字符串转化为大写
+
+          valueOf()	返回字符串包装对象的原始值
+
+          toString()	直接转为字符串并返回
+
+          includes()	判断是否包含指定的字符串
+
+          startsWith()	 判断是否以指定字符串开头
+
+          endsWith()	判断是否以指定字符串结尾
+
+          repeat()	重复指定次数
+
+## Array 数组
+
+           列举常用数组方法：
+           concat() 合并数组，并返回合并之后的数据
+
+           join()	使用分隔符，将数组转为字符串并返回
+
+           pop()	删除最后一位，并返回删除的数据，在原数组
+
+           shift()	删除第一位，并返回删除的数据，在原数组
+
+           unshift()	在第一位新增一或多个数据，返回长度，在原数组
+
+           push()	在最后一位新增一或多个数据，返回长度
+
+           reverse()	反转数组，返回结果，在原数组
+
+           slice()	截取指定位置的数组，并返回
+
+           sort()	排序（字符规则），返回结果，在原数组
+
+           splice()	删除指定位置，并替换，返回删除的数据
+
+           toString()	直接转为字符串，并返回
+
+           valueOf()	返回数组对象的原始值
+
+           indexOf()	查询并返回数据的索引
+
+           lastIndexOf()	反向查询并返回数据的索引
+
+           forEach()	参数为回调函数，会遍历数组所有的项，回调函数接受三个参数，分别为value，index，self；forEach没有返回值
+
+           map()	同forEach，同时回调函数返回数据，组成新数组由map返回
+
+           filter()	同forEach，同时回调函数返回布尔值，为true的数据组成新数组由filter返回
+
+           Array.from()	将伪数组对象或可遍历对象转换为真数组
+
+           Array.of()	将一系列值转换成数组
+
+           find	找出第一个满足条件返回true的元素
+
+           findIndex	找出第一个满足条件返回true的元素下标
+
+## Object 对象
+
+          对象常用方法:
+          Object.assign()  浅拷贝
+
+          Object.create()  需要传入一个参数，作为新建对象的原型对象
+
+          Object.is()  判断两个值是否相等
+
+          Object.keys() 获取给定对象的自身可枚举属性的属性名（键）
+
+          Object.values() 获取给定对象的自身可枚举属性的属性值（值）
+
+          Object.entries() 返回键值对数组
+
+          Object.fromEntries()  将键值对数组转换为对象
+
+          Object.defineProperty() 给对象定义新属性、修改现有属性
+          Object.defineProperties() 可一次性处理多个属性
+
+          Object.proxy() Proxy是一个构造函数，用它来代理某些操作
+
+          Object.getOwnPropertyDescription() 获取对象上的一个自有属性的属性描述
+          Object.getOwnPropertyDescriptors() 获取对象的所有自身属性的描述符
+
+          Object.getOwnPropertyNames() 获取对象自身拥有的可枚举属性和不可枚举属性的属性名，返回一个数组
+
+          Object.prototype.hasOwnProperty() 判断对象自身属性是否含有指定的属性，不包括从原型链上继承的属性
+
+          Object.getPrototypeOf()  返回指定对象的原型，如果没有则返回null
+
+          Object.setPrototypeOf() 设置指定对象的新原型
+
+          Object.prototype.isPrototypeOf() 检测一个对象是否存在于另一个对象的原型链上
+
+          Object.toString() 每个对象都有这个方法，用于返回一个表示该对象的字符串，不同类型的数据都重写了toString方法，因此返回的值不一样
+
+          Object.toLocaleString() 将对象根据语言环境来转换字符串
+
 ## BOM
 
 ### URL 的组成
@@ -613,13 +809,31 @@ for (let i = 0, str = 'div'; i <= 4; i++) {
 
 8. `console.log` / `console.info` / `console.debug`
 
-> 都是让控制台输出消息,几乎没什么不同,用 console.log 就行  
-> console.log 支持占位符
+> 都是让控制台输出消息,几乎没什么不同,用 console.log 就行
 
 ```js
 console.log('log');
 console.info('info');
 console.debug('debug');
+```
+
+> console.log 支持占位符
+>
+> - 字符串：`%s`
+> - 整数：`%d`
+> - 浮点数：`%f`
+> - 对象：`%o` 或 `%O`
+> - CSS 样式：`%c`
+
+```js
+// %c 指令前的文本不会受到影响，但指令后的文本将会使用参数中声明的 CSS 样式
+// 如果输出的文本里面希望包含 "%c" 这个字符，可以使用 "%%c" 的方式进行转义
+console.log(
+  `%c vue-devtools %c Detected Vue v2.6.11 %c`,
+  'background:#35495e ; padding: 1px; border-radius: 3px 0 0 3px;  color: #fff',
+  'background:#41b883 ; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff',
+  'background:transparent'
+);
 ```
 
 9. `console.group` / `console.groupCollapsed` / `console.groupEnd`
@@ -668,7 +882,7 @@ console.log(console.memory);
 console.clear();
 ```
 
-## Proxy 代理
+## Proxy
 
 ```js
 console.log(typeof Proxy); // function
@@ -1327,64 +1541,6 @@ Object.create(null);
 }
 
 {
-  // 数据类型的判断
-  // 1. typeof的返回值有八种，返回值是字符串，不能判断数组和null的数据类型，返回object。
-  typeof ''; // string
-  typeof 1; // number
-  typeof true; // boolean
-  typeof undefined; // undefined
-  typeof Symbol(); // bigint
-  typeof 1n; // symbol
-  typeof new Function(); // function
-
-  typeof null; //object 无效   这个是一个设计缺陷，造成的
-  typeof []; //object 无效
-
-  // 2.  instanceof  检查对象原型链上有没有该构造函数，可以精准判断引用数据类型
-  ({}) instanceof Object; //true
-  new Date() instanceof Date; //true
-  new RegExp() instanceof RegExp; //true
-  new Error() instanceof Error; //true
-
-  [] instanceof Array; //true
-  [] instanceof Object; //true
-
-  (() => {}) instanceof Function; // true
-  (() => {}) instanceof Object; // true
-
-  // 3. constructor 访问它的构造函数。既可以检测基本类型又可以检测对象，但不能检测null和undefined
-  // 注意函数的 constructor 是不稳定，如果把函数的原型进行重写，这样检测出来的结果会不准确
-  (10).constructor === Number; // true
-  [].constructor === Array; // true
-  new RegExp().constructor === RegExp; // true
-  new RegExp().constructor === Object; // false
-
-  function Fn() {}
-  Fn.prototype = new Array();
-  new Fn().constructor; // [Function: Array]
-  (() => {}).constructor; // [Function: Function]
-
-  // 4. 最准确方式 —— Object.prototype.toString.call()
-  /*
-    获取Object原型上的toString方法，让方法执行
-    让toString方法中的this指向第一个参数的值，最准确方式。
-    
-    第一个object：当前实例是对象数据类型的(object)
-    第二个Object：数据类型。
-  */
-  Object.prototype.toString.call(''); // [object String]
-  Object.prototype.toString.call(1); // [object Number]
-  Object.prototype.toString.call(true); // [object Boolean]
-  Object.prototype.toString.call(undefined); // [object Undefined]
-  Object.prototype.toString.call(null); // [object Null]
-  Object.prototype.toString.call(new Function()); // [object Function]
-  Object.prototype.toString.call(new Date()); // [object Date]
-  Object.prototype.toString.call([]); // [object Array]
-  Object.prototype.toString.call(new RegExp()); // [object RegExp]
-  Object.prototype.toString.call(new Error()); // [object Error]
-}
-
-{
   // 0.1+0.2 === 0.3吗
   console.log(0.1 + 0.2 === 0.3); // false
   console.log((0.1 + 0.2).toFixed(2)); // 0.30  toFixed为四舍五入
@@ -1540,146 +1696,6 @@ Object.create(null);
     function add() {
       console.log(Array.isArray(arguments));
     }
-  }
-}
-
-{
-  // 字符串
-  {
-    /* 
-          列举常用字符串方法:
-          charAt()	返回指定索引的字符
-
-          charCodeAt()	返回指定索引的字符编码
-
-          concat()	将原字符串和指定字符串拼接，不指定相当于复制一个字符串
-
-          String.fromCharCode()	返回指定编码的字符
-
-          indexOf()	查询并返回指定子串的索引，不存在返回-1
-
-          lastIndexOf()	反向查询并返回指定子串的索引，不存在返回-1
-
-          localeCompare()	比较原串和指定字符串：原串大返回1,原串小返回-1，相等返回0
-
-          slice()	截取指定位置的字符串，并返回。包含起始位置但是不包含结束位置，位置可以是负数
-
-          substr()	截取指定起始位置固定长度的字符串
-
-          substring()	截取指定位置的字符串，类似slice。起始位置和结束位置可以互换并且不能是负数
-
-          split()	将字符串切割转化为数组返回
-
-          toLowerCase()	将字符串转化为小写
-
-          toUpperCase()	将字符串转化为大写
-
-          valueOf()	返回字符串包装对象的原始值
-
-          toString()	直接转为字符串并返回
-
-          includes()	判断是否包含指定的字符串
-
-          startsWith()	 判断是否以指定字符串开头
-
-          endsWith()	判断是否以指定字符串结尾
-
-          repeat()	重复指定次数
-        */
-  }
-}
-
-{
-  // 数组
-  {
-    /* 
-           列举常用数组方法：
-           concat()	合并数组，并返回合并之后的数据
-
-           join()	使用分隔符，将数组转为字符串并返回
-
-           pop()	删除最后一位，并返回删除的数据，在原数组
-
-           shift()	删除第一位，并返回删除的数据，在原数组
-
-           unshift()	在第一位新增一或多个数据，返回长度，在原数组
-
-           push()	在最后一位新增一或多个数据，返回长度
-
-           reverse()	反转数组，返回结果，在原数组
-
-           slice()	截取指定位置的数组，并返回
-
-           sort()	排序（字符规则），返回结果，在原数组
-
-           splice()	删除指定位置，并替换，返回删除的数据
-
-           toString()	直接转为字符串，并返回
-
-           valueOf()	返回数组对象的原始值
-
-           indexOf()	查询并返回数据的索引
-
-           lastIndexOf()	反向查询并返回数据的索引
-
-           forEach()	参数为回调函数，会遍历数组所有的项，回调函数接受三个参数，分别为value，index，self；forEach没有返回值
-
-           map()	同forEach，同时回调函数返回数据，组成新数组由map返回
-
-           filter()	同forEach，同时回调函数返回布尔值，为true的数据组成新数组由filter返回
-
-           Array.from()	将伪数组对象或可遍历对象转换为真数组
-
-           Array.of()	将一系列值转换成数组
-
-           find	找出第一个满足条件返回true的元素
-
-           findIndex	找出第一个满足条件返回true的元素下标
-        */
-  }
-}
-
-{
-  // 对象
-  {
-    /* 
-          对象常用方法:
-          Object.assign()  浅拷贝
-
-          Object.create()  需要传入一个参数，作为新建对象的原型对象
-
-          Object.is()  判断两个值是否相等
-
-          Object.keys() 获取给定对象的自身可枚举属性的属性名（键）
-
-          Object.values() 获取给定对象的自身可枚举属性的属性值（值）
-
-          Object.entries() 返回键值对数组
-
-          Object.fromEntries()  将键值对数组转换为对象
-          
-          Object.defineProperty() 给对象定义新属性、修改现有属性
-          Object.defineProperties() 可一次性处理多个属性
-
-          Object.proxy() Proxy是一个构造函数，用它来代理某些操作
-
-          Object.getOwnPropertyDescription() 获取对象上的一个自有属性的属性描述
-          Object.getOwnPropertyDescriptors() 获取对象的所有自身属性的描述符
-
-          Object.getOwnPropertyNames() 获取对象自身拥有的可枚举属性和不可枚举属性的属性名，返回一个数组
-
-          Object.prototype.hasOwnProperty() 判断对象自身属性是否含有指定的属性，不包括从原型链上继承的属性
-
-          Object.getPrototypeOf()  返回指定对象的原型，如果没有则返回null
-
-          Object.setPrototypeOf() 设置指定对象的新原型
-
-          Object.prototype.isPrototypeOf() 检测一个对象是否存在于另一个对象的原型链上
-
-          Object.toString() 每个对象都有这个方法，用于返回一个表示该对象的字符串，不同类型的数据都重写了toString方法，因此返回的值不一样
-
-          Object.toLocaleString() 将对象根据语言环境来转换字符串
-        */
   }
 }
 
