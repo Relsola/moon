@@ -40,8 +40,8 @@ export default defineConfig({
 
     sidebar: {
       '/web/JavaScript/': [
-        { text: 'JavaScript', link: '/JavaScript/javascript' },
-        { text: 'ES6+', link: '/JavaScript/es6' },
+        { text: 'JavaScript', link: '/web/JavaScript/' },
+        { text: 'ES6+', link: '/web/JavaScript/es6' },
         { text: '正则表达式', link: 'web/JavaScript/regexp' }
       ],
       'web/Java/': [
