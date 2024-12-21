@@ -1,8 +1,65 @@
 # JavaScript 知识笔记
 
-> JavaScript 详细权威知识参考 MDN 文档
+> JavaScript 详细权威知识参考 [MDN](https://developer.mozilla.org/zh-CN/) 文档  
+> 阅读书籍推荐 《JavaScript 高级程序设计》
 
-## 判断数据类型
+## 对 JS 的理解
+
+- `JavaScript` 是动态类型语言，代码在执行过程中，才知道这个变量属于的类型。
+- 弱类型，数据类型不固定，可以随时改变。
+- 解释型，一边执行，一边编译，不需要程序在运行之前整体先编译。
+- 基于对象，最终所有对象都指向 `Object`。
+- 脚本语言，一般都是可以嵌在其它编程语言当中执行。
+- 单线程，依次执行，前面代码执行完后面才执行。
+
+## JS 的数据类型
+
+### 原始类型
+
+JavaScript 中原始类型有六种，原始类型既只保存原始值，是没有函数可以调用的类型。  
+`string` `number` `boolean` `null` `undefined` `symbol`
+
+::: tip 原始类型的函数调用
+原始类型调用函数方法时会被封装成其对应的对象  
+`1'.toString()` 相当于 `new String('1').toString()`  
+`new String('1')` 创建的是一个对象，而这个对象里是存在 `toString()` 方法的
+:::
+
+::: tip `null`、`undefined`、`undeclared` 的区别
+`null` 表示空，什么都没有，不存在的对象，他的数据类型是 `object`。  
+初始值赋值为 `null`，表示将要赋值为对象， 不再使用的值设为 `null`，浏览器会自动回收。
+
+`undefined` 表示未定义，常见的为 `undefined` 情况：
+
+1. 变量声明未赋值
+2. 函数执行但没有明确的返回值
+3. 获取一个对象上不存在的属性或方法。
+
+变量声明未赋值，是 `undefined`，未声明的变量，是 `undeclared`，程序运行会报错。
+
+:::
+
+::: tip `null` 到底是什么类型
+现在很多书籍把 null 解释成空对象，是一个对象类型。然而在早期 JavaScript 的版本中使用的是 32 位系统，考虑性能问题，使用低位存储变量的类型信息，000 开头代表对象，而 null 就代表全零，所以将它错误的判断成 Object，虽然后期内部判断代码已经改变，但 null 类型为 object 的判断却保留了下来，至于 null 具体是什么类型，属于仁者见仁智者见智，你说它是一个 bug 也好，说它是空对象，是对象类型也能理解的通。
+:::
+
+### 对象类型
+
+在 JavaScript 中，除了原始类型，其它的都是对象类型  
+对象类型存储的是地址，而原始类型存储的是值。
+
+```js
+const a = [];
+const b = a;
+a.push(1);
+console.log(b); // [1]
+```
+
+基本数据类型存储在栈中，引用数据类型存储在堆中。  
+引用数据类型在栈中存储了指针，该指针指向堆中该实体的起始地址。  
+当解释器寻找引用值时，会首先检索其在栈中的地址，取得地址后从堆中获得实体。
+
+### 判断数据类型
 
 1. `typeof`
 
@@ -72,6 +129,14 @@ Object.prototype.toString.call([]); // [object Array]
 Object.prototype.toString.call(new RegExp()); // [object RegExp]
 Object.prototype.toString.call(new Error()); // [object Error]
 ```
+
+### 类型转换
+
+JavaScript 中，类型转换只有三种：
+
+1. 转换成数字
+2. 转换成布尔值
+3. 转换成字符串
 
 ## String 字符串
 
@@ -1463,84 +1528,6 @@ Object.create(null);
 
 ```js
 {
-  /* 
-    对JS的理解
-      动态类型语言：代码在执行过程中，才知道这个变量属于的类型。
-      弱类型：数据类型不固定，可以随时改变。
-      解释型：一边执行，一边编译，不需要程序在运行之前需要整体先编译。
-      基于对象：最终所有对象都指向Object。
-      脚本语言：一般都是可以嵌在其它编程语言当中执行。
-      单线程：依次执行，前面代码执行完后面才执行。
-
-  ECMAscript	                DOM	                      BOM  
-  JavaScript的语法部分  	    文档对象模型	           浏览器对象模型
-  主要包含JavaScript语言语法  主要用来操作页面元素和样式 主要用来操作浏览器相关功能
-  */
-}
-
-{
-  // JS数据类型有哪些？值是如何存储的？
-  // 基本数据类型:
-  Number;
-  String;
-  Boolean;
-  undefined;
-  null;
-  Symbol; // ES6新增，表示独一无二的值
-  BigInt; // ES6新增，以n结尾，表示超长数据
-
-  // 对象：
-  Object;
-  Function;
-  Array;
-  Date;
-  RegExp;
-  Error;
-
-  /* 
-    基本数据类型值是不可变的，多次赋值，只取最后一个。
-    基本数据类型存储在栈中，占据空间小
-    引用数据类型存储在堆中。引用数据类型占据空间大
-    引用数据类型在栈中存储了指针，该指针指向堆中该实体的起始地址。当解释器寻找引用值时，会首先检索其在栈中的地址，取得地址后从堆中获得实体。
-  */
-}
-
-{
-  /* 
-    4. Null、undefined、undeclared 的 区别
-       null表示空的，什么都没有，不存在的对象，他的数据类型是object。 初始值赋值为null，表示将要赋值为对象， 不再使用的值设为null，浏览器会自动回收。
-       
-       undefined表示未定义，常见的为undefined情况： 一是变量声明未赋值， 二是数组声明未赋值； 三是函数执行但没有明确的返回值； 四是获取一个对象上不存在的属性或方法。
-         变量声明未赋值，是 undefined。
-         未声明的变量，是 undeclared。浏览器会报错a is not defined ，ReferenceError。
-  */
-  null, undefined;
-}
-
-{
-  /* 
-    JS数据类型转换 JS的显式数据类型转换一共有三种
-      转字符串：.toString() String() 
-      Sting()函数相可以将null和undefined转化为字符串，toString()转化会报错。
-
-      转数值：Number() parseInt()  parseFloat()
-      Number()函数  字符串合法数字则转化成数字 不合法则转化为NAN 
-                    空串转化为0  null和undefined转0和NAN true转1 false转0
-      parseInt()是从左向右获取一个字符串的合法整数位
-      parseFloat()获取字符串的所有合法小数位
-
-      转布尔：像false、0、空串、null、undefined和NaN这6种会转化为false
-      
-
-     常用的隐式类型转换有：任意值+空串转字符串、+a转数值、a-0 转数值等。
-  */
-  String(), toString();
-  Number(), parseInt(), parseFloat();
-  Boolean();
-  0 + '', +'10', !!null;
-}
-
-{
   // 0.1+0.2 === 0.3吗
   console.log(0.1 + 0.2 === 0.3); // false
   console.log((0.1 + 0.2).toFixed(2)); // 0.30  toFixed为四舍五入
@@ -1697,40 +1684,5 @@ Object.create(null);
       console.log(Array.isArray(arguments));
     }
   }
-}
-
-{
-  // Math常用方法
-  Math.abs(); // 绝对值
-
-  Math.ceil(); // 向上取整
-
-  Math.floor(); // 向下取整
-
-  Math.max(); // 最大值
-
-  Math.min(); // 最小值
-
-  Math.round(); // 四舍五入
-
-  Math.random(); // 随机数
-
-  Math.pow(); // 指数运算
-
-  Math.sqrt(); // 平方根
-
-  Math.log(); // 返回以e为底的自然对数值
-
-  Math.exp(); // 返回常数e的参数次方
-
-  // Math属性  只读，不可修改
-  Math.E; // 2.718281828459045  常数e
-  Math.LN2; // 0.6931471805599453   2的自然对数
-  Math.LN10; // 2.302585092994046   10的自然对数
-  Math.LOG2E; // 1.4426950408889634  以2为底的e的对数
-  Math.LOG10E; // 0.4342944819032518  以10为底的e的对数
-  Math.PI; // 3.141592653589793 常数π
-  Math.SQRT1_2; // 0.7071067811865476  0.5的平方根
-  Math.SQRT2; // 1.4142135623730951  2 的平方根
 }
 ```
