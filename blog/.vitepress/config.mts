@@ -1,4 +1,17 @@
 import { defineConfig } from 'vitepress';
+import { resolve } from 'path';
+
+// Element Plus 自动导入和按需加载
+import AutoImport from 'unplugin-auto-import/vite';
+import Components from 'unplugin-vue-components/vite';
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
+
+// 集成 unocss
+import UnoCSS from 'unocss/vite';
+
+// Vite 配置路径别名的
+const root = process.cwd();
+const path = (path: string) => resolve(root, path);
 
 export default defineConfig({
   title: 'Relsola',
@@ -40,7 +53,8 @@ export default defineConfig({
 
     sidebar: {
       '/web/JavaScript/': [
-        { text: 'JavaScript', link: '/web/JavaScript/' },
+        { text: 'JavaScript 知识笔记', link: '/web/JavaScript/' },
+        { text: '最佳实践', link: '/web/JavaScript/best-practice' },
         { text: 'ES6+', link: '/web/JavaScript/es6' },
         { text: '正则表达式', link: 'web/JavaScript/regexp' }
       ],
@@ -56,5 +70,17 @@ export default defineConfig({
     },
 
     socialLinks: [{ icon: 'github', link: 'https://github.com/Relsola' }]
+  },
+
+  vite: {
+    plugins: [
+      UnoCSS(),
+      AutoImport({ resolvers: [ElementPlusResolver()] }),
+      Components({ resolvers: [ElementPlusResolver()] })
+    ],
+
+    resolve: {
+      alias: [{ find: '@components', replacement: path('components') }]
+    }
   }
 });

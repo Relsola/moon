@@ -1,12 +1,17 @@
 {
-  "devDependencies": {
-    "vitepress": "^1.5.0"
-  },
   "scripts": {
     "dev": "vitepress dev",
     "build": "vitepress build"
   },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "unocss": "^0.65.2",
+    "unplugin-auto-import": "^0.19.0",
+    "unplugin-vue-components": "^0.28.0",
+    "vitepress": "^1.5.0"
+  },
   "dependencies": {
+    "element-plus": "^2.9.1",
     "vue": "^3.5.13"
   }
 }
