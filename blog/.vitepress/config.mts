@@ -53,7 +53,8 @@ export default defineConfig({
 
     sidebar: {
       '/web/JavaScript/': [
-        { text: 'JavaScript', link: '/web/JavaScript/' },
+        { text: 'JavaScript 知识笔记', link: '/web/JavaScript/' },
+        { text: '最佳实践', link: '/web/JavaScript/best-practice' },
         { text: 'ES6+', link: '/web/JavaScript/es6' },
         { text: '正则表达式', link: 'web/JavaScript/regexp' }
       ],
