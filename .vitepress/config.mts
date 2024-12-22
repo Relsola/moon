@@ -40,14 +40,6 @@ export default defineConfig({
           { text: 'Godot', link: '/game/Godot/' }
         ]
       },
-      {
-        text: 'Learn',
-        items: [
-          { text: 'Python', link: '/learn/Python/' },
-          { text: 'C 语言', link: '/learn/C/' },
-          { text: 'Rust', link: '/learn/Rust/' }
-        ]
-      },
       { text: 'GitHub', link: 'GitHub/index' }
     ],
 

@@ -9,6 +9,8 @@ import Regex from '@components/Regex/index.vue'
 
 ## 正则测试器
 
+<Regex />
+
 ## 正则表达式中的特殊字符
 
 ### 字符组
