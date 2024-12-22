@@ -76,7 +76,7 @@ export default defineConfig({
     plugins: [
       UnoCSS(),
       AutoImport({ resolvers: [ElementPlusResolver()] }),
-      Components({ resolvers: [ElementPlusResolver({ ssr: true })] })
+      Components({ resolvers: [ElementPlusResolver()] })
     ],
 
     resolve: {
