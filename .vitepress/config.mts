@@ -17,7 +17,7 @@ export default defineConfig({
   title: 'Relsola',
   description: "Relsola's blog.",
   srcDir: 'docs/',
-  base: '.',
+  base: '/moon/',
   head: [['link', { rel: 'icon', href: '/moon/favicon.jpg' }]],
 
   themeConfig: {
@@ -81,6 +81,10 @@ export default defineConfig({
 
     resolve: {
       alias: [{ find: '@components', replacement: path('components') }]
+    },
+
+    ssr: {
+      noExternal: [/element-plus/]
     }
   }
 });
