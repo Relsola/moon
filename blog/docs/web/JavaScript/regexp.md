@@ -1,4 +1,10 @@
+<script setup>
+import Regex from '@components/Regex/index.vue'
+</script>
+
 # 正则表达式
+
+<Regex />
 
 ## 正则表达式字符匹配
 
@@ -380,10 +386,7 @@ console.log(reg.test('abcdEF234')); // true 三者都有
       '&': 'amp',
       "'": '#39'
     };
-    const regex = new RegExp(
-      '[' + Object.keys(escapeChars).join('') + ']',
-      'g'
-    );
+    const regex = new RegExp('[' + Object.keys(escapeChars).join('') + ']', 'g');
     return str.replace(regex, c => '&' + escapeChars[c] + ';');
   }
   console.log(escapeHTML('<div>Blah blah blah</div>'));
