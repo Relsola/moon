@@ -37,23 +37,20 @@ jobs:
         with:
           node-version: 20
           cache: pnpm
-          cache-dependency-path: blog/pnpm-lock.yaml
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
       - name: Install dependencies
         run: pnpm install
-        working-directory: ./blog
 
       - name: Build with VitePress
         run: pnpm build
-        working-directory: ./blog
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: blog/.vitepress/dist
+          path: .vitepress/dist
 
   # 部署工作
   deploy:

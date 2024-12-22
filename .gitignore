@@ -4,12 +4,9 @@
 .vs
 
 # VitePress build output
-blog/.vitepress/cache
-blog/.vitepress/dist
+.vitepress/cache
+.vitepress/dist
 
 # Node.js
 node_modules
 
-# Build files
-out
-bin
