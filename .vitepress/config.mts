@@ -75,8 +75,8 @@ export default defineConfig({
   vite: {
     plugins: [
       UnoCSS(),
-      AutoImport({ resolvers: [ElementPlusResolver()] }),
-      Components({ resolvers: [ElementPlusResolver()] })
+      AutoImport({ resolvers: [ElementPlusResolver({ ssr: true })] }),
+      Components({ resolvers: [ElementPlusResolver({ ssr: true })] })
     ],
 
     resolve: {
