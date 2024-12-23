@@ -32,6 +32,7 @@ export default defineConfig({
           { text: 'TypeScript', link: '/web/TypeScript/' }
         ]
       },
+      { text: 'SQl', link: '/SQL/' },
       {
         text: 'Game',
         items: [
