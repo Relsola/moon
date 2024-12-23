@@ -13,98 +13,58 @@ const n: null = null;
 const obj: object = { num: 1 };
 const big: bigint = 100n;
 const sym: symbol = Symbol('symbol');
-
-console.log(str);
-console.log(num);
-console.log(bool);
-console.log(u);
-console.log(n);
-console.log(obj);
-console.log(big);
-console.log(sym);
-
-/* 
-       默认情况下 null 和 undefined 是所有类型的子类型。 
-          就是说你可以把 null 和 undefined 赋值给其他类型。
-        
-       如果你在tsconfig.json指定了"strictNullChecks":true 
-          null 和 undefined 只能赋值给 void 和它们各自的类型。
-*/
 ```
+
+::: tip
+默认情况下 `null` 和 `undefined` 是所有类型的子类型  
+就是可以把 `null` 和 `undefined` 赋值给其他类型
+
+如果你在 `tsconfig.json` 指定了 `"strictNullChecks":true`  
+`null` 和 `undefined` 只能赋值给 `void` 和它们各自的类型
+:::
 
 ### Array 数组
 
+对数组类型的定义有两种方式
+
 ```ts
-{
-  // Array  对数组类型的定义有两种方式：
-  const arr: string[] = ['1', '2'];
+const arr: string[] = ['1', '2'];
 
-  const arr2: Array<number> = [1, 2];
-
-  const arr3: (string | number)[] = [1, '2'];
-
-  const arr4: Array<string | number> = ['1', 2];
-
-  console.log(arr);
-  console.log(arr2);
-  console.log(arr3);
-  console.log(arr4);
-}
-
-{
-  // 定义指定对象成员的数组：
-  interface Test {
-    name: string;
-    age: number;
-  }
-
-  const arr: Test[] = [{ name: '张三', age: 17 }];
-
-  const arr2: Array<Test> = [{ name: '李四', age: 21 }];
-
-  console.log(arr);
-  console.log(arr2);
-}
+const arr: Array<number> = [1, 2];
 ```
 
 ### Function 函数
 
+TS 的函数声明
+
 ```ts
-{
-  // 函数声明
-  function sum(x: number, y: number): number {
-    return x + y;
-  }
-  console.log(sum(1, 2));
+function sum(x: number, y: number): number {
+  return x + y;
+}
+```
+
+用接口定义函数类型  
+用函数表达式接口定义函数的方式时，对等号左侧进行类型限制  
+可以保证以后对函数名赋值时保证参数个数、参数类型、返回值类型不变
+
+```ts
+interface SearchFunc {
+  (source: string, subString: string): boolean;
 }
 
-{
-  /*
-       用接口定义函数类型
-       用函数表达式接口定义函数的方式时，对等号左侧进行类型限制
-       可以保证以后对函数名赋值时保证参数个数、参数类型、返回值类型不变。
-    */
+const search: SearchFunc = (a, b) => a === b;
+```
 
-  interface SearchFunc {
-    (source: string, subString: string): boolean;
-  }
+可选参数和参数默认值
 
-  const fn: SearchFunc = (a, b) => a === b;
-  console.log(fn('a', 'b'));
-}
+```ts
+const reduce = (x: number = 0, y?: number): number => {
+  if (y === undefined) return x;
+  return y - x;
+};
+```
 
-{
-  // 可选参数  参数默认值
-  // 注意点：可选参数后面不允许再出现必需参数
-
-  const reduce = (x: number = 0, y?: number): number => {
-    if (y === undefined) return x;
-    return y - x;
-  };
-
-  console.log(reduce());
-}
-
+```ts
 {
   // 剩余参数
   const push = (arr: any[], ...items: any[]): void => {
