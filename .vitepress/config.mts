@@ -32,7 +32,9 @@ export default defineConfig({
           { text: 'TypeScript', link: '/web/TypeScript/' }
         ]
       },
+      { text: 'Java', link: '/Java/' },
       { text: 'SQl', link: '/SQL/' },
+      { text: 'Godot', link: '/Godot/' },
       {
         text: 'Game',
         items: [
@@ -51,9 +53,9 @@ export default defineConfig({
         { text: 'ES6+', link: '/web/JavaScript/es6' },
         { text: '正则表达式', link: 'web/JavaScript/regexp' }
       ],
-      'web/Java/': [
-        { text: 'Java 知识笔记', link: '/web/Java/' },
-        { text: 'Spring Boot 开发', link: '/web/Java/spring' }
+      '/Java/': [
+        { text: 'Java 知识笔记', link: '/Java/' },
+        { text: 'Spring Boot 开发', link: '/Java/spring' }
       ]
     },
 
