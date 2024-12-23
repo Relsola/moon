@@ -23,35 +23,22 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: 'Home', link: '/' },
-      {
-        text: 'Web',
-        items: [
-          { text: 'JavaScript', link: '/web/JavaScript/' },
-          { text: 'Java', link: '/web/Java/' },
-          { text: '数据库', link: '/web/SQl/' },
-          { text: 'TypeScript', link: '/web/TypeScript/' }
-        ]
-      },
+      { text: 'JavaScript', link: '/JavaScript/' },
       { text: 'Java', link: '/Java/' },
       { text: 'SQl', link: '/SQL/' },
       { text: 'Godot', link: '/Godot/' },
-      {
-        text: 'Game',
-        items: [
-          { text: 'C++', link: '/game/CPP/' },
-          { text: 'C#', link: '/game/CSharp/' },
-          { text: 'Godot', link: '/game/Godot/' }
-        ]
-      },
+      { text: 'C++', link: '/CPP/' },
+      { text: 'C#', link: '/CSharp/' },
       { text: 'GitHub', link: 'GitHub/index' }
     ],
 
     sidebar: {
-      '/web/JavaScript/': [
-        { text: 'JavaScript 知识笔记', link: '/web/JavaScript/' },
-        { text: '最佳实践', link: '/web/JavaScript/best-practice' },
-        { text: 'ES6+', link: '/web/JavaScript/es6' },
-        { text: '正则表达式', link: 'web/JavaScript/regexp' }
+      '/JavaScript/': [
+        { text: 'JavaScript 知识笔记', link: '/JavaScript/' },
+        { text: '最佳实践', link: '/JavaScript/best-practice' },
+        { text: 'ES6+', link: '/JavaScript/es6' },
+        { text: '正则表达式', link: '/JavaScript/regexp' },
+        { text: 'TypeScript', link: '/JavaScript/typescript' }
       ],
       '/Java/': [
         { text: 'Java 知识笔记', link: '/Java/' },
