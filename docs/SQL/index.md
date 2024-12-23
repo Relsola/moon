@@ -176,3 +176,18 @@ UPDATE <表名> SET 字段1 = 值1 + 10, 字段2 = 值2 + 10, ... WHERE ...;
 :::
 
 3. 删除数据
+
+> 删除数据库表中的记录使用 `DELETE` 语句
+
+```sql
+DELETE FROM <表名> WHERE ...;
+```
+
+::: warning 注意
+`DELETE` 和 `UPDATE` 类似  
+`WHERE` 条件没有匹配到任何记录，`DELETE` 语句不会报错，也不会有任何记录被删除  
+不带 `WHERE` 条件的 `DELETE` 语句会删除整个表的数据  
+在使用 `MySQL` 这类真正的关系数据库时，`DELETE` 语句也会返回删除的行数以及 `WHERE` 条件匹配的行数
+:::
+
+## 事务
