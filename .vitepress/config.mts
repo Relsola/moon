@@ -29,7 +29,10 @@ export default defineConfig({
       { text: 'Godot', link: '/Godot/' },
       { text: 'C++', link: '/CPP/' },
       { text: 'C#', link: '/CSharp/' },
-      { text: 'GitHub', link: 'GitHub/index' }
+      {
+        text: 'GitHub',
+        items: [{ text: 'sudoku', link: 'https://github.com/Relsola/sudoku' }]
+      }
     ],
 
     sidebar: {
