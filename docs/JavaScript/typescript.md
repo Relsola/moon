@@ -59,259 +59,181 @@ const search: SearchFunc = (a, b) => a === b;
 
 ```ts
 const reduce = (x: number = 0, y?: number): number => {
-  if (y === undefined) return x;
+  if (y === undefined) {
+    return x;
+  }
   return y - x;
 };
 ```
 
+剩余参数
+
 ```ts
-{
-  // 剩余参数
-  const push = (arr: any[], ...items: any[]): void => {
-    for (const item of items) arr.push(item);
-  };
+const push = (arr: any[], ...items: any[]): void => {
+  items.forEach(item => arr.push(item));
+};
+```
 
-  const a: any[] = [];
-  push(a, '1', 2, true);
-  console.log(a);
-}
+函数重载
 
-{
-  /* 
-       函数重载
-
-       函数重载是使用相同名称和不同参数数量或类型创建多个方法的一种能力
-       为同一个函数提供多个函数类型定义来进行函数重载
-       编译器会根据这个列表去处理函数的调用。
-    */
-
-  function add(x: number, y: number): number;
-  function add(x: number, y: string): string;
-  function add(x: string, y: number): string;
-  function add(x: string, y: string): string;
-  function add(x: number | string, y: number | string) {
-    if (typeof x === 'string' || typeof y === 'string') {
-      return x.toString() + y.toString();
-    }
-    return x + y;
+```ts
+function add(x: number, y: number): number;
+function add(x: number, y: string): string;
+function add(x: string, y: number): string;
+function add(x: string, y: string): string;
+function add(x: number | string, y: number | string) {
+  if (typeof x === 'string' || typeof y === 'string') {
+    return x.toString() + y.toString();
   }
-
-  const result = add(1, '2');
-  console.log(result.split(''));
+  return x + y;
 }
 ```
 
 ### Tuple 元组
 
+元组最重要的特性是可以限制数组元素的个数和类型，它特别适合用来实现多值返回。
+
 ```ts
-{
-  /* 
-       元组最重要的特性是可以限制数组元素的个数和类型，它特别适合用来实现多值返回。
-       元祖用于保存定长定数据类型的数据
-
-       注意，元组类型只能表示一个已知元素数量和类型的数组，长度已指定，越界访问会提示错误。如果一个数组中可能有多种类型，数量和类型都不确定，那就直接any[]
-    */
-
-  let x: [string, number]; // 类型必须匹配且个数必须为2
-
-  x = ['hello', 10]; // OK
-  // x = ['hello', 10, 10]; // Error
-  // x = [10, 'hello']; // Error
-
-  console.log(x);
-}
-
-{
-  // 解构赋值 可选元素
-  type Tuple = [number, string?];
-
-  const one: Tuple = [123, '123'];
-  const two: Tuple = [123];
-
-  console.log(one);
-  console.log(two);
-}
-
-{
-  /* 
-       元组类型的剩余元素
-
-       元组类型里最后一个元素可以是剩余元素
-       形式为 ...X
-       这里 X 是数组类型
-       
-       剩余元素代表元组类型是开放的，可以有零个或多个额外的元素
-       例如，[number, ...string[]] 
-       表示带有一个 number 元素和任意数量string 类型元素的元组类型。
-
-       只读的元组类型
-       为任何元组类型加上 readonly 关键字前缀，以使其成为只读元组。
-       使用 readonly 关键字修饰元组类型之后
-       任何企图修改元组中元素的操作都会抛出异常
-    */
-
-  type ResTuple = readonly [number, ...string[]];
-  const rt1: ResTuple = [666, '99', '88'];
-  console.log(rt1);
-  // rt1[0] = 100
-}
+let x: [string, number];
 ```
+
+可选元素
+
+```ts
+type Tuple = [number, string?];
+const one: Tuple = [123, '123'];
+const two: Tuple = [123];
+```
+
+元组类型的剩余元素
+
+```ts
+type ResTuple = [number, ...string[]];
+const rt1: ResTuple = [666, '99', '88'];
+```
+
+::: warning 注意
+元祖用于保存定长定数据类型的数据，表示一个已知元素数量和类型的数组，长度已指定，越界访问会提示错误。如果一个数组中可能有多种类型，数量和类型都不确定，那就直接 `any[]`
+:::
 
 ### void
 
+void 表示没有任何类型，和其他类型是平等关系，不能直接赋值  
+一般也只有在函数没有返回值时去声明
+
 ```ts
-/* 
-       void表示没有任何类型，和其他类型是平等关系，不能直接赋值:
-       let a: void; // Error
-
-       你只能为它赋予null和undefined（在strictNullChecks未指定为true时）
-       一般也只有在函数没有返回值时去声明。
-
-       值得注意的是，方法没有返回值将得到undefined
-       但是我们需要定义成void类型，而不是undefined类型。
-    */
-
 const fun = (): void => {
-  1 + 1;
+  // ...
 };
 ```
 
+::: tip
+方法没有返回值将得到 `undefined`  
+但是我们需要定义成 `void` 类型，而不是 `undefined` 类型
+:::
+
 ### never
 
+`never` 类型表示的是那些永不存在的值的类型，值会永不存在的两种情况
+
+1. 如果一个函数执行时抛出了异常，那么这个函数永远不存在返回值，因为抛出异常会直接中断程序运行，这使得程序运行不到返回值那一步，即具有不可达的终点，也就永不存在返回了。
+2. 函数中执行无限循环的代码（死循环），使得程序永远无法运行到函数返回值那一步，永不存在返回。
+
 ```ts
-{
-  /* 
-       never类型表示的是那些永不存在的值的类型。
+const err = (msg: string): never => {
+  throw new Error(msg);
+};
 
-       值会永不存在的两种情况：
+const lop = (): never => {
+  while (true) {}
+};
+```
 
-          1. 如果一个函数执行时抛出了异常，那么这个函数永远不存在返回值（因为抛出异常会直接中断程序运行，这使得程序运行不到返回值那一步，即具有不可达的终点，也就永不存在返回了）
+`never` 类型是任何类型的子类型，可以赋值给任何类型  
+但是没有类型是 `never` 的子类型或可以赋值给 `never` 类型（除了 `never` 本身之外）  
+即使 `any` 也不可以赋值给 `never`
 
-          2. 函数中执行无限循环的代码（死循环），使得程序永远无法运行到函数返回值那一步，永不存在返回
-    */
-  const err = (msg: string): never => {
-    throw new Error(msg);
-  };
+使用 `never` 避免出现新增了联合类型没有对应的实现  
+目的就是写出类型绝对安全的代码  
+在 TypeScript 中，可以利用 never 类型的特性来实现全面性检查
 
-  const lop = (): never => {
-    while (true) {}
-  };
-}
+```ts
+type Foo = string | number;
 
-{
-  /* 
-       never类型同null和undefined一样 是任何类型的子类型，也可以赋值给任何类型
-       但是没有类型是never的子类型或可以赋值给never类型（除了never本身之外）
-       即使any也不可以赋值给never
-    */
-
-  let ne: never;
-  let any: any;
-
-  // ne = 123; // Error
-  // ne = an; // Error
-  ne = (() => {
-    throw new Error('异常');
-  })(); // OK
-}
-
-{
-  /* 
-       使用 never 避免出现新增了联合类型没有对应的实现
-       目的就是写出类型绝对安全的代码。
-       在 TypeScript 中，可以利用 never 类型的特性来实现全面性检查
-    */
-
-  type Foo = string | number;
-
-  function controlFlowAnalysisWithNever(foo: Foo) {
-    if (typeof foo === 'string') {
-      // 这里 foo 被收窄为 string 类型
-    } else if (typeof foo === 'number') {
-      // 这里 foo 被收窄为 number 类型
-    } else {
-      // foo 在这里是 never
-      const check: never = foo;
-    }
+function controlFlowAnalysisWithNever(foo: Foo) {
+  if (typeof foo === 'string') {
+    // 这里 foo 被收窄为 string 类型
+  } else if (typeof foo === 'number') {
+    // 这里 foo 被收窄为 number 类型
+  } else {
+    // foo 在这里是 never
+    const check: never = foo;
   }
 }
 ```
 
 ### any
 
+在 `TypeScript` 中，任何类型都可以被归为 `any` 类型。  
+这让 `any` 类型成为了类型系统的顶级类型。  
+在 `any` 上访问任何属性都是允许的,也允许调用任何方法。
+
 ```ts
-/* 
-       在 TypeScript 中，任何类型都可以被归为 any 类型。
-       这让 any 类型成为了类型系统的顶级类型.
-       
-       如果是一个普通类型，在赋值过程中改变类型是不被允许的
-       但如果是 any 类型，则允许被赋值为任意类型。
-       
-       在any上访问任何属性都是允许的,也允许调用任何方法.
-       变量如果在声明的时候，未指定其类型，那么它会被识别为任意值类型
-*/
-
-let a: string = 'seven';
-// a = 7;  // TS2322: Type 'number' is not assignable to type 'string'.
-
-let b: any = 'seven';
-b = 7;
+let a: any = 'seven';
+a = 7;
 
 let c; // any
 c = [7];
-if (c.name === undefined) console.log(c[0]);
+if (c.name === undefined) {
+  // ...
+}
 ```
 
 ### unknown
 
+`unknown` 与 `any` 一样，所有类型都可以分配给 `unknown`
+
+`unknown` 与 `any` 的最大区别是：  
+任何类型的值可以赋值给 `any`，同时 `any` 类型的值也可以赋值给任何类型。  
+`unknown` 任何类型的值都可以赋值给它，但它只能赋值给 `unknown` 和 `any`
+
 ```ts
-{
-  /*
-   unknown与any一样，所有类型都可以分配给unknown
+let notSure: unknown = 4;
+notSure = 'maybe a string instead'; // OK
+notSure = false; // OK
 
-   unknown与any的最大区别是： 
-   任何类型的值可以赋值给any，同时any类型的值也可以赋值给任何类型。
-   unknown 任何类型的值都可以赋值给它，但它只能赋值给unknown和any
-*/
+let ms: unknown = 4;
+let msg: any = ms;
+let mss: unknown = ms;
 
-  let notSure: unknown = 4;
-  notSure = 'maybe a string instead'; // OK
-  notSure = false; // OK
+let num: number = ms; // Error
+```
 
-  let ms: unknown = 4;
-  let msg: any = ms;
-  let mss: unknown = ms;
-  // let num:number = ms // Error
+如果不缩小类型，就无法对 `unknown` 类型执行任何操作  
+这种机制起到了很强的预防性，更安全  
+这就要求我们必须缩小类型，我们可以使用 `typeof`、类型断言等方式来缩小未知范围
+
+```ts
+const getDog = (): string => 'dog';
+const dog: unknown = { hello: getDog };
+dog.hello(); // Error
+
+const getCat = () => {
+  let x: unknown;
+  return x;
+};
+
+const cat = getCat();
+// 直接使用
+const upName = cat.toLowerCase(); // Error
+
+// typeof
+if (typeof cat === 'string') {
+  const upName = cat.toLowerCase();
 }
 
-{
-  /* 
-       如果不缩小类型，就无法对unknown类型执行任何操作
-
-        这种机制起到了很强的预防性，更安全，这就要求我们必须缩小类型，我们可以使用typeof、类型断言等方式来缩小未知范围
-    */
-
-  const getDog = (): string => 'dog';
-  const dog: unknown = { hello: getDog };
-  // dog.hello() // Error
-
-  const getCat = () => {
-    let x: unknown;
-    return x;
-  };
-
-  const cat = getCat();
-  // 直接使用
-  // const upName = cat.toLowerCase(); // Error
-
-  // typeof
-  if (typeof cat === 'string') {
-    const upName = cat.toLowerCase();
-  }
-
-  // 类型断言
-  const upName = (cat as string).toLowerCase(); // OK
-}
+// 类型断言
+const upName = (cat as string).toLowerCase(); // OK
 ```
 
 ### 对象类型
