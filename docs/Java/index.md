@@ -299,9 +299,39 @@ try {
 }
 ```
 
+3. 不要捕获 `Throwable`
+
+> `Throwable` 是 `exception` 和 `error` 的父类，如果在 `catch` 子句中捕获了 `Throwable`，很可能把超出程序处理能力之外的错误也捕获了。
+
+```java
+// 不要这样做
+try {
+} catch (Throwable t) {
+    // ...
+}
+```
+
 ## Java 常用工具类
 
-### StringUtils
+1. `StringUtils`
+
+```xml
+<dependency>
+    <groupId>org.apache.commons</groupId>
+    <artifactId>commons-lang3</artifactId>
+    <version>3.12.0</version>
+</dependency>
+```
+
+2. `Hutool`
+
+```xml
+<dependency>
+    <groupId>cn.hutool</groupId>
+    <artifactId>hutool-all</artifactId>
+    <version>5.4.3</version>
+</dependency>
+```
 
 ### Objects
 
