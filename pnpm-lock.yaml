@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@element-plus/icons-vue':
+        specifier: ^2.3.1
+        version: 2.3.1(vue@3.5.13)
       element-plus:
         specifier: ^2.9.1
         version: 2.9.1(vue@3.5.13)
@@ -1060,8 +1063,8 @@ packages:
   confbox@0.1.8:
     resolution: {integrity: sha512-RMtmw0iFkeR4YV+fUOSucriAQNb9g8zFR52MWCtl+cCZOFRNL6zeB395vPzFhEjjn4fMxXudmELnl/KF/WrK6w==}
 
-  consola@3.3.1:
-    resolution: {integrity: sha512-GyKnPG3/I+a4RtJxgHquJXWr70g9I3c4NT3dvqh0LPHQP2nZFQBOBszb7a5u/pGzqr40AKplQA6UxM1BSynSXg==}
+  consola@3.3.2:
+    resolution: {integrity: sha512-X3dcWPU+QeEaPrdtX3zBRQ0P0kIeEnmJV49uNtpy4N/TPnzA3grJvHftKjHuFIQNLrqBPzzykmc3fNrkQDl5yA==}
     engines: {node: ^14.18.0 || >=16.10.0}
 
   copy-anything@3.0.5:
@@ -2204,7 +2207,7 @@ snapshots:
       cac: 6.7.14
       chokidar: 3.6.0
       colorette: 2.0.20
-      consola: 3.3.1
+      consola: 3.3.2
       magic-string: 0.30.17
       pathe: 1.1.2
       perfect-debounce: 1.0.0
@@ -2530,7 +2533,7 @@ snapshots:
 
   confbox@0.1.8: {}
 
-  consola@3.3.1: {}
+  consola@3.3.2: {}
 
   copy-anything@3.0.5:
     dependencies:
