@@ -54,7 +54,13 @@ export default defineConfig({
       label: '页面导航'
     },
 
-    socialLinks: [{ icon: 'github', link: 'https://github.com/Relsola' }]
+    socialLinks: [
+      { icon: 'github', link: 'https://github.com/Relsola' },
+      {
+        icon: 'steam',
+        link: 'https://steamcommunity.com/profiles/76561198871195039/'
+      }
+    ]
   },
 
   vite: {
