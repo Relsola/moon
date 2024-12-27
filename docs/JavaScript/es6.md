@@ -22,7 +22,70 @@ function getValue(condition) {
 }
 ```
 
+```js
+console.log(fn); // undefined
+if (true) {
+  fn(); // fn...
+  function fn() {
+    console.log('fn...');
+  }
+}
+console.log(fn); // Function
+```
+
+::: warning 注意
+提升以函数为界限，提升不可能提升到函数外面。
+:::
+
 ### 块级声明
+
+块级声明用于声明在指定的作用域之外无妨访问的变量，块级作用域存在于函数内部和块中。
+
+`let` 声明：
+
+- `let` 声明和 `var` 声明的用法基本相同。
+- `let` 声明的变量不会被提升。
+- `let` 不能在同一个作用域中重复声明已经存在的变量，会报错。
+- `let` 声明的变量作用域范围仅存在于当前的块中，程序进入块开始时被创建，程序退出块时被销毁。
+- 全局作用域下使用 `let` 声明的变量不再挂载到 `window` 对象上。
+
+`const` 声明：
+
+- `const` 声明和 `let` 声明大多数情况是相同的。
+- `const` 声明的量不能修改（栈空间）。
+- `const` 声明的量必须赋值初始化。
+
+### 暂时性死区
+
+因为 `let` 和 `const` 声明的变量不会进行声明提升，所以在 `let` 和 `const` 变量声明之前任何访问此变量的操作都会引发错误
+
+```js
+if (condition) {
+  // Error
+  console.log(typeof value);
+  let value = 'value';
+}
+```
+
+### 块作用域绑定
+
+在全局作用域下通过 `var` 声明一个变量，那么这个变量会挂载到全局对象 `window` 上。
+
+```js
+var num = 7;
+console.log(window.num); // 7
+```
+
+使用 `let` 或者 `const` 在全局作用域下创建一个新的变量，这个变量不会添加到 `window` 上。
+
+```js
+let num = 7;
+console.log(window.num); // undefined
+```
+
+> 最佳实践  
+> 默认使用 `const`声明，只有确定变量的值会在后续需要修改时才会使用 `let` 声明  
+> 因为大部分变量在初始化后不应再改变，而预料以外的变量值改变是很多 bug 的源头
 
 ## 代理和反射
 
@@ -278,28 +341,154 @@ Object.defineProperty('对象', '属性', {
 
 ## 解构赋值
 
-```js
-// 数组解构赋值
-let [a, b] = [1, 2];
+解构是一种打破数据结构，将其拆分为更小部分的过程。
 
-// 对象解构赋值
-let obj = {
-  say: function () {
-    console.log('say...');
+### 对象解构
+
+```js
+const person = {
+  name: 'Relsola',
+  age: 24
+};
+const { name, age } = person;
+console.log(name); // Relsola
+console.log(age); // 24
+```
+
+### 解构赋值
+
+```js
+const person = {
+  name: 'Relsola',
+  age: 24
+};
+let name, age;
+
+({ name, age } = person);
+console.log(name); // Relsola
+console.log(age); // 24
+```
+
+### 解构默认值
+
+使用解构赋值表达式时，如果指定的局部变量名称在对象中不存在，那么这个局部变量会被赋值为 `undefined`，此时可以随意指定一个默认值。
+
+```js
+const person = {
+  name: 'Relsola',
+  age: 24
+};
+const { name, age, sex = '男' } = person;
+console.log(sex); // 男
+```
+
+### 为非同名变量赋值
+
+```js
+const person = {
+  name: 'Relsola',
+  age: 24
+};
+const { name, age } = person; // 相当于 let { name: name, age: age } = person;
+
+const { name: newName, age: newAge } = person;
+console.log(newName); // Relsola
+console.log(newAge); // 24
+```
+
+### 嵌套对象结构
+
+解构嵌套对象任然与对象字面量语法相似，只是我们可以将对象拆解成我们想要的样子。
+
+```js
+const person = {
+  name: 'Relsola',
+  age: 24
+  job: {
+    name: 'FE',
+    salary: 1000
   },
-  fn: function () {
-    console.log('fn...');
-  },
-  tn: function () {
-    console.log('tn...');
+  department: {
+    group: {
+      number: 1000,
+      isMain: true
+    }
   }
 };
-let { fn, tn: bn } = obj;
-fn();
-bn();
+let {
+  job,
+  department: { group }
+} = person;
+console.log(job); // { name: 'FE', salary: 1000 }
+console.log(group); // { number: 1000, isMain: true }
+```
 
-// 函数参数结构
-({ item }) => item;
+### 数组解构
+
+```js
+const colors = ['red', 'green', 'blue'];
+const [firstColor, secondColor] = colors;
+// 按需解构
+const [, , threeColor] = colors;
+console.log(firstColor); // red
+console.log(secondColor); // green
+console.log(threeColor); // blue
+```
+
+> 解构数组赋值
+
+```js
+const colors = ['red', 'green', 'blue'];
+let firstColor, secondColor;
+[firstColor, secondColor] = colors;
+console.log(firstColor); // red
+console.log(secondColor); // green
+```
+
+> 数组解构设置默认值
+
+```js
+const colors = ['red'];
+const [firstColor, secondColor = 'green'] = colors;
+console.log(firstColor); // red
+console.log(secondColor); // green
+```
+
+> 嵌套数组解构
+
+```js
+const colors = ['red', ['green', 'lightgreen'], 'blue'];
+const [firstColor, [secondColor]] = colors;
+console.log(firstColor); // red
+console.log(secondColor); // green
+```
+
+> 不定元素
+
+```js
+let colors = ['red', 'green', 'blue'];
+let [firstColor, ...restColors] = colors;
+console.log(firstColor); // red
+console.log(restColors); // ['green', 'blue']
+```
+
+### 解构参数
+
+当我们定一个需要接受大量参数的函数时，通常我们会创建可以可选的对象，将额外的参数定义为这个对象的属性
+
+```js
+function setCookie(name, value, options) {
+  options = options || {};
+  let path = options.path,
+    domain = options.domain,
+    expires = options.expires;
+  // ...
+}
+
+// 使用解构参数
+function setCookie(name, value, { path, domain, expires } = {}) {
+  // ...
+}
 ```
 
 ## 展开运算符
