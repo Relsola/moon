@@ -1,17 +1,3 @@
 学习记录~
 
-> i wish you a wonderful day!
-
-## 学习计划
-
-- 2024.12.22 —— 2025.01.20
-
-1. 学习 Java 及 SQL 基础，并完善笔记
-2. 学习 C# 和 Godot 基础，完善笔记
-3. 使用 Godot 和 C# 开发至少一个 demo
-
-## 未来计划
-
-- 熟练掌握 Web 开发，学习优秀开源项目源码
-- 掌握 Godot 引擎和 C# 、 C++ 编程语言，制作自己的独立游戏
-- C++ 实现简单的游戏引擎，学习了解相关底层知识
+i wish you a wonderful day!
