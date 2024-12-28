@@ -326,18 +326,119 @@ Object.defineProperty('对象', '属性', {
 });
 ```
 
-## 箭头函数
+## 函数
 
-1. 当我们的箭头函数只有一行代码的时候 `{}` 可以省略
-2. 当我们的箭头函数只有一行 return 的时候 return 可以省略
-3. 当我们只有一个参数的时候 ()可以省略
-4. 如果我们返回值是对象的话 对象需要使用 () 进行一个包裹 `() => ({})`
-5. 箭头函数是没有 this 的 他的 this 是当时的变量 this 遵循作用域往上找
-6. 箭头函数中的 this 不会被改变
-7. 箭头函数不能用作构造器
-8. class 中的 constructor 不能用箭头函数
-9. 箭头函数没有原型对象(没有显示原型，有隐士原型)
-10. 给原型对象添加方法的时候，不推荐去使用箭头函数
+### 形参默认值
+
+```js
+function fun(key, timeout = 2000, callback = () => {}) {
+  // ...
+}
+```
+
+::: tip
+对于默认参数而言，除非不传或者主动传递 `undefined` 才会使用参数默认值  
+如果传递 `null`，这是一个合法的参数，不会使用默认值。
+:::
+
+#### 形参默认值对 `arguments` 对象的影响
+
+- 在 ES5 非严格模式下，如果修改参数的值，这些参数的值会同步反应到 `arguments` 对象中
+- 而在 ES5 严格模式下，修改参数的值不再反应到 `arguments` 对象中
+- 对于使用了 ES6 的形参默认值，`arguments` 对象的行为始终保持和 ES5 严格模式一样，无论当前是否为严格模式
+- 即 `arguments` 总是等于最初传递的值，不会随着参数的改变而改变，总是可以使用 `arguments` 对象将参数还原为最初的值
+
+```js
+function mixArgs(first, second = 'B') {
+  // arguments对象始终等于传递的值，形参默认值不会反映在arguments上
+  console.log(arguments.length); // 1
+  console.log(arguments[0]); // A
+  console.log(arguments[1]); // undefined
+
+  first = 'a';
+  second = 'b';
+
+  console.log(arguments[0]); // A
+  console.log(arguments[1]); // undefined
+}
+mixArgs('A');
+```
+
+#### 默认参数的暂时性死区
+
+在 `let` 和 `const` 变量声明之前尝试访问该变量会触发错误，在函数默认参数中也存在暂时性死区
+
+```js
+function add(first = second, second) {
+  return first + second;
+}
+add(1, 1); // 2
+
+// first 参数使用参数默认值，而此时 second 变量还没有初始化
+add(undefined, 1); // 抛出错误
+```
+
+### 不定参数
+
+JavaScript 的函数语法规定无论函数已定义的命名参数有多少个，都不限制调用时传入的实际参数的数量。
+
+```js
+function pick(object, ...keys) {
+  let result = Object.create(null);
+  for (let i = 0, len = keys.length; i < len; i++) {
+    let item = keys[i];
+    result[item] = object[item];
+  }
+  return result;
+}
+```
+
+#### 不定参数的限制
+
+- 一个函数最多只能有一个不定参数。
+- 不定参数一定要放在所有参数的最后一个。
+- 不能在对象字面量 `setter` 之中使用不定参数。
+
+#### 展开运算符 `...`
+
+展开运算符和不定参数是最为相似的，不定参数可以让我们指定多个各自独立的参数，并通过整合后的数组来访问；而展开运算符可以让你指定一个数组，将它们打散后作为各自独立的参数传入函数。
+
+```js
+const arr = [4, 10, 5, 6, 32];
+// ES6 之前
+console.log(Math.max.apply(Math, arr)); // 32
+// 使用展开运算符
+console.log(Math.max(...arr)); // 32
+```
+
+### 箭头函数
+
+在 ES6 中，箭头函数是一种使用箭头 => 定义函数的新语法，但它和传统的 JavaScript 函数有些许不同：
+
+- 没有 `this`、`super`、`arguments` 和 `new.target` 绑定，箭头函数中的 `this`、`super`、`arguments` 和 `new.target` 这些值由外围最近一层非箭头函数所决定。
+- 不能通过 `new` 关键词调用：因为箭头函数没有[[Construct]]函数，所以不能通过 `new` 关键词进行调用，如果使用 `new` 进行调用会抛出错误。
+- 没有原型，因为不会通过 `new` 关键词进行调用，所以没有构建原型的需要，也就没有了 `prototype` 这个属性。
+- 不可以改变 `this` 的绑定，在箭头函数的内部，`this` 的值不可改变(即不能通过 `call`、`apply` 或者 `bind` 等方法来改变)。
+- 不支持 `arguments` 对象：箭头函数没有 `arguments` 绑定，所以必须使用命名参数或者不定参数这两种形式访问参数。
+- 不支持重复的命名参数：无论是否处于严格模式，箭头函数都不支持重复的命名参数。
+
+#### 箭头函数的语法
+
+```js
+// 无参数 无返回值
+() => {};
+
+// 无参数且只有一行表达式可省略 {}
+() => 123;
+
+// 一个参数可省略 ()
+val => val;
+
+// 多个参数 多行表达式
+(a, b, c) => {
+  //...
+};
+```
 
 ## 解构赋值
 
@@ -490,15 +591,6 @@ function setCookie(name, value, { path, domain, expires } = {}) {
   // ...
 }
 ```
-
-## 展开运算符
-
-`...` 展开运算符 也叫拓展运算符  
-当你想定义一个函数 但是参数个数不确定的时 可以使用 `arguments`  
-在 ES6+ 中可以使用 rest 运算符，将我们所有参数收集到 `arg` 中  
-如果用 rest 运算符的话 那么 `...arg` 后面不能再写接收变量  
-`Array.concat() `拼接数组  
-`Array.from()` 将伪数组转换成真数组
 
 ## Proxy 代理
 
