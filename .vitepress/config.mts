@@ -25,13 +25,27 @@ export default defineConfig({
       { text: 'Home', link: '/' },
       { text: 'JavaScript', link: '/JavaScript/' },
       { text: 'Java', link: '/Java/' },
-      { text: 'SQl', link: '/SQL/' },
+      { text: '数据库', link: '/SQL/' },
       { text: 'Godot', link: '/Godot/' },
       { text: 'C++', link: '/CPP/' },
       { text: 'C#', link: '/CSharp/' },
       {
+        text: 'Tool',
+        items: [
+          { text: '正则测试器', link: 'https://github.com/Relsola' },
+          { text: '拾色器', link: 'https://github.com/Relsola' }
+        ]
+      },
+      {
+        text: 'Game',
+        items: [
+          { text: '拼图', link: 'https://github.com/Relsola' },
+          { text: '数独', link: 'https://github.com/Relsola' }
+        ]
+      },
+      {
         text: 'GitHub',
-        items: [{ text: 'sudoku', link: 'https://github.com/Relsola/sudoku' }]
+        items: [{ text: 'cmd-games', link: 'https://github.com/Relsola/sudoku' }]
       }
     ],
 
