@@ -306,25 +306,31 @@ function Proxy(target, handler) {
 */
 ```
 
-## 对象拓展
+## 对象的扩展
 
-1. 当属性名和属性保持一致的时候，可以简写
-2. `Object.defineProperty` 定义属性
-3. `Object.assign` 方法用来将源对象中所有可枚举的属性赋值到目标对象
+### 对象字面量的扩展
+
+- 属性初始值的简写：当对象的属性和本地变量同名时，只写属性即可。
+- 对象方法的简写： 消除了冒号和 `function` 关键字。
+- 可计算属性名：在定义对象时，对象的属性值可通过变量来计算。
 
 ```js
-Object.defineProperty('对象', '属性', {
-  value: '张三',
-  enumerable: false, // 是否能被枚举
-  writable: false, // 是否可写
-  get() {
-    console.log('get...');
-  },
-  set() {
-    console.log('set...');
+const name = 'Rel';
+const firstName = 'first name';
+const person = {
+  name,
+  [firstName]: 'sola',
+  sayName() {
+    console.log(this.name);
   }
-});
+};
 ```
+
+### 新增方法
+
+1. `Object.is`
+
+2. `Object.assign`
 
 ## 函数
 
