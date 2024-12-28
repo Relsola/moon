@@ -7,6 +7,10 @@ const regexText = ref('');
 const modifier = ref(['g']);
 /** 进行匹配的文本 */
 const text = ref('');
+/** 替换文本 */
+const replaceText = ref('');
+/** 替换结果 */
+const replaceResult = ref('<span class="text-slate-400">替换结果...</span>');
 /** 修饰符列表 */
 const modifierList = [
   { value: 'g', label: '全局匹配 -g' },
@@ -38,6 +42,15 @@ const matchText = computed(() => {
     match => `<span class="bg-blue">${match}</span>`
   );
 });
+
+/** 替换 */
+function replace() {
+  if (!text.value || !reg.value) {
+    replaceResult.value = '<span class="text-slate-400">替换结果...</span>';
+    return;
+  }
+  replaceResult.value = text.value.replace(reg.value, replaceText.value);
+}
 </script>
 
 <template>
@@ -84,6 +97,17 @@ const matchText = computed(() => {
 
   <div
     v-html="matchText"
-    class="mt5 w100% border-solid border border-slate-300 rounded p2 text-xs min-h-12"
+    class="my5 w100% border-solid border border-slate-300 rounded p2 text-xs min-h-12"
+  ></div>
+
+  <el-input v-model="replaceText" style="width: 60%" placeholder="在此输入替换文本">
+    <template #prepend> 替换文本 </template>
+  </el-input>
+
+  <el-button type="primary" class="ml2" @click="replace">替换</el-button>
+
+  <div
+    v-html="replaceResult"
+    class="my5 w100% border-solid border border-slate-300 rounded p2 text-xs min-h-12"
   ></div>
 </template>
