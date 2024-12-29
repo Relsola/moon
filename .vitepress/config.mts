@@ -33,7 +33,7 @@ export default defineConfig({
         text: 'Tool',
         items: [
           { text: '正则测试器', link: 'https://github.com/Relsola' },
-          { text: '拾色器', link: 'https://github.com/Relsola' }
+          { text: '拾色器', link: '/Tool/color' }
         ]
       },
       {
