@@ -26,19 +26,12 @@ export default defineConfig({
       { text: 'JavaScript', link: '/JavaScript/' },
       { text: 'Java', link: '/Java/' },
       { text: '数据库', link: '/SQL/' },
-      { text: 'Godot', link: '/Godot/' },
-      { text: 'C++', link: '/CPP/' },
-      { text: 'C#', link: '/CSharp/' },
+      { text: 'Game', link: '/Game/cpp' },
       {
         text: 'Tool',
         items: [
           { text: '正则测试器', link: 'https://github.com/Relsola' },
-          { text: '拾色器', link: '/Tool/color' }
-        ]
-      },
-      {
-        text: 'Game',
-        items: [
+          { text: '拾色器', link: 'https://github.com/Relsola' },
           { text: '拼图', link: 'https://github.com/Relsola' },
           { text: '数独', link: 'https://github.com/Relsola' }
         ]
@@ -60,6 +53,16 @@ export default defineConfig({
       '/Java/': [
         { text: 'Java 知识笔记', link: '/Java/' },
         { text: 'Spring Boot 开发', link: '/Java/spring' }
+      ],
+      '/SQL/': [
+        { text: 'SQL 语言', link: '/SQL/' },
+        { text: 'MySQL', link: '/SQL/mysql' },
+        { text: 'Redis', link: '/SQL/redis' }
+      ],
+      '/Game/': [
+        { text: 'C++ 知识笔记', link: '/Game/cpp' },
+        { text: 'C# 知识笔记', link: '/Game/csharp' },
+        { text: 'Godot 知识笔记', link: '/Game/godot' }
       ]
     },
 

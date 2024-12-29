@@ -17,21 +17,9 @@ features:
     title: LeetCode 刷题攻略
     link: 'https://github.com/youngyangyang04/leetcode-master'
 
-  - icon: 🗨️
+  - icon: 🌥️
     title: TS 类型挑战通关手册
     link: 'https://blog.maxiaobo.com.cn/type-challenge/dist/'
-
-  - icon: 🌥️
-    title: Vue.js 官方文档
-    link: 'https://cn.vuejs.org/'
-
-  - icon: ☪️
-    title: React.js 官方文档
-    link: 'https://react.docschina.org/'
-
-  - icon: 📓
-    title: Next.js 官方文档
-    link: 'https://www.nextjs.cn/docs/getting-started'
 ---
 
 <style>
