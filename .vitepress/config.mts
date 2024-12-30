@@ -58,7 +58,7 @@ export default defineConfig({
       ],
       '/Tool/': [
         { text: '链接导航', link: '/Tool/link' },
-        { text: '正则测试器', link: '/Tool/regex' },
+        { text: '正则测试器', link: '/Tool/regexp' },
         { text: '图片取色器', link: '/Tool/color' }
       ]
     },

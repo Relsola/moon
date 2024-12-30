@@ -54,6 +54,11 @@ function replace() {
 </script>
 
 <template>
+  <div class="mb5">
+    <el-button type="primary">生成代码</el-button>
+    <el-button type="primary">测试示例</el-button>
+  </div>
+
   <el-input v-model="regexText" style="width: 60%" placeholder="请输入正则表达式">
     <template #prepend> / </template>
     <template #append> /{{ modifier.join('') }} </template>
@@ -70,10 +75,7 @@ function replace() {
     </el-checkbox-group>
 
     <el-divider style="margin: 5px 0" />
-    <el-link
-      href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Regular_expressions#%E9%80%9A%E8%BF%87%E6%A0%87%E5%BF%97%E8%BF%9B%E8%A1%8C%E9%AB%98%E7%BA%A7%E6%90%9C%E7%B4%A2"
-      target="_blank"
-    >
+    <el-link href="#通过标志进行高级搜索">
       <el-icon><Position /></el-icon> &nbsp; 修饰符介绍
     </el-link>
 
@@ -110,4 +112,6 @@ function replace() {
     v-html="replaceResult"
     class="my5 w100% border-solid border border-slate-300 rounded p2 text-xs min-h-12"
   ></div>
+
+  <el-backtop :right="100" :bottom="100" />
 </template>

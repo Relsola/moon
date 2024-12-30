@@ -2,13 +2,6 @@
 import Regex from '@components/Regex/index.vue'
 </script>
 
-# 正则表达式
-
-> [JS 正则表达式完整教程](https://juejin.cn/post/6844903487155732494?searchId=202412221741358057531E480441E6BB82)  
-> [正则表达式字符详解](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Regular_expressions)
-
-## 正则测试器
-
 <Regex />
 
 ## 正则表达式中的特殊字符
