@@ -27,15 +27,7 @@ export default defineConfig({
       { text: 'Java', link: '/Java/' },
       { text: '数据库', link: '/SQL/' },
       { text: 'Game', link: '/Game/cpp' },
-      {
-        text: 'Tool',
-        items: [
-          { text: '正则测试器', link: 'https://github.com/Relsola' },
-          { text: '拾色器', link: 'https://github.com/Relsola' },
-          { text: '拼图', link: 'https://github.com/Relsola' },
-          { text: '数独', link: 'https://github.com/Relsola' }
-        ]
-      },
+      { text: 'Tool', link: '/Tool/link' },
       {
         text: 'GitHub',
         items: [{ text: 'cmd-games', link: 'https://github.com/Relsola/sudoku' }]
@@ -63,6 +55,11 @@ export default defineConfig({
         { text: 'C++ 知识笔记', link: '/Game/cpp' },
         { text: 'C# 知识笔记', link: '/Game/csharp' },
         { text: 'Godot 知识笔记', link: '/Game/godot' }
+      ],
+      '/Tool/': [
+        { text: '链接导航', link: '/Tool/link' },
+        { text: '正则测试器', link: '/Tool/regex' },
+        { text: '图片取色器', link: '/Tool/color' }
       ]
     },
 
