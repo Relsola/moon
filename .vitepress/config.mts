@@ -23,14 +23,17 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'JavaScript', link: '/JavaScript/' },
-      { text: 'Java', link: '/Java/' },
+      { text: 'Web 前端', link: '/JavaScript/' },
+      { text: 'Java 后端', link: '/Java/' },
       { text: '数据库', link: '/SQL/' },
       { text: 'Game', link: '/Game/cpp' },
       { text: 'Tool', link: '/Tool/link' },
       {
         text: 'GitHub',
-        items: [{ text: 'cmd-games', link: 'https://github.com/Relsola/sudoku' }]
+        items: [
+          { text: 'cmd-games', link: 'https://github.com/Relsola/sudoku' },
+          { text: 'OSU!', link: 'https://github.com/ppy/osu' }
+        ]
       }
     ],
 
