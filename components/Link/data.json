@@ -1,0 +1,39 @@
+[
+  {
+    "label": "Web 前端",
+    "name": "web",
+    "data": [
+      {
+        "name": "MDN",
+        "href": "https://developer.mozilla.org/zh-CN/"
+      },
+      {
+        "name": "Vue",
+        "href": "https://cn.vuejs.org/"
+      },
+      {
+        "name": "TailwindCSS",
+        "href": "https://www.tailwindcss.cn/"
+      },
+      {
+        "name": "JS正则表达式完整教程",
+        "href": "https://juejin.cn/post/6844903487155732494?searchId=202412221741358057531E480441E6BB82"
+      }
+    ]
+  },
+  {
+    "label": "Java 后端",
+    "name": "java",
+    "data": []
+  },
+  {
+    "label": "GitHub",
+    "name": "github",
+    "data": []
+  },
+  {
+    "label": "Other",
+    "name": "other",
+    "data": []
+  }
+]
