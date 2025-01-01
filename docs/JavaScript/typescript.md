@@ -238,166 +238,136 @@ const upName = (cat as string).toLowerCase(); // OK
 
 ### 对象类型
 
+Number、String、Boolean、Symbol  
+从类型兼容性上看，原始类型兼容对应的对象类型  
+反过来对象类型不兼容对应的原始类型
+
 ```ts
-{
-  /* 
-    Number、String、Boolean、Symbol
-    从类型兼容性上看，原始类型兼容对应的对象类型
-    反过来对象类型不兼容对应的原始类型。
-  */
+let num: number = 1;
+let Num: Number = 1;
 
-  let num: number = 1;
-  let Num: Number = 1;
+Num = num; // OK
 
-  Num = num; // OK
-  // num = Num; // Error
-}
-
-{
-  /* 
-    object（首字母小写，以下称“小 object”）
-    Object（首字母大写，以下称“大 Object”）
-    {}（以下称“空对象”）
-  */
-
-  /*
-    大 Object代表所有拥有 toString、hasOwnProperty 方法的类型
-    所以所有原始类型、非原始类型都可以赋给 Object。
-    同样，在严格模式下，null 和 undefined 类型也不能赋给 Object。
-  */
-
-  let obj: Object;
-  obj = 1; // OK
-  obj = true; // OK
-  obj = {}; // OK
-  // obj = undefined; // Error
-  // obj = null; // Error
-}
-
-{
-  // 大 Object 不仅是小 object 的父类型，同时也是小 object 的子类型。
-
-  type isLowerCaseObjectExtendsUpperCaseObject = object extends Object
-    ? true
-    : false; // true
-
-  type isUpperCaseObjectExtendsLowerCaseObject = Object extends object
-    ? true
-    : false; // true
-
-  let objM: Object = {};
-  let objX: object = {};
-
-  objM = objX; // OK
-  objX = objM; // OK
-
-  // 尽管官方文档说可以使用小 object 代替大 Object，但是我们仍要明白大 Object 并不完全等价于小 object
-}
-
-{
-  // {}空对象类型和大 Object 一样，也是表示原始类型和非原始类型的集合，并且在严格模式下，null 和 undefined 也不能赋给 {}
-
-  let ObjectLiteral: {};
-  ObjectLiteral = 1; // ok
-  ObjectLiteral = 'a'; // ok
-  ObjectLiteral = true; // ok
-  // ObjectLiteral = null; // ts(2322)
-  // ObjectLiteral = undefined; // ts(2322)
-  ObjectLiteral = {}; // ok
-
-  // 综上结论：{}、大 Object 是比小 object 更宽泛的类型（least specific），{} 和大 Object 可以互相代替，用来表示原始类型（null、undefined 除外）和非原始类型；而小 object 则表示非原始类型。
-}
+num = Num; // Error
 ```
+
+`Object` 代表所有拥有 `toString`、`hasOwnProperty` 方法的类型  
+所以所有原始类型、非原始类型都可以赋给 `Object`  
+同样，在严格模式下，`null` 和 `undefined` 类型也不能赋给 `Object`
+
+```ts
+let obj: Object;
+
+obj = 1; // OK
+obj = true; // OK
+obj = {}; // OK
+
+obj = undefined; // Error
+obj = null; // Error
+```
+
+`Object` 不仅是 `object` 的父类型，同时也是 `object` 的子类型
+
+::: warning 注意
+管官方文档说可以使用 `object` 代替大 `Object`  
+但是我们仍要明白 `Object` 并不完全等价于 `object`
+:::
+
+```ts
+type A = object extends Object ? true : false; // true
+type B = Object extends object ? true : false; // true
+
+let objM: Object = {};
+let objX: object = {};
+
+objM = objX; // OK
+objX = objM; // OK
+```
+
+`{}` 空对象类型和 `Object` 一样，也是表示原始类型和非原始类型的集合  
+在严格模式下，`null` 和 `undefined` 也不能赋给 `{}`
+
+```ts
+let ObjectLiteral: {};
+
+ObjectLiteral = 1; // ok
+ObjectLiteral = 'a'; // ok
+ObjectLiteral = true; // ok
+
+ObjectLiteral = null; // Error
+ObjectLiteral = undefined; // Error
+
+ObjectLiteral = {}; // ok
+```
+
+::: tip 综述
+`{}` 和 `Object` 是比 `object` 更宽泛的类型（least specific）  
+`{}` 和 `Object` 可以互相代替，用来表示原始类型（`null`、`undefined` 除外）和非原始类型  
+小 `object` 则表示非原始类型
+:::
 
 ## 类型推断
 
 ### 类型推断
 
+在很多情况下，`TypeScript` 会根据上下文环境自动推断出变量的类型，无须我们再写明类型注解，我们把 `TypeScript` 这种基于赋值表达式推断类型的能力称之为类型推断。
+
+在 `TypeScript` 中，具有初始化值的变量、有默认值的函数参数、函数返回的类型都可以根据上下文推断出来，比如我们能根据 `return` 语句推断函数返回的类型。
+
+::: warning 注意
+如果定义的时候没有赋值，不管之后有没有赋值，都会被推断成 `any` 类型而完全不被类型检查。
+:::
+
 ```ts
-{
-  /* 
-       在很多情况下，TypeScript 会根据上下文环境自动推断出变量的类型
-       无须我们再写明类型注解
-       我们把 TypeScript 这种基于赋值表达式推断类型的能力称之为类型推断
+let str: string = 'this is string';
+let num: number = 1;
+let bool: boolean = true;
 
+// 等价于
 
-       在 TypeScript 中
-       具有初始化值的变量、有默认值的函数参数、函数返回的类型
-       都可以根据上下文推断出来
-       比如我们能根据 return 语句推断函数返回的类型
+let str = 'this is string';
+let num = 1;
+let bool = true;
+```
 
-       注意： 如果定义的时候没有赋值，不管之后有没有赋值，都会被推断成 any 类型而完全不被类型检查
-    */
+```ts
+const str: string = 'this is string';
+const num: number = 1;
+const bool: boolean = true;
 
-  {
-    let str: string = 'this is string';
-    let num: number = 1;
-    let bool: boolean = true;
-  }
+// 不等价
 
-  {
-    let str = 'this is string'; // 等价
-    let num = 1; // 等价
-    let bool = true; // 等价
-  }
+const str = 'this is string';
+const num = 1;
+const bool = true;
+```
 
-  // ---------------------------------------------------------
+```ts
+const add1 = (a: number, b: number) => a + b;
+const x1 = add1(1, 1); // 推断出 x1 的类型也是 number
 
-  {
-    const str: string = 'this is string';
-    const num: number = 1;
-    const bool: boolean = true;
-  }
-
-  {
-    const str = 'this is string'; // 不等价
-    const num = 1; // 不等价
-    const bool = true; // 不等价
-  }
-
-  // ---------------------------------------------------------
-
-  {
-    const add1 = (a: number, b: number) => a + b;
-    const x1 = add1(1, 1); // 推断出 x1 的类型也是 number
-
-    const add2 = (a: number, b = 1) => a + b;
-    const x2 = add2(1);
-    // const x3 = add2(1, "1") // Error
-  }
-}
+const add2 = (a: number, b = 1) => a + b;
+const x2 = add2(1);
+const x3 = add2(1, '1'); // Error
 ```
 
 ### 类型断言
 
+`TypeScript` 类型检测无法做到绝对智能，毕竟程序不能像人一样思考，有时会碰到我们比 `TypeScript` 更清楚实际类型的情况，通常这会发生在你清楚地知道一个实体具有比它现有类型更确切的类型。
+
+通过类型断言这种方式可以告诉编译器，“相信我，我知道自己在干什么” ，类型断言好比其他语言里的类型转换，但是不进行特殊的数据检查和解构，它没有运行时的影响，只是在编译阶段起作用。
+
+通常使用 `as` 语法做类型断言，第二种 `<>` 尖括号语法，两种方式虽然没有任何区别，但是尖括号格式会与 `react` 中 `JSX` 产生语法冲突，因此更推荐使用 `as` 语法。
+
 ```ts
-{
-  /*
-      TypeScript 类型检测无法做到绝对智能，毕竟程序不能像人一样思考
-      有时会碰到我们比 TypeScript 更清楚实际类型的情况
-    
-        通常这会发生在你清楚地知道一个实体具有比它现有类型更确切的类型。
-        通过类型断言这种方式可以告诉编译器，“相信我，我知道自己在干什么”
-        类型断言好比其他语言里的类型转换，但是不进行特殊的数据检查和解构
-        它没有运行时的影响，只是在编译阶段起作用。
-    
-        通常使用 as 语法做类型断言
+// as 语法
+const arr: number[] = [1, 2, 3, 4, 5];
+const greaterThan2: number = arr.find(num => num > 2); // Error
+const greaterThan2: number = arr.find(num => num > 2) as number;
 
-        第二种 尖括号 语法
-        两种方式虽然没有任何区别，但是尖括号格式会与react中JSX产生语法冲突
-        因此更推荐使用 as 语法。
-
-    */
-
-  // as 语法
-  const arr: number[] = [1, 2, 3, 4, 5];
-  // const greaterThan2: number = arr.find(num => num > 2); // Error
-  const greaterThan2: number = arr.find(num => num > 2) as number;
-
-  //  尖括号 语法
-  let val: any = 'this is string';
-  val = (<string>val).length;
-}
+//  尖括号 语法
+let val: any = 'this is string';
+val = (<string>val).length;
 ```
 
 ### 非空断言
