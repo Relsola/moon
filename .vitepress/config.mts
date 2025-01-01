@@ -24,15 +24,16 @@ export default defineConfig({
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Web 前端', link: '/JavaScript/' },
+      { text: 'Flutter', link: '/Flutter/' },
       { text: 'Java 后端', link: '/Java/' },
       { text: '数据库', link: '/SQL/' },
       { text: 'Game', link: '/Game/cpp' },
-      { text: 'Tool', link: '/Tool/link' },
+      { text: 'Tools', link: '/Tools/link' },
       {
         text: 'GitHub',
         items: [
           { text: 'cmd-games', link: 'https://github.com/Relsola/sudoku' },
-          { text: 'OSU!', link: 'https://github.com/ppy/osu' }
+          { text: 'osu!', link: 'https://github.com/ppy/osu' }
         ]
       }
     ],
@@ -59,10 +60,10 @@ export default defineConfig({
         { text: 'C# 知识笔记', link: '/Game/csharp' },
         { text: 'Godot 知识笔记', link: '/Game/godot' }
       ],
-      '/Tool/': [
-        { text: '链接导航', link: '/Tool/link' },
-        { text: '正则测试器', link: '/Tool/regexp' },
-        { text: '图片取色器', link: '/Tool/color' }
+      '/Tools/': [
+        { text: '链接导航', link: '/Tools/link' },
+        { text: '正则测试器', link: '/Tools/regexp' },
+        { text: '图片取色器', link: '/Tools/color' }
       ]
     },
 
