@@ -372,16 +372,11 @@ val = (<string>val).length;
 
 ### 非空断言
 
-```ts
-/* 
-       在上下文中当类型检查器无法断定类型时，
-       一个新的后缀表达式操作符 ! 
-       可以用于断言操作对象是非 null 和非 undefined 类型
-       具体而言，x! 将从 x 值域中排除 null 和 undefined 。
-    */
+在上下文中当类型检查器无法断定类型时，一个新的后缀表达式操作符 `!` 可以用于断言操作对象是非 `null` 和非 `undefined` 类型，具体而言，`x!` 将从 `x` 值域中排除 `null` 和 `undefined` 。
 
+```ts
 let str: null | undefined | string;
-// str.toString(); // Error
+str.toString(); // Error
 
 str?.toString(); // OK
 str!.toString(); // OK
@@ -389,7 +384,7 @@ str!.toString(); // OK
 type n = () => number;
 
 const fn = (ns: n | undefined) => {
-  // const num = ns(); // Error
+  const num = ns(); // Error
   const num = ns!(); // OK
 };
 ```
@@ -398,60 +393,49 @@ const fn = (ns: n | undefined) => {
 
 ### 字面量类型
 
-```ts
-/*
-  在 TypeScript 中，字面量不仅可以表示值，还可以表示类型
-  目前，TypeScript 支持 3 种字面量类型
-    字符串字面量类型
-    数字字面量类型
-    布尔字面量类型
-*/
+在 TypeScript 中，字面量不仅可以表示值，还可以表示类型  
+目前，TypeScript 支持 3 种字面量类型
 
+- 字符串字面量类型
+- 数字字面量类型
+- 布尔字面量类型
+
+```ts
 const s: 'this' = 'this';
 const n: 789 = 789;
 const t: true = true;
+```
 
+通过使用字面量类型组合的联合类型，我们可以限制函数的参数为指定的字面量类型集合，然后编译器会检查参数是否是指定的字面量类型集合里的成员。
+相较于使用 `string` 类型，使用字面量类型（组合的联合类型）可以将函数的参数限定为更具体的类型，这不仅提升了程序的可读性， 还保证了函数的参数类型，可谓一举两得。
+
+```ts
 // 推荐
 type d = 'up' | 'down';
 const move = (dir: d): null => null;
 move('up'); // OK
-
-/*
-      通过使用字面量类型组合的联合类型
-      我们可以限制函数的参数为指定的字面量类型集合
-      然后编译器会检查参数是否是指定的字面量类型集合里的成员。
-      相较于使用 string 类型
-      使用字面量类型（组合的联合类型）可以将函数的参数限定为更具体的类型
-      这不仅提升了程序的可读性
-      还保证了函数的参数类型，可谓一举两得。
-    */
 ```
 
-### let 和 const 分析
+### `let` 和 `const` 分析
+
+`const` 定义为一个不可变更的常量，在缺省类型注解的情况下，`TypeScript` 推断出它的类型直接由赋值字面量的类型决定。
 
 ```ts
-{
-  /* 
-      const 定义为一个不可变更的常量
-      在缺省类型注解的情况下
-      TypeScript 推断出它的类型直接由赋值字面量的类型决定
-    */
-  const str = 'this is string'; // str : 'this is string'
-  const num = 1; // num : 1
-  const bool = true; // bool : true
-}
+const str = 'this is string'; // str : 'this is string'
+const num = 1; // num : 1
+const bool = true; // bool : true
+```
 
-{
-  // 缺省显式类型注解的可变更的变量的类型转换为了赋值字面量类型的父类型
+缺省显式类型注解的可变更的变量的类型转换为了赋值字面量类型的父类型。
 
-  let str = 'this is string'; // string
-  let num = 2; // number
-  let bool = true; // boolean
+```ts
+let str = 'this is string'; // string
+let num = 2; // number
+let bool = true; // boolean
 
-  str = 'any string';
-  num = 5;
-  bool = false;
-}
+str = 'any string';
+num = 5;
+bool = false;
 ```
 
 ### 类型拓宽 Type Widening
