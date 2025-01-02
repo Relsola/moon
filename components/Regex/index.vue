@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import data from './data.json';
 
+/** 常用的正则表达式 */
+const value = ref('');
 /** 正则表达式文本 */
 const regexText = ref('');
 /** 修饰符 */
@@ -55,11 +58,35 @@ function replace() {
 
 <template>
   <div class="mb5">
+    <el-select
+      v-model="value"
+      clearable
+      filterable
+      placeholder="常用的正则表达式"
+      @change="() => (regexText = value)"
+      style="width: 80%; margin-right: 8px"
+    >
+      <el-option
+        v-for="{ label, value, example } in data"
+        :label="label"
+        :value="value"
+      >
+        <span class="float-left">{{ label }}</span>
+        <span
+          style="
+            float: right;
+            color: var(--el-text-color-secondary);
+            font-size: 13px;
+          "
+        >
+          {{ example }}
+        </span>
+      </el-option>
+    </el-select>
     <el-button type="primary">生成代码</el-button>
-    <el-button type="primary">测试示例</el-button>
   </div>
 
-  <el-input v-model="regexText" style="width: 60%" placeholder="请输入正则表达式">
+  <el-input v-model="regexText" style="width: 80%" placeholder="请输入正则表达式">
     <template #prepend> / </template>
     <template #append> /{{ modifier.join('') }} </template>
   </el-input>
@@ -74,19 +101,8 @@ function replace() {
       />
     </el-checkbox-group>
 
-    <el-divider style="margin: 5px 0" />
-    <el-link href="#通过标志进行高级搜索">
-      <el-icon><Position /></el-icon> &nbsp; 修饰符介绍
-    </el-link>
-
     <template #reference>
       <el-button class="ml2">修饰符</el-button>
-    </template>
-  </el-popover>
-
-  <el-popover placement="bottom" :width="200" trigger="click">
-    <template #reference>
-      <el-button class="ml2">语法参考</el-button>
     </template>
   </el-popover>
 

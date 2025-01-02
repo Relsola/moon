@@ -43,7 +43,6 @@ export default defineConfig({
         { text: 'JavaScript 知识笔记', link: '/JavaScript/' },
         { text: '最佳实践', link: '/JavaScript/best-practice' },
         { text: 'ES6+', link: '/JavaScript/es6' },
-        { text: '正则表达式', link: '/JavaScript/regexp' },
         { text: 'TypeScript', link: '/JavaScript/typescript' }
       ],
       '/Java/': [
