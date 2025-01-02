@@ -14,6 +14,12 @@ importers:
       element-plus:
         specifier: ^2.9.1
         version: 2.9.1(vue@3.5.13)
+      media-chrome:
+        specifier: ^4.3.0
+        version: 4.3.0
+      swapy:
+        specifier: ^1.0.3
+        version: 1.0.3
       vue:
         specifier: ^3.5.13
         version: 3.5.13
@@ -1272,6 +1278,9 @@ packages:
   mdn-data@2.12.2:
     resolution: {integrity: sha512-IEn+pegP1aManZuckezWCO+XZQDplx1366JoVhTpMpBB1sPey/SbveZQUosKiKiGYjg1wH4pMlNgXbCiYgihQA==}
 
+  media-chrome@4.3.0:
+    resolution: {integrity: sha512-Gr8Jd7eEjG53u8w0kJSWVUf1AbqUhRmMO9g2CvMDU4/V3ixy+FRKNRDNkPTQLHU6YN8PsCwfQVv619HL7lm8+Q==}
+
   memoize-one@6.0.0:
     resolution: {integrity: sha512-rkpe71W0N0c0Xz6QD0eJETuWAJGnJ9afsl1srmwPrI+yBCkge5EycXXbYRyvL29zZVUWQCY7InPRCv3GDXuZNw==}
 
@@ -1439,6 +1448,9 @@ packages:
   superjson@2.2.2:
     resolution: {integrity: sha512-5JRxVqC8I8NuOUjzBbvVJAKNM8qoVuH0O77h4WInc/qC2q5IreqKxYwgkga3PfA22OayK2ikceb/B26dztPl+Q==}
     engines: {node: '>=16'}
+
+  swapy@1.0.3:
+    resolution: {integrity: sha512-1vjW82TgNdQbufqI+JhWDhvrSu4hZr9Jmmzw15U8XQSvh1cHPjmrZFQiT3/Wlv30ouqcUbZhAdakZFMTVuBwfg==}
 
   tabbable@6.2.0:
     resolution: {integrity: sha512-Cat63mxsVJlzYvN51JmVXIgNoUokrIaT2zLclCXjRd8boZ0004U4KCs/sToJ75C6sdlByWxpYnb5Boif1VSFew==}
@@ -2825,6 +2837,8 @@ snapshots:
 
   mdn-data@2.12.2: {}
 
+  media-chrome@4.3.0: {}
+
   memoize-one@6.0.0: {}
 
   merge2@1.4.1: {}
@@ -3009,6 +3023,8 @@ snapshots:
   superjson@2.2.2:
     dependencies:
       copy-anything: 3.0.5
+
+  swapy@1.0.3: {}
 
   tabbable@6.2.0: {}
 
