@@ -1,3 +1,7 @@
+---
+outline: 3
+---
+
 # TypeScript
 
 ## 数据类型
@@ -440,452 +444,373 @@ bool = false;
 
 ### 类型拓宽 Type Widening
 
+我们将 `TypeScript` 的字面量子类型转换为父类型的这种设计称之为 "literal widening"，也就是字面量类型的拓宽。
+
+所有通过 `let` 或 `var` 定义的变量、函数的形参、对象的非只读属性，如果满足指定了初始值且未显式添加类型注解的条件，那么它们推断出来的类型就是指定的初始值字面量类型拓宽后的类型，这就是字面量类型拓宽。
+
 ```ts
-{
-  /* 
-    我们将 TypeScript 的字面量子类型转换为父类型的这种设计称之为 "literal widening"，也就是字面量类型的拓宽
-    
-    所有通过 let 或 var 定义的变量、函数的形参、对象的非只读属性，如果满足指定了初始值且未显式添加类型注解的条件，那么它们推断出来的类型就是指定的初始值字面量类型拓宽后的类型，这就是字面量类型拓宽。
-  */
+let str = 'this is string'; // string
+let strFun = (str = 'this is string') => str; // (str?: string) => string;
+const specifiedStr = 'this is string'; // 'this is string'
+let str2 = specifiedStr; // 'string'
+let strFun2 = (str = specifiedStr) => str; // (str?: string) => string;
+```
 
-  let str = 'this is string'; // 类型是 string
-  let strFun = (str = 'this is string') => str; // 类型是 (str?: string) => string;
-  const specifiedStr = 'this is string'; // 类型是 'this is string'
-  let str2 = specifiedStr; // 类型是 'string'
-  let strFun2 = (str = specifiedStr) => str; // 类型是 (str?: string) => string;
+当一个 `const` 声明的字面量类型被赋值给一个 `let` 声明的变量时，`TypeScript` 会将变量的类型推断为更宽泛的类型。  
+当一个明确的字面量类型被赋值给另一个变量时，即使这个变量是用 `let` 声明的，`TypeScript` 也会保留字面量类型。
+
+```ts
+const str: 'this is string' = 'this is string'; // 'this is string'
+let str2 = str; // 'this is string'
+
+interface Vector3 {
+  x: number;
+  y: number;
+  z: number;
 }
+const getComponent = (vector: Vector3, axis: 'x' | 'y' | 'z') => vector[axis];
 
-{
-  /* 
-     因为str常量不可变更，类型没有拓宽
-     所以 str 的类型是 'this is string' 字面量类型。
-     因为赋予的值 str 的类型是字面量类型，且没有显式类型注解
-     所以str2 的类型是字面量类型
-  */
+// 使用 getComponent 函数时，TypeScript 会提示以下错误信息：
+// 类型“string”的参数不能赋给类型“"x" | "y" | "z"”的参数。
+let x = 'x';
+let vec = { x: 10, y: 20, z: 30 };
+getComponent(vec, x); // Error
 
-  const str: 'this is string' = 'this is string'; // str: 'this is string'
-  let str2 = str; // 即便使用 let 定义，类型是 'this is string'
-}
+// 使用 const 可以帮助我们修复前面例子中的错误
+const y = 'y'; // let x:"x" = "x" 显示注解也行
+getComponent(vec, y); // 20
+```
 
-{
-  interface Vector3 {
-    x: number;
-    y: number;
-    z: number;
-  }
-  const getComponent = (vector: Vector3, axis: 'x' | 'y' | 'z') => vector[axis];
+当你在一个值之后使用 const 断言时，`TypeScript` 将为它推断出最窄的类型，没有拓宽，对于真正的常量，这通常是你想要的。
 
-  // 但是，当你尝试使用 getComponent 函数时，TypeScript 会提示以下错误信息：
-  // 类型“string”的参数不能赋给类型“"x" | "y" | "z"”的参数。
-  let x = 'x';
-  let vec = { x: 10, y: 20, z: 30 };
-  // getComponent(vec, x) // Error
+```ts
+// 提供显式类型注释
+const obj: { x: 1 | 2 | 3 } = { x: 1 };
 
-  // 使用 const 可以帮助我们修复前面例子中的错误
-  const y = 'y'; // let x:"x" = "x" 显示注解也行
-  getComponent(vec, y); // 20
+// const 断言
+const obj1 = { x: 1, y: 2 }; // {x: number; y: number}
+const obj2 = { x: 1 as const, y: 2 }; // {x: 1; y: number}
+const obj3 = { x: 1, y: 2 } as const; //  {readonly x: 1; readonly y: 2}
 
-  const obj = { x: 1 };
-  // const obj: { [key: string]: number | string } = {}
-  obj.x = 6; // OK
-
-  // obj.x = '6' // Error
-  // obj.y = 8 // Error
-  // obj.name = "mtf" //Error
-
-  const arr: (string | object | number | boolean)[] = [];
-  arr.push('1', { x: 2 }, 3, true);
-  console.log(arr);
-}
-
-{
-  /*
-   当你在一个值之后使用 const 断言时
-   TypeScript 将为它推断出最窄的类型，没有拓宽
-   对于真正的常量，这通常是你想要的。
-  */
-
-  // 提供显式类型注释
-  const obj: { x: 1 | 2 | 3 } = { x: 1 };
-
-  // const 断言
-  const obj1 = { x: 1, y: 2 }; // {x: number; y: number}
-  const obj2 = { x: 1 as const, y: 2 }; // {x: 1; y: number}
-  const obj3 = { x: 1, y: 2 } as const; //  {readonly x: 1; readonly y: 2}
-
-  const arr1 = [1, 2, 3]; // number[]
-  const arr2 = [1, 2, 3] as const; // readonly [1, 2, 3]
-}
+const arr1 = [1, 2, 3]; // number[]
+const arr2 = [1, 2, 3] as const; // readonly [1, 2, 3]
 ```
 
 ### 类型缩小 Type Narrowing
 
+在 TypeScript 中，我们可以通过某些操作将变量的类型由一个较为宽泛的集合缩小到相对较小、较明确的集合，这就是 "Type Narrowing"。
+
 ```ts
-/* 
-  在 TypeScript 中，我们可以通过某些操作将变量的类型由一个较为宽泛的集合缩小到相对较小、较明确的集合，这就是 "Type Narrowing"。
-*/
+// 类型守卫
+const func = (anything: any) => {
+  if (typeof anything === 'string') {
+    return anything;
+  } else if (typeof anything === 'number') {
+    return anything;
+  }
+  return null;
+};
 
-{
-  // 类型守卫
-  const func = (anything: any) => {
-    if (typeof anything === 'string') return anything;
-    else if (typeof anything === 'number') return anything;
-    return null;
-  };
+// 同样，我们可以使用类型守卫将联合类型缩小到明确的子类型
+const fun = (anything: string | number) => {
+  if (typeof anything === 'string') {
+    return anything;
+  } else if (typeof anything === 'number') {
+    return anything;
+  }
+};
+```
 
-  // 同样，我们可以使用类型守卫将联合类型缩小到明确的子类型
-  const fun = (anything: string | number) => {
-    if (typeof anything === 'string') return anything;
-    else if (typeof anything === 'number') return anything;
-  };
+通过字面量类型等值判断`（===）`或其他控制流语句（包括但不限于 if、三目运算符、switch 分支）将联合类型收敛为更具体的类型。
+
+```ts
+type Goods = 'pen' | 'pencil' | 'ruler';
+
+const getConst = (item: Goods) => {
+  if (item === 'pen') {
+    item; // item => 'pen'
+  } else {
+    item; // => 'pencil' | 'ruler'
+  }
+};
+
+interface UploadEvent {
+  type: 'upload';
+  filename: string;
+  contents: string;
 }
 
-{
-  // 通过字面量类型等值判断（===）或其他控制流语句（包括但不限于 if、三目运算符、switch 分支）将联合类型收敛为更具体的类型
+interface DownloadEvent {
+  type: 'download';
+  filename: string;
+}
 
-  type Goods = 'pen' | 'pencil' | 'ruler';
+type AppEvent = UploadEvent | DownloadEvent;
 
-  const getConst = (item: Goods) => {
-    if (item === 'pen') {
-      item; // item => 'pen'
-    } else {
-      item; // => 'pencil' | 'ruler'
-    }
-  };
-
-  interface UploadEvent {
-    type: 'upload';
-    filename: string;
-    contents: string;
-  }
-
-  interface DownloadEvent {
-    type: 'download';
-    filename: string;
-  }
-
-  type AppEvent = UploadEvent | DownloadEvent;
-
-  function handleEvent(e: AppEvent) {
-    switch (e.type) {
-      case 'download':
-        e; // Type is DownloadEvent
-        break;
-      case 'upload':
-        e; // Type is UploadEvent
-        break;
-    }
+function handleEvent(e: AppEvent) {
+  switch (e.type) {
+    case 'download':
+      e; // Type is DownloadEvent
+      break;
+    case 'upload':
+      e; // Type is UploadEvent
+      break;
   }
 }
 ```
 
 ### 联合类型
 
+联合类型表示取值可以为多种类型中的一种，使用 `|` 分隔每个类型。  
+联合类型通常与 `null` 或 `undefined` 一起使用。
+
 ```ts
-/* 
-  联合类型表示取值可以为多种类型中的一种，使用 | 分隔每个类型。
-  联合类型通常与 null 或 undefined 一起使用
-*/
+let myFavoriteNumber: string | number;
+myFavoriteNumber = 'seven'; // OK
+myFavoriteNumber = 7; // OK
 
-{
-  let myFavoriteNumber: string | number;
-  myFavoriteNumber = 'seven'; // OK
-  myFavoriteNumber = 7; // OK
-
-  let num: 0 | 1 = 1;
-  type EventNames = 'click' | 'scroll' | 'mousemove';
-}
+let num: 0 | 1 = 1;
+type EventNames = 'click' | 'scroll' | 'mousemove';
 ```
 
 ### 类型别名
 
+类型别名用来给一个类型起个新名字。类型别名常用于联合类型。
+
 ```ts
-/* 
-  类型别名用来给一个类型起个新名字。类型别名常用于联合类型。
-*/
-{
-  type Message = string | string[];
-  const greet = (message: Message) => {};
-}
+type Message = string | string[];
+const greet = (message: Message) => {};
 ```
 
 ### 交叉类型
 
+交叉类型是将多个类型合并为一个类型，这让我们可以把现有的多种类型叠加到一起成为一种类型，它包含了所需的所有类型的特性，使用&定义交叉类型。
+
+如果我们仅仅把原始类型、字面量类型、函数类型等原子类型合并成交叉类型，是没有任何用处的，因为任何类型都不能满足同时属于多种原子类型，因此其类型就是个 `never`。
+
 ```ts
-/* 
-  交叉类型是将多个类型合并为一个类型
-  这让我们可以把现有的多种类型叠加到一起成为一种类型
-  它包含了所需的所有类型的特性，使用&定义交叉类型。
-*/
+type useLess = string & number; // never
+```
 
-{
-  type useLess = string & number; // never
+交叉类型真正的用武之地就是将多个接口类型合并成一个类型，从而实现等同接口继承的效果，也就是所谓的合并接口类型。
 
-  /*
-       如果我们仅仅把原始类型、字面量类型、函数类型等原子类型合并成交叉类型
-       是没有任何用处的
-       因为任何类型都不能满足同时属于多种原子类型
-       因此，在上述的代码中，类型别名 Useless 的类型就是个 never。
-    */
+```ts
+type t = { id: number; name: string } & { age: number };
+const m1: t = { id: 1, name: '张三', age: 18 };
+```
 
-  /*
-      交叉类型真正的用武之地就是将多个接口类型合并成一个类型
-      从而实现等同接口继承的效果，也就是所谓的合并接口类型
-    */
+如果合并的多个接口类型存在同名属性:
 
-  type t = { id: number; name: string } & { age: number };
-  const m1: t = { id: 1, name: '张三', age: 18 };
+- 如果同名属性的类型不兼容 `never`
+- 如果同名属性的类型兼容 类型就是两者中的子类型
+- 属性是非基本数据类型 可以成功合并
+
+```ts
+// 1. 同名属性的类型不兼容
+type One = { id: number; name: 2 } & {
+  age: number;
+  name: number;
+};
+const obj: One = { id: 1, name: 'string', age: 2 }; //Error
+// 'string' 类型不能赋给 'never' 类型
+
+// 2. 同名属性的类型兼容
+type Tow = { id: number; name: 2 } & {
+  age: number;
+  name: number;
+};
+// number & 2  --> 子类型 2
+const obj: Tow = {
+  id: 1,
+  name: 2, // OK
+  // name: 18, // Error
+  age: 18
+};
+
+// 3. 属性是非基本数据类型
+interface A {
+  x: { d: true };
 }
-
-// 其他......................................
-{
-  /* 
-      如果合并的多个接口类型存在同名属性
-        如果同名属性的类型不兼容 never
-        如果同名属性的类型兼容 类型就是两者中的子类型
-        属性是非基本数据类型 可以成功合并
-
-    
-    */
-
-  // 1. 同名属性的类型不兼容
-  type One = { id: number; name: 2 } & {
-    age: number;
-    name: number;
-  };
-  // const obj:One = { id: 1, name: "string", age: 2 } //Error
-  // 'string' 类型不能赋给 'never' 类型
-
-  // 2. 同名属性的类型兼容
-  type Tow = { id: number; name: 2 } & {
-    age: number;
-    name: number;
-  };
-  // number & 2  --> 子类型 2
-  const obj: Tow = {
-    id: 1,
-    name: 2, // OK
-    // name: 18, // Error
-    age: 18
-  };
-
-  // 3. 属性是非基本数据类型
-  interface A {
-    x: { d: true };
-  }
-  interface B {
-    x: { e: string };
-  }
-  interface C {
-    x: { f: number };
-  }
-  type ABC = A & B & C;
-
-  const abc: ABC = { x: { d: true, e: '', f: 666 } }; // OK
+interface B {
+  x: { e: string };
 }
+interface C {
+  x: { f: number };
+}
+type ABC = A & B & C;
+
+const abc: ABC = { x: { d: true, e: '', f: 666 } }; // OK
 ```
 
 ## 接口与泛型
 
 ### 接口
 
+在面向对象语言中，接口（`Interfaces`）是一个很重要的概念，它是对行为的抽象，而具体如何行动需要由类（`classes`）去实现（`implement`）。
+
+`TypeScript` 中的接口是一个非常灵活的概念，除了可用于**对类的一部分行为进行抽象**以外，也常用于对**对象的形状（`Shape`）**进行描述。
+
+接口一般首字母大写，定义的变量比接口少了一些属性是不允许的，多一些属性也是不允许的。
+
 ```ts
-/* 
-  在面向对象语言中，接口（Interfaces）是一个很重要的概念
-  它是对行为的抽象，而具体如何行动需要由类（classes）去实现（implement）。
-  
-  TypeScript 中的接口是一个非常灵活的概念
-  除了可用于[对类的一部分行为进行抽象]以外
-  也常用于对「对象的形状（Shape）」进行描述。
-*/
-
-{
-  /*
-      接口一般首字母大写。
-      定义的变量比接口少了一些属性是不允许的：
-      多一些属性也是不允许的：
-    */
-
-  interface Person {
-    name: string;
-    age: number;
-    once?: number; // 可选属性
-  }
-
-  let Tom: Person = { name: 'Tom', age: 18 };
-  // let Tom1: Person = { name: 'Tom', age: 18 ,gender:"男"} // Error
-  // let Tom2: Person = { name: 'Tom' } // Error
+interface Person {
+  name: string;
+  age: number;
+  once?: number; // 可选属性
 }
 
-{
-  /*
-      任意属性
-      有时候我们希望一个接口中除了包含必选和可选属性之外，还允许有其他的任意属性
-      这时我们可以使用 索引签名 的形式来满足上述要求
+let Tom: Person = { name: 'Tom', age: 18 };
+let Tom1: Person = { name: 'Tom', age: 18, gender: '男' }; // Error
+let Tom2: Person = { name: 'Tom' }; // Error
+```
 
-      需要注意的是，一旦定义了任意属性
-      那么确定属性和可选属性的类型都必须是它的类型的子集
+### 任意属性
 
-      一个接口中只能定义一个任意属性
-      如果接口中有多个类型的属性
-      则可以在任意属性中使用联合类型：
-    */
+有时候我们希望一个接口中除了包含必选和可选属性之外，还允许有其他的任意属性，这时我们可以使用 **索引签名** 的形式来满足上述要求。
 
-  interface Person {
-    readonly name: string;
-    age?: number; // 这里真实的类型应该为：number | undefined
-    [key: string]: string | number | undefined;
-  }
+需要注意的是，一旦定义了任意属性，那么确定属性和可选属性的类型都必须是它的类型的子集。
 
-  const tom: Person = {
-    name: 'Tom',
-    age: 17,
-    gender: 'male'
-  };
+一个接口中只能定义一个任意属性，如果接口中有多个类型的属性，则可以在任意属性中使用联合类型。
+
+```ts
+interface Person {
+  readonly name: string;
+  age?: number; // 这里真实的类型应该为：number | undefined
+  [key: string]: string | number | undefined;
 }
 
-{
-  /* 
-      只读属性用于限制只能在对象刚刚创建的时候修改其值
-      TypeScript 还提供了 ReadonlyArray<T> 类型
-      确保数组创建后再也不能被修改。
-    */
+const tom: Person = {
+  name: 'Tom',
+  age: 17,
+  gender: 'male'
+};
+```
 
-  let a: number[] = [1, 2, 3];
-  let ro: ReadonlyArray<number> = a;
-  // ro[0] = 12 // Error
-  // ro.push(5) // Error
-  // ro.length = 100 // Error
-  // a = ro // Error
-}
+只读属性用于限制只能在对象刚刚创建的时候修改其值，`TypeScript` 还提供了 `ReadonlyArray<T>` 类型，确保数组创建后再也不能被修改。
+
+```ts
+let a: number[] = [1, 2, 3];
+let ro: ReadonlyArray<number> = a;
+
+ro[0] = 12; // Error
+ro.push(5); // Error
+ro.length = 100; // Error
+a = ro; // Error
 ```
 
 ### 接口与类型别名的区别
 
+实际上，在大多数的情况下使用接口类型和类型别名的效果等价，但是在某些特定的场景下这两者还是存在很大区别。
+
+`TypeScript` 的核心原则之一是对值所具有的结构进行类型检查，而接口的作用就是为这些类型命名和为你的代码或第三方代码定义数据模型。
+
+`type`（类型别名） 会给一个类型起个新名字，`type` 有时和 `interface` 很像，但是可以作用于原始值（基本类型），联合类型，元组以及其它任何你需要手写的类型，起别名不会新建一个类型，它创建了一个新 名字来引用那个类型，给基本类型起别名通常没什么用，尽管可以做为文档的一种形式使用。
+
+- 接口可以定义多次，会被自动合并为单个接口，类型别名不可以
+- 接口只能给对象指定类型，类型别名可以为任意类型指定别名。
+- 接口通过 `extends` 关键字进行继承，类型别名的扩展就是交叉类型，通过 `&` 来实现。
+- `type` 可以使用 `in` 关键字生成映射类型，`interface` 不行
+
+::: tip 建议
+公共的用 `interface` 实现，不能用 `interface` 实现的再用 `type` 实现
+:::
+
+`interface`
+
 ```ts
-/* 
-  实际上，在大多数的情况下使用接口类型和类型别名的效果等价
-  但是在某些特定的场景下这两者还是存在很大区别。
-  
-  TypeScript 的核心原则之一是对值所具有的结构进行类型检查
-  而接口的作用就是为这些类型命名和为你的代码或第三方代码定义数据模型。
-  
-  type(类型别名)会给一个类型起个新名字
-  type 有时和 interface 很像，
-  但是可以作用于原始值（基本类型），联合类型，元组以及其它任何你需要手写的类型
-  起别名不会新建一个类型
-  它创建了一个新 名字来引用那个类型
-  给基本类型起别名通常没什么用，尽管可以做为文档的一种形式使用。
-
-
-    1. 接口可以定义多次,会被自动合并为单个接口。
-       类型别名不可以
-
-    2. 接口只能给对象指定类型
-       类型别名可以为任意类型指定别名
-
-    3. 接口通过 extends 关键字进行继承
-       类型别名的扩展就是交叉类型，通过 & 来实现。
-    
-    4. type可以使用in 关键字生成映射类型
-       interface不行
-
-  建议：公共的用 interface 实现，不能用 interface 实现的再用 type 实现
-*/
-
-// interface
-{
-  interface Point {
-    x: number;
-  }
-
-  interface Point {
-    y: number;
-  }
-
-  interface SetPoint {
-    (x: number, y: number): void;
-  }
-
-  const point: Point = { x: 1, y: 2 };
+interface Point {
+  x: number;
 }
 
-// Type
-{
-  // primitive
-  type Name = string;
-
-  // object
-  type PartialPointX = { x: number };
-  type PartialPointY = { y: number };
-  type SetPointType = (x: number, y: number) => void;
-
-  // union
-  type PartialPoint = PartialPointX | PartialPointY;
-
-  // tuple
-  type Data = [number, string];
-
-  // dom
-  let div = document.createElement('div');
-  type B = typeof div;
-
-  // 映射
-  type Keys = 'name' | 'age';
-  type DudeType = {
-    [key in Keys]: string | number;
-  };
-  const tom: DudeType = {
-    name: 'Tom',
-    age: 18
-  };
+interface Point {
+  y: number;
 }
 
-{
-  /* 
-      扩展
-        两者的扩展方式不同，但并不互斥
-        接口可以扩展类型别名，同理，类型别名也可以扩展接口
-
-        接口的扩展就是继承，通过 extends 来实现
-        类型别名的扩展就是交叉类型，通过 & 来实现
-    */
-  {
-    // 接口扩展接口
-    interface PointX {
-      x: number;
-    }
-
-    interface Point extends PointX {
-      y: number;
-    }
-
-    let point: Point = { x: 1, y: 2 };
-  }
-
-  {
-    // 类型别名扩展类型别名
-    type PointX = { x: number };
-    type Point = PointX & { y: number };
-    let point: Point = { x: 1, y: 2 };
-  }
-
-  {
-    // 接口扩展类型别名
-    type PointX = { x: number };
-    interface Point extends PointX {
-      y: number;
-    }
-  }
-
-  {
-    // 类型别名扩展接口
-    interface PointX {
-      x: number;
-    }
-    type Point = PointX & { y: number };
-  }
+interface SetPoint {
+  (x: number, y: number): void;
 }
+
+const point: Point = { x: 1, y: 2 };
+```
+
+`Type`
+
+```ts
+// primitive
+type Name = string;
+
+// object
+type PartialPointX = { x: number };
+type PartialPointY = { y: number };
+type SetPointType = (x: number, y: number) => void;
+
+// union
+type PartialPoint = PartialPointX | PartialPointY;
+
+// tuple
+type Data = [number, string];
+
+// dom
+let div = document.createElement('div');
+type B = typeof div;
+
+// 映射
+type Keys = 'name' | 'age';
+type DudeType = {
+  [key in Keys]: string | number;
+};
+const tom: DudeType = {
+  name: 'Tom',
+  age: 18
+};
+```
+
+扩展：
+
+- 两者的扩展方式不同，但并不互斥，接口可以扩展类型别名，同理，类型别名也可以扩展接口。
+- 接口的扩展就是继承，通过 `extends` 来实现，类型别名的扩展就是交叉类型，通过 `&` 来实现。
+
+1. 接口扩展接口
+
+```ts
+interface PointX {
+  x: number;
+}
+
+interface Point extends PointX {
+  y: number;
+}
+
+let point: Point = { x: 1, y: 2 };
+```
+
+2. 类型别名扩展类型别名
+
+```ts
+type PointX = { x: number };
+type Point = PointX & { y: number };
+
+let point: Point = { x: 1, y: 2 };
+```
+
+3. 接口扩展类型别名
+
+```ts
+type PointX = { x: number };
+
+interface Point extends PointX {
+  y: number;
+}
+```
+
+4. 类型别名扩展接口
+
+```ts
+interface PointX {
+  x: number;
+}
+
+type Point = PointX & { y: number };
 ```
 
 ### 绕开额外属性检查的方式
