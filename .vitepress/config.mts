@@ -63,7 +63,8 @@ export default defineConfig({
       '/Tools/': [
         { text: '链接导航', link: '/Tools/link' },
         { text: '正则测试器', link: '/Tools/regexp' },
-        { text: '图片取色器', link: '/Tools/color' }
+        { text: '图片取色器', link: '/Tools/color' },
+        { text: 'Movie', link: '/Tools/movie' }
       ]
     },
 
