@@ -1,8 +1,5 @@
 # JavaScript 知识笔记
 
-> JavaScript 详细权威知识参考 [MDN](https://developer.mozilla.org/zh-CN/) 文档  
-> 阅读书籍推荐 《JavaScript 高级程序设计》
-
 ## 对 JS 的理解
 
 - `JavaScript` 是动态类型语言，代码在执行过程中，才知道这个变量属于的类型。
