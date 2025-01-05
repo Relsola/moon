@@ -642,7 +642,7 @@ type ABC = A & B & C;
 const abc: ABC = { x: { d: true, e: '', f: 666 } }; // OK
 ```
 
-## 接口与泛型
+## 接口
 
 ### 接口
 
@@ -815,193 +815,167 @@ type Point = PointX & { y: number };
 
 ### 绕开额外属性检查的方式
 
+1. 鸭式辨型法
+
+下面代码，在参数里写对象就相当于是直接给 `labeledObj` 赋值，这个对象有严格的类型定义，所以不能多参或少参。  
+而当你在外面将该对象用另一个变量 `myObj` 接收，`myObj` 不会经过额外属性检查，但会根据类型推论为 `let myObj: { size: number; label: string } = { size: 10, label: "Size 10 Object" }`。
+然后将这个 `myObj` 再赋值给 `labeledObj`，此时根据类型的兼容性，两种类型对象，参照鸭式辨型法，因为都具有 `label` 属性，所以被认定为两个相同，故而可以用此法来绕开多余的类型检查。
+
 ```ts
-// 一. 鸭式辨型法
-{
-  /*
-      下面代码，在参数里写对象就相当于是直接给labeledObj赋值
-      这个对象有严格的类型定义，所以不能多参或少参。
-      
-      而当你在外面将该对象用另一个变量myObj接收
-      myObj不会经过额外属性检查
-      但会根据类型推论为let myObj: { size: number; label: string } = { size: 10, label: "Size 10 Object" };
-      
-      然后将这个myObj再赋值给labeledObj
-      此时根据类型的兼容性，两种类型对象，参照鸭式辨型法，因为都具有label属性，所以被认定为两个相同，故而可以用此法来绕开多余的类型检查。
-    */
-
-  interface LabeledValue {
-    label: string;
-  }
-
-  function printLabel(labeledObj: LabeledValue) {
-    console.log(labeledObj.label);
-  }
-
-  let myObj = { size: 10, label: 'Size 10 Object' };
-  printLabel(myObj); // OK
-
-  // printLabel({ size: 10, label: "Size 10 Object" }); // Error
+interface LabeledValue {
+  label: string;
 }
 
-// 二. 类型断言
-{
-  /* 
-      类型断言的意义就等同于你在告诉程序，你很清楚自己在做什么
-      此时程序自然就不会再进行额外的属性检查了。
-    */
-  interface Props {
-    name: string;
-    age: number;
-    money?: number;
-  }
-
-  let p: Props = {
-    name: '张三',
-    age: 25,
-    money: -100000,
-    girl: false
-  } as Props; // OK
+function printLabel(labeledObj: LabeledValue) {
+  console.log(labeledObj.label);
 }
 
-// 三. 索引签名
-{
-  interface Props {
-    name: string;
-    age: number;
-    money?: number;
-    [key: string]: boolean | string | number | undefined;
-  }
+printLabel({ size: 10, label: 'Size 10 Object' }); // Error
 
-  let p: Props = {
-    name: '张三',
-    age: 25,
-    money: -100000,
-    girl: false,
-    once: 123
-  }; // OK
-}
+let myObj = { size: 10, label: 'Size 10 Object' };
+printLabel(myObj); // OK
 ```
 
-### 泛型
+2. 类型断言
+
+类型断言的意义就等同于你在告诉程序，你很清楚自己在做什么，此时程序自然就不会再进行额外的属性检查了。
 
 ```ts
-// 一. 泛型介绍
-{
-  /* 
-      下面代码中 T 代表 Type，在定义泛型时通常用作第一个类型变量名称
-      但实际上 T 可以用任何有效名称代替。除了 T 之外
-      
-      以下是常见泛型变量代表的意思：
-        K（Key）：表示对象中的键类型；
-        V（Value）：表示对象中的值类型；
-        E（Element）：表示元素类型。
-    */
-
-  const identities = <T, U>(value: T, message: U): T => {
-    console.log(message);
-    return value;
-  };
-
-  console.log(identities<number, string>(12, 'string'));
-
-  // 除了为类型变量显式设定值之外，一种更常见的做法是使编译器自动选择这些类型，从而使代码更简洁。我们可以完全省略尖括号
-  console.log(identities(17, 'semLinker'));
+interface Props {
+  name: string;
+  age: number;
+  money?: number;
 }
 
-// 二、泛型约束
-{
-  /* 
-      如下假如我想打印出参数的 size 属性
-      如果完全不进行约束 TS 是会报错的
-
-      报错的原因在于 T 理论上是可以是任何类型的
-      不同于 any，你不管使用它的什么属性或者方法都会报错（除非这个属性和方法是所有集合共有的）
-      
-      那么直观的想法是限定传给 trace 函数的参数类型应该有 size 类型，这样就不会报错了
-      实现这个需求的关键在于使用类型约束
-      使用 extends 关键字可以做到
-      简单来说就是你定义一个类型，然后让 T 实现这个接口即可。
-    */
-
-  function trace<T>(arg: T): T {
-    // console.log(arg.size); // Error
-    return arg;
-  }
-
-  // 解决
-  interface Sizeable {
-    size: number;
-    push: Function;
-  }
-  const fn = <T extends Sizeable>(arg: T): T => {
-    console.log(arg.size);
-    arg.push(12);
-    return arg;
-  };
-}
+let p: Props = {
+  name: '张三',
+  age: 25,
+  money: -100000,
+  girl: false
+} as Props; // OK
 ```
 
-## 泛型工具
+3. 索引签名
 
 ```ts
-// 总结常用泛型工具
-
-/* 
-  typeof  in keyof  infer  extends
-
-  - Partial<T> 将类型的属性变成可选
-
-  - Required<T> 将类型的属性变成必选
-
-  - Readonly<T> 将某个类型所有属性变为只读
-
-  - Pick<T, K> 从某个类型中挑出一些属性出来
-
-  - Record<K, T> 将 K 中所有的属性的值转化为 T 类型
-
-  - ReturnType<T> 得到一个函数的返回值类型
-
-  - Exclude<T, U> 将某个类型中属于另一个的类型移除掉
-
-  - Extract<T, U> 从 T 中提取出 U
-
-  - Omit<T, K> 使用 T 类型中除了 K 类型的所有属性，来构造一个新的类型
-
-  - NonNullable<T> 过滤类型中的 null 及 undefined 类型
-
-  - Parameters<T> 用于获得函数的参数类型组成的元组类型。
-*/
-
-{
-  interface Todo {
-    title: string;
-    description: string;
-    completed?: boolean;
-  }
-
-  type k1 = Partial<Todo>;
-
-  type k2 = Required<Todo>;
-
-  type k3 = Readonly<Todo>;
-
-  type k4 = Pick<Todo, 'title' | 'completed'>;
-
-  type k5 = Record<string, string | number>;
-
-  type k6 = ReturnType<() => number>;
-
-  type k7 = Exclude<'a' | 'b' | 'c', 'a' | 'b'>;
-
-  type k8 = Extract<'a' | 'b' | 'c', 'a' | 'b'>;
-
-  type k9 = Omit<Todo, 'title'>;
-
-  type k10 = NonNullable<string | number | null | undefined | void>;
-
-  type k11 = Parameters<(a: number, b: boolean) => string>;
+interface Props {
+  name: string;
+  age: number;
+  money?: number;
+  [key: string]: boolean | string | number | undefined;
 }
+
+let p: Props = {
+  name: '张三',
+  age: 25,
+  money: -100000,
+  girl: false,
+  once: 123
+}; // OK
+```
+
+## 泛型
+
+### 泛型介绍
+
+下面代码中 `T` 代表 `Type`，在定义泛型时通常用作第一个类型变量名称  
+但实际上 `T` 可以用任何有效名称代替。除了 `T` 之外，以下是常见泛型变量代表的意思：
+
+- `K`（Key）：表示对象中的键类型
+- `V`（Value）：表示对象中的值类型
+- `E`（Element）：表示元素类型
+
+```ts
+const identities = <T, U>(value: T, message: U): T => {
+  console.log(message);
+  return value;
+};
+
+console.log(identities<number, string>(12, 'string'));
+
+// 除了为类型变量显式设定值之外，一种更常见的做法是使编译器自动选择这些类型，从而使代码更简洁
+// 我们可以完全省略尖括号
+console.log(identities(17, 'semLinker'));
+```
+
+### 泛型约束
+
+如下假如我想打印出参数的 `size` 属性，如果完全不进行约束 `TS` 是会报错的，报错的原因在于 `T` 理论上是可以是任何类型的，不同于 `any`，你不管使用它的什么属性或者方法都会报错（除非这个属性和方法是所有集合共有的），那么直观的想法是限定传给 `trace` 函数的参数类型应该有 `size` 类型，这样就不会报错了，实现这个需求的关键在于使用类型约束，使用 `extends` 关键字可以做到，简单来说就是你定义一个类型，然后让 `T` 实现这个接口即可。
+
+```ts
+function trace<T>(arg: T): T {
+  console.log(arg.size); // Error
+  return arg;
+}
+
+// 解决
+interface Sizeable {
+  size: number;
+  push: Function;
+}
+const fn = <T extends Sizeable>(arg: T): T => {
+  console.log(arg.size);
+  arg.push(12);
+  return arg;
+};
+```
+
+### 泛型工具
+
+总结常用泛型工具：
+
+- `typeof` `in` `keyof` `infer` `extends`
+
+- `Partial<T>` 将类型的属性变成可选
+
+- `Required<T>` 将类型的属性变成必选
+
+- `Readonly<T>` 将某个类型所有属性变为只读
+
+- `Pick<T, K>` 从某个类型中挑出一些属性出来
+
+- `Record<K, T>` 将 K 中所有的属性的值转化为 T 类型
+
+- `ReturnType<T>` 得到一个函数的返回值类型
+
+- `Exclude<T, U>` 将某个类型中属于另一个的类型移除掉
+
+- `Extract<T, U>` 从 T 中提取出 U
+
+- `Omit<T, K>` 使用 T 类型中除了 K 类型的所有属性，来构造一个新的类型
+
+- `NonNullable<T>` 过滤类型中的 null 及 undefined 类型
+
+- `Parameters<T>` 用于获得函数的参数类型组成的元组类型。
+
+```ts
+interface Todo {
+  title: string;
+  description: string;
+  completed?: boolean;
+}
+
+type k = Partial<Todo>;
+
+type k = Required<Todo>;
+
+type k = Readonly<Todo>;
+
+type k = Pick<Todo, 'title' | 'completed'>;
+
+type k = Record<string, string | number>;
+
+type k = ReturnType<() => number>;
+
+type k = Exclude<'a' | 'b' | 'c', 'a' | 'b'>;
+
+type k = Extract<'a' | 'b' | 'c', 'a' | 'b'>;
+
+type k = Omit<Todo, 'title'>;
+
+type k = NonNullable<string | number | null | undefined | void>;
+
+type k = Parameters<(a: number, b: boolean) => string>;
 ```
 
 ### typeof
