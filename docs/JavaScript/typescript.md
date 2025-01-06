@@ -893,7 +893,8 @@ const identities = <T, U>(value: T, message: U): T => {
 
 console.log(identities<number, string>(12, 'string'));
 
-// 除了为类型变量显式设定值之外，一种更常见的做法是使编译器自动选择这些类型，从而使代码更简洁
+// 除了为类型变量显式设定值之外
+// 一种更常见的做法是使编译器自动选择这些类型，从而使代码更简洁
 // 我们可以完全省略尖括号
 console.log(identities(17, 'semLinker'));
 ```
@@ -924,7 +925,15 @@ const fn = <T extends Sizeable>(arg: T): T => {
 
 总结常用泛型工具：
 
-- `typeof` `in` `keyof` `infer` `extends`
+- [`typeof` 获取变量或者属性的类型](#typeof)
+
+- [`in` 遍历枚举类型](#in)
+
+- [`keyof` 获取某种类型的所有键](#keyof)
+
+- [`infer` 声明一个类型变量并且对它进行使用](#infer)
+
+- `extends`
 
 - `Partial<T>` 将类型的属性变成可选
 
@@ -978,170 +987,160 @@ type k = NonNullable<string | number | null | undefined | void>;
 type k = Parameters<(a: number, b: boolean) => string>;
 ```
 
-### typeof
+#### typeof
+
+`typeof` 的主要用途是在类型上下文中获取变量或者属性的类型
+
+`typeof` 操作符除了可以获取对象的结构类型之外，它也可以用来获取函数对象的类型
 
 ```ts
-/* 
-  typeof 的主要用途是在类型上下文中获取变量或者属性的类型
-
-  此外，typeof 操作符除了可以获取对象的结构类型之外
-  它也可以用来获取函数对象的类型
-
-*/
-
-{
-  interface Person {
-    name: string;
-    age: number;
-  }
-
-  const sem: Person = { name: '张三', age: 18 };
-  type Sem = typeof sem; // type Sem = Person
-  const son: Sem = { name: '李四', age: 17 };
-
-  const message = {
-    name: 'jimmy',
-    age: 18,
-    address: {
-      province: '四川',
-      city: '成都'
-    }
-  };
-  type Message = typeof message;
+interface Person {
+  name: string;
+  age: number;
 }
 
-{
-  function toArray(x: number): Array<number> {
-    return [x];
+const sem: Person = { name: '张三', age: 18 };
+type Sem = typeof sem; // type Sem = Person
+const son: Sem = { name: '李四', age: 17 };
+
+const message = {
+  name: 'jimmy',
+  age: 18,
+  address: {
+    province: '四川',
+    city: '成都'
   }
+};
+type Message = typeof message;
 
-  type Func = typeof toArray; // -> (x: number) => number[]
-
-  const num = 10;
-  type n = typeof num; // 也支持基本类型和字面量类型
+function toArray(x: number): Array<number> {
+  return [x];
 }
+
+type Func = typeof toArray; // -> (x: number) => number[]
+
+const num = 10;
+type n = typeof num; // 也支持基本类型和字面量类型
 ```
 
-### keyof
+#### in
+
+`in` 用来遍历枚举类型
 
 ```ts
-/* 
-  keyof 可以用于获取某种类型的所有键，其返回类型是联合类型。
+type Keys = 'name' | 'age' | 'gender';
 
-    注：在 TypeScript 中支持两种索引签名，数字索引和字符串索引
+type Person = {
+  [p in Keys]: number | string;
+};
 
-    JavaScript 在执行索引操作时
-    会先把数值索引先转换为字符串索引
-    所以 keyof { [x: string]: Person } 的结果会返回 string | number。
-    数字索引 -> keyof [index: number]: string => number
-*/
-
-{
-  interface Person {
-    name: string;
-    age: number;
-  }
-  type K1 = keyof Person; // "name" | "age"
-  type K2 = keyof []; // "length"  | "pop" | "push" ...
-  type K3 = keyof { [x: string]: Person }; // string | number
-
-  let k1: K1 = 'name';
-  k1 = 'age';
-
-  let k2: K2 = 2; // 数组是数字索引
-  k2 = 'join';
-
-  let k3: K3 = 4;
-  k3 = 'this is string';
-}
-
-{
-  // keyof也支持基本数据类型：
-  let K1: keyof boolean; // let K1: "valueOf"
-  let K2: keyof number; // let K2: "toString" | "toFixed"  ...
-  let K3: keyof symbol; // let K1: "valueOf" ...
-}
-
-{
-  // 返回值是any
-  function prop(obj: object, key: string) {
-    return obj[key];
-  }
-
-  function props<T extends object, K extends keyof T>(obj: T, key: K) {
-    return obj[key];
-  }
-
-  type Todo = {
-    id: number;
-    text: string;
-    done: boolean;
-  };
-
-  const todo: Todo = {
-    id: 1,
-    text: 'learn typescript keyof',
-    done: false
-  };
-
-  const id = props(todo, 'id'); // const id: number
-  const text = props(todo, 'text'); // const text: string
-  const done = props(todo, 'done'); // const done: boolean
-  // const date = props(todo, "date"); // Error
-}
+const tom: Person = {
+  name: 'zhangsan',
+  age: 17,
+  gender: 'man'
+};
 ```
 
-### in
+#### keyof
+
+`keyof` 可以用于获取某种类型的所有键，其返回类型是联合类型。
+
+::: tip 注意
+在 `TypeScript` 中支持两种索引签名，数字索引和字符串索引  
+JavaScript 在执行索引操作时，会先把数值索引先转换为字符串索引  
+所以 `keyof { [x: string]: Person }` 的结果会返回 `string | number`  
+数字索引则 `keyof { [index: number]: string }` 返回 `number`
+:::
 
 ```ts
-// in 用来遍历枚举类型：
-
-{
-  type Keys = 'name' | 'age' | 'gender';
-
-  type Person = {
-    [p in Keys]: number | string;
-  };
-
-  const tom: Person = {
-    name: 'zhangsan',
-    age: 17,
-    gender: 'man'
-  };
+interface Person {
+  name: string;
+  age: number;
 }
+type K1 = keyof Person; // "name" | "age"
+type K2 = keyof []; // "length"  | "pop" | "push" ...
+type K3 = keyof { [x: string]: Person }; // string | number
+
+let k1: K1 = 'name';
+k1 = 'age';
+
+let k2: K2 = 2; // 数组是数字索引
+k2 = 'join';
+
+let k3: K3 = 4;
+k3 = 'this is string';
 ```
 
-### infer
+`keyof` 也支持基本数据类型
 
 ```ts
-// 在条件类型语句中，可以用 infer 声明一个类型变量并且对它进行使用。
+let K1: keyof boolean; // let K1: "valueOf"
+let K2: keyof number; // let K2: "toString" | "toFixed"  ...
+let K3: keyof symbol; // let K1: "valueOf" ...
+```
 
-{
-  // 获取函数返回值的类型
-  type ReturnType<T> = T extends (...args: any[]) => infer R ? R : never;
-  const sum = (a: number, b: number) => a + b;
+`keyof` 获取返回值类型
 
-  type SumReturnType = ReturnType<typeof sum>; // number
+```ts
+// 返回值是any
+function prop(obj: object, key: string) {
+  return obj[key];
 }
 
-{
-  // 获取数组里的元素类型
-  type ArrayElementType<T> = T extends (infer U)[] ? U : never;
-  const numbers = [1, 2, 3, '4', '5']; // (string | number)[]
-
-  type NumberType = ArrayElementType<typeof numbers>; // string | number
+function props<T extends object, K extends keyof T>(obj: T, key: K) {
+  return obj[key];
 }
 
-{
-  // 提取 Promise 的 resolved 类型
-  type ResolvedType<T> = T extends Promise<infer R> ? R : never;
-  async function fetchData() {
-    // 省略异步操作
-    return 'data';
-  } // Promise<string>
+type Todo = {
+  id: number;
+  text: string;
+  done: boolean;
+};
 
-  type DataType = ResolvedType<ReturnType<typeof fetchData>>; // string
-}
+const todo: Todo = {
+  id: 1,
+  text: 'learn typescript keyof',
+  done: false
+};
+
+const id = props(todo, 'id'); // const id: number
+const text = props(todo, 'text'); // const text: string
+const done = props(todo, 'done'); // const done: boolean
+const date = props(todo, 'date'); // Error
+```
+
+#### infer
+
+在条件类型语句中，可以用 `infer` 声明一个类型变量并且对它进行使用。
+
+获取函数返回值的类型
+
+```ts
+type ReturnType<T> = T extends (...args: any[]) => infer R ? R : never;
+const sum = (a: number, b: number) => a + b;
+
+type SumReturnType = ReturnType<typeof sum>; // number
+```
+
+获取数组里的元素类型
+
+```ts
+type ArrayElementType<T> = T extends (infer U)[] ? U : never;
+const numbers = [1, 2, 3, '4', '5']; // (string | number)[]
+
+type NumberType = ArrayElementType<typeof numbers>; // string | number
+```
+
+提取 `Promise` 的 `resolved` 类型
+
+```ts
+type ResolvedType<T> = T extends Promise<infer R> ? R : never;
+async function fetchData() {
+  // 省略异步操作
+  return 'data';
+} // Promise<string>
+
+type DataType = ResolvedType<ReturnType<typeof fetchData>>; // string
 ```
 
 ### extends
