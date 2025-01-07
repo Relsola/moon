@@ -1,5 +1,5 @@
 ---
-outline: 3
+outline: [2, 3]
 ---
 
 # TypeScript
@@ -921,9 +921,7 @@ const fn = <T extends Sizeable>(arg: T): T => {
 };
 ```
 
-### 泛型工具
-
-总结常用泛型工具：
+### TS 关键字
 
 - [`typeof` 获取变量或者属性的类型](#typeof)
 
@@ -933,59 +931,7 @@ const fn = <T extends Sizeable>(arg: T): T => {
 
 - [`infer` 声明一个类型变量并且对它进行使用](#infer)
 
-- `extends`
-
-- `Partial<T>` 将类型的属性变成可选
-
-- `Required<T>` 将类型的属性变成必选
-
-- `Readonly<T>` 将某个类型所有属性变为只读
-
-- `Pick<T, K>` 从某个类型中挑出一些属性出来
-
-- `Record<K, T>` 将 K 中所有的属性的值转化为 T 类型
-
-- `ReturnType<T>` 得到一个函数的返回值类型
-
-- `Exclude<T, U>` 将某个类型中属于另一个的类型移除掉
-
-- `Extract<T, U>` 从 T 中提取出 U
-
-- `Omit<T, K>` 使用 T 类型中除了 K 类型的所有属性，来构造一个新的类型
-
-- `NonNullable<T>` 过滤类型中的 null 及 undefined 类型
-
-- `Parameters<T>` 用于获得函数的参数类型组成的元组类型。
-
-```ts
-interface Todo {
-  title: string;
-  description: string;
-  completed?: boolean;
-}
-
-type k = Partial<Todo>;
-
-type k = Required<Todo>;
-
-type k = Readonly<Todo>;
-
-type k = Pick<Todo, 'title' | 'completed'>;
-
-type k = Record<string, string | number>;
-
-type k = ReturnType<() => number>;
-
-type k = Exclude<'a' | 'b' | 'c', 'a' | 'b'>;
-
-type k = Extract<'a' | 'b' | 'c', 'a' | 'b'>;
-
-type k = Omit<Todo, 'title'>;
-
-type k = NonNullable<string | number | null | undefined | void>;
-
-type k = Parameters<(a: number, b: boolean) => string>;
-```
+- [`extends` 添加泛型约束](#extends)
 
 #### typeof
 
@@ -1035,7 +981,7 @@ type Person = {
 };
 
 const tom: Person = {
-  name: 'zhangsan',
+  name: 'Relsola',
   age: 17,
   gender: 'man'
 };
@@ -1143,155 +1089,201 @@ async function fetchData() {
 type DataType = ResolvedType<ReturnType<typeof fetchData>>; // string
 ```
 
-### extends
+#### extends
+
+`extends` 关键字添加泛型约束。
 
 ```ts
-// extends 关键字添加泛型约束。
-
-{
-  interface Lengthwise {
-    length: number;
-  }
-
-  function loggingIdentity<T extends Lengthwise>(arg: T): T {
-    console.log(arg.length);
-    return arg;
-  }
-
-  // 现在这个泛型函数被定义了约束，因此它不再是适用于任意类型：
-  // loggingIdentity(3);  // Error, number doesn't have a .length property
-
-  // 这时我们需要传入符合约束类型的值，必须包含length属性：
-  loggingIdentity({ length: 10, value: 3 });
-
-  // 条件类型约束
-  type TypeName<T> = T extends string
-    ? 'string'
-    : T extends number
-    ? 'number'
-    : T extends boolean
-    ? 'boolean'
-    : T extends undefined
-    ? 'undefined'
-    : 'object';
-
-  type TypeA = TypeName<string>; // "string"
-  type TypeB = TypeName<number>; // "number"
-  type TypeC = TypeName<boolean>; // "boolean"
-  type TypeD = TypeName<undefined>; // "undefined"
-  type TypeE = TypeName<object>; // "object"
-
-  // 条件类型递归
-  type Flatten<T> = T extends Array<infer U> ? Flatten<U> : T;
-
-  type NestedArray = [1, [2, [3, [4]]]];
-  type FlattenedArray = Flatten<NestedArray>; // 1 | 2 | 3 | 4
+interface Lengthwise {
+  length: number;
 }
+
+function loggingIdentity<T extends Lengthwise>(arg: T): T {
+  console.log(arg.length);
+  return arg;
+}
+
+// 现在这个泛型函数被定义了约束，因此它不再是适用于任意类型：
+loggingIdentity(3); // Error, number doesn't have a .length property
+
+// 这时我们需要传入符合约束类型的值，必须包含length属性：
+loggingIdentity({ length: 10, value: 3 });
+
+// 条件类型约束
+type TypeName<T> = T extends string
+  ? 'string'
+  : T extends number
+  ? 'number'
+  : T extends boolean
+  ? 'boolean'
+  : T extends undefined
+  ? 'undefined'
+  : 'object';
+
+type TypeA = TypeName<string>; // "string"
+type TypeB = TypeName<number>; // "number"
+type TypeC = TypeName<boolean>; // "boolean"
+type TypeD = TypeName<undefined>; // "undefined"
+type TypeE = TypeName<object>; // "object"
+
+// 条件类型递归
+type Flatten<T> = T extends Array<infer U> ? Flatten<U> : T;
+
+type NestedArray = [1, [2, [3, [4]]]];
+type FlattenedArray = Flatten<NestedArray>; // 1 | 2 | 3 | 4
 ```
 
 ### 索引类型
 
+在实际开发中，我们经常能遇到这样的场景：在对象中获取一些属性的值，然后建立对应的集合。  
+可以用索引类型让 `TS` 报错 排除可以返回的 `undefined`，且让代码提示变得更加丰富
+
 ```ts
-/* 
-  在实际开发中，我们经常能遇到这样的场景
-  在对象中获取一些属性的值，然后建立对应的集合。
-  可以用索引类型让TS报错 排除可以返回的undefined
-  且让代码提示变得更加丰富
-*/
-{
-  const getValue = <T, K extends keyof T>(person: T, keys: K[]) =>
-    keys.map(key => person[key]); // T[K][]
+const getValue = <T, K extends keyof T>(person: T, keys: K[]) =>
+  keys.map(key => person[key]); // T[K][]
 
-  interface Person {
-    name: string;
-    age: number;
-  }
-
-  const person: Person = {
-    name: 'tom',
-    age: 17
-  };
-
-  getValue(person, ['name', 'age']); // ['tom', 17]
-
-  // getValue(person, ['gender']) // 报错
+interface Person {
+  name: string;
+  age: number;
 }
+
+const person: Person = {
+  name: 'tom',
+  age: 17
+};
+
+getValue(person, ['name', 'age']); // ['tom', 17]
+
+getValue(person, ['gender']); // Error
 ```
 
 ### 映射类型
 
+根据旧的类型创建出新的类型, 我们称之为映射类型
+
 ```ts
-// 根据旧的类型创建出新的类型, 我们称之为映射类型
-{
-  interface TestInterface {
-    name: string;
-    age: number;
-  }
-  // 我们可以通过 + / - 来指定添加还是删除
-
-  type OptionalTestInterface<T> = {
-    +readonly [p in keyof T]+?: T[p];
-  };
-
-  type newTestInterface = OptionalTestInterface<TestInterface>;
-
-  // 等价于
-  type newTestInterfaceType = {
-    readonly name?: string;
-    readonly age?: number;
-  };
+interface TestInterface {
+  name: string;
+  age: number;
 }
+// 我们可以通过 + / - 来指定添加还是删除
+
+type OptionalTestInterface<T> = {
+  +readonly [p in keyof T]+?: T[p];
+};
+
+type newTestInterface = OptionalTestInterface<TestInterface>;
+
+// 等价于
+type newTestInterfaceType = {
+  readonly name?: string;
+  readonly age?: number;
+};
 ```
 
-### Partial
+### 泛型工具
+
+- [`Partial<T>` 将类型的属性变成可选](#partial)
+
+- [`Required<T>` 将类型的属性变成必选](#required)
+
+- [`Readonly<T>` 将某个类型所有属性变为只读](#readonly)
+
+- [`Pick<T, K>` 从某个类型中挑出一些属性出来](#pick)
+
+- [`Record<K, T>` 将 K 中所有的属性的值转化为 T 类型](#record)
+
+- [`ReturnType<T>` 得到一个函数的返回值类型](#returntype)
+
+- [`Exclude<T, U>` 将某个类型中属于另一个的类型移除掉](#exclude)
+
+- [`Extract<T, U>` 从 T 中提取出 U](#extract)
+
+- [`Omit<T, K>` 使用 T 类型中除了 K 类型的所有属性，来构造一个新的类型](#omit)
+
+- [`NonNullable<T>` 过滤类型中的 null 及 undefined 类型](#nonnullable)
+
+- [`Parameters<T>` 用于获得函数的参数类型组成的元组类型](#parameters)
 
 ```ts
-// Partial<T> 将类型的属性变成可选
-{
-  // 定义
-  type Partial<T> = {
-    [K in keyof T]?: T[K];
-  };
-
-  interface UserInfo {
-    id: number;
-    name: string;
-  }
-
-  const zhangsan: Partial<UserInfo> = { name: 'zhangsan' };
+interface Todo {
+  title: string;
+  description: string;
+  completed?: boolean;
 }
 
-// 但是 Partial<T> 有个局限性，就是只支持处理第一层的属性
-{
-  interface UserInfo {
-    id: number;
-    name: string;
-    fruits: {
-      appleNumber: number;
-      orangeNumber: number;
-    };
-  }
+type k = Partial<Todo>;
 
-  // const zhangsan: Partial<UserInfo> = { fruits: { orangeNumber: 1 } }
-  // Error
+type k = Required<Todo>;
 
-  // 如果要处理多层，就可以自己实现
-  type DeepPartial<T> = {
-    // 如果是 object，则递归类型
-    [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K];
-  };
+type k = Readonly<Todo>;
 
-  const zhangsan: DeepPartial<UserInfo> = {
-    fruits: { orangeNumber: 1 }
-  };
-}
+type k = Pick<Todo, 'title' | 'completed'>;
+
+type k = Record<string, string | number>;
+
+type k = ReturnType<() => number>;
+
+type k = Exclude<'a' | 'b' | 'c', 'a' | 'b'>;
+
+type k = Extract<'a' | 'b' | 'c', 'a' | 'b'>;
+
+type k = Omit<Todo, 'title'>;
+
+type k = NonNullable<string | number | null | undefined | void>;
+
+type k = Parameters<(a: number, b: boolean) => string>;
 ```
 
-### Required
+#### Partial
+
+`Partial<T>` 将类型的属性变成可选
 
 ```ts
-// Required将类型的属性变成必选
+// 定义
+type Partial<T> = {
+  [K in keyof T]?: T[K];
+};
 
+interface UserInfo {
+  id: number;
+  name: string;
+}
+
+const Relsola: Partial<UserInfo> = { name: 'Relsola' };
+```
+
+但是 `Partial<T>` 有个局限性，就是只支持处理第一层的属性
+
+如果要处理多层，就可以自己实现
+
+```ts
+interface UserInfo {
+  id: number;
+  name: string;
+  fruits: {
+    appleNumber: number;
+    orangeNumber: number;
+  };
+}
+
+const Relsola: Partial<UserInfo> = { fruits: { orangeNumber: 1 } }; // Error
+
+type DeepPartial<T> = {
+  // 如果是 object，则递归类型
+  [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K];
+};
+
+const Relsola: DeepPartial<UserInfo> = {
+  fruits: { orangeNumber: 1 }
+};
+```
+
+#### Required
+
+`Required` 将类型的属性变成必选
+
+```ts
 // 定义
 type Required<T> = {
   // -? 移除可选
@@ -1306,11 +1298,11 @@ interface UserInfo {
 const tom: Required<UserInfo> = { id: 1, name: 'tom' };
 ```
 
-### Readonly
+#### Readonly
+
+`Readonly<T> `的作用是将某个类型所有属性变为只读属性，不能被重新赋值。
 
 ```ts
-// Readonly<T> 的作用是将某个类型所有属性变为只读属性，不能被重新赋值。
-
 // 定义
 type Readonly<T> = {
   readonly [K in keyof T]: T[K];
@@ -1324,14 +1316,14 @@ const todo: Readonly<Todo> = {
   title: 'Delete inactive users'
 };
 
-// todo.title = "Hello"; // Error: cannot reassign a readonly property
+todo.title = 'Hello'; // Error
 ```
 
-### Pick
+#### Pick
+
+`Pick` 从某个类型中挑出一些属性出来
 
 ```ts
-// Pick 从某个类型中挑出一些属性出来
-
 // 定义
 type Pick<T, K extends keyof T> = {
   [P in K]: T[P];
@@ -1351,11 +1343,11 @@ const todo: TodoPreview = {
 };
 ```
 
-### Record
+#### Record
+
+`Record<K extends keyof any, T> `的作用是将 `K` 中所有的属性的值转化为 `T` 类型。
 
 ```ts
-// Record<K extends keyof any, T> 的作用是将 K 中所有的属性的值转化为 T 类型。
-
 // 定义
 type Record<K extends keyof any, T> = {
   [P in K]: T;
@@ -1380,11 +1372,11 @@ const x: Record<Page, PageInfo> = {
 };
 ```
 
-### ReturnType
+#### ReturnType
+
+`ReturnType<F>` 用来得到一个函数的返回值类型
 
 ```ts
-// 用来得到一个函数的返回值类型
-
 // 定义
 type ReturnType<T extends (...arg: any[]) => any> = T extends (
   ...arg: any[]
@@ -1397,11 +1389,11 @@ type Func = (value: number) => string;
 const foo: ReturnType<Func> = 'string';
 ```
 
-### Exclude
+#### Exclude
+
+`Exclude<T, U>` 的作用是将某个类型中属于另一个的类型移除掉。
 
 ```ts
-// Exclude<T, U> 的作用是将某个类型中属于另一个的类型移除掉。
-
 // 定义
 type Exclude<T, U> = T extends U ? never : T;
 
@@ -1412,11 +1404,11 @@ type T1 = Exclude<'a' | 'b' | 'c', 'a' | 'b'>; // "c"
 type T2 = Exclude<string | number | (() => void), Function>; // string | number
 ```
 
-### Extract
+#### Extract
+
+`Extract<T, U>` 的作用是从 T 中提取出 U。
 
 ```ts
-// Extract<T, U> 的作用是从 T 中提取出 U。
-
 // 定义
 type Extract<T, U> = T extends U ? T : never;
 
@@ -1424,11 +1416,11 @@ type T0 = Extract<'a' | 'b' | 'c', 'a' | 'f'>; // "a"
 type T1 = Extract<string | number | (() => void), Function>; // () =>void
 ```
 
-### Omit
+#### Omit
+
+`Omit<T, K extends keyof any> `使用 T 类型中除了 K 类型的所有属性，来构造一个新的类型。
 
 ```ts
-// Omit<T, K extends keyof any> 使用 T 类型中除了 K 类型的所有属性，来构造一个新的类型。
-
 // 定义
 type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;
 
@@ -1446,11 +1438,11 @@ const todo: TodoPreview = {
 };
 ```
 
-### NonNullable
+#### NonNullable
+
+`NonNullable<T>` 的作用是用来过滤类型中的 null 及 undefined 类型。
 
 ```ts
-// NonNullable<T> 的作用是用来过滤类型中的 null 及 undefined 类型。
-
 // 定义
 type NonNullable<T> = T extends null | undefined ? never : T;
 // type NonNullable<T> = Exclude<T, undefined | null>
@@ -1459,11 +1451,11 @@ type T0 = NonNullable<string | number | undefined>; // string | number
 type T1 = NonNullable<string[] | null | undefined>; // string[]
 ```
 
-### Parameters
+#### Parameters
+
+`Parameters<T>` 的作用是用于获得函数的参数类型组成的元组类型。
 
 ```ts
-// Parameters<T> 的作用是用于获得函数的参数类型组成的元组类型。
-
 // 定义
 type Parameters<T extends (...args: any) => any> = T extends (
   ...args: infer P
@@ -1477,7 +1469,7 @@ type C = Parameters<typeof parseInt>; // [string, (number | undefined)?]
 type D = Parameters<typeof Math.max>; // number[]
 ```
 
-## tsconfig
+## tsconfig.json 配置解释
 
 ```json
 /* 
