@@ -27,6 +27,7 @@ export default defineConfig({
       { text: 'Flutter', link: '/Flutter/' },
       { text: 'Java 后端', link: '/Java/' },
       { text: '数据库', link: '/SQL/' },
+      { text: 'Python', link: '/Python/' },
       { text: 'Game', link: '/Game/cpp' },
       { text: 'Tools', link: '/Tools/link' },
       {
