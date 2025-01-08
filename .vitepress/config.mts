@@ -45,6 +45,7 @@ export default defineConfig({
         { text: '最佳实践', link: '/JavaScript/best-practice' },
         { text: 'ES6+', link: '/JavaScript/es6' },
         { text: 'TypeScript', link: '/JavaScript/typescript' },
+        { text: 'Vue2 源码解读', link: '/JavaScript/vue2sourceCode' },
         { text: 'Canvas', link: '/JavaScript/canvas' }
       ],
       '/Java/': [
