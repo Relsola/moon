@@ -29,7 +29,16 @@
   {
     "label": "GitHub",
     "name": "github",
-    "data": []
+    "data": [
+      {
+        "name": "C++ 编写的终端俄罗斯方块游戏",
+        "href": "https://github.com/taylorconor/tinytetris"
+      },
+      {
+        "name": "C++ 编写的终端 2048 游戏",
+        "href": "https://github.com/plibither8/2048.cpp"
+      }
+    ]
   },
   {
     "label": "Other",
