@@ -1,0 +1,9 @@
+{
+  "name": "vue2",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {},
+  "devDependencies": {
+    "rollup": "^4.30.1"
+  }
+}
