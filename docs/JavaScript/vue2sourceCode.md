@@ -2325,7 +2325,3 @@ window.pop = function () {
 
 console.log(vm);
 ```
-
-效果如下：
-
-![Alt text](@/vue/mini-vue.gif)
