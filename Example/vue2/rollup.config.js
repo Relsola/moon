@@ -1,8 +1,9 @@
 export default {
-  input: 'src/main.js',
+  input: 'src/index.js',
   output: {
-    file: 'dist/bundle.cjs.js',
-    format: 'cjs',
-    name: 'vue2'
+    file: './dist/vue.js',
+    name: 'vue',
+    format: 'umd',
+    sourcemap: true
   }
 };
