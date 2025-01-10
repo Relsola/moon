@@ -24,7 +24,20 @@
   {
     "label": "Java 后端",
     "name": "java",
-    "data": []
+    "data": [
+      {
+        "name": "Java 进阶之路",
+        "href": "https://javabetter.cn/"
+      },
+      {
+        "name": "Java 全栈知识体系",
+        "href": "https://pdai.tech/"
+      },
+      {
+        "name": "Java 学习&面试指南",
+        "href": "https://javaguide.cn/home.html"
+      }
+    ]
   },
   {
     "label": "GitHub",
