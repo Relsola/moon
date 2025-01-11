@@ -38,6 +38,9 @@ sudo service redis-server restart
 
 # 查看运行状态
 sudo service redis-server status
+
+# 关闭服务
+sudo service redis-server stop
 ```
 
 使用 Redis CLI 或其他 Redis 客户端工具来连接到 WSL 中的 Redis 服务
