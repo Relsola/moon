@@ -10,3 +10,6 @@
 # Node.js
 node_modules
 
+# Java Logs and cache
+target/
+Logs/
