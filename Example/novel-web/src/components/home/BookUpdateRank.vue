@@ -18,10 +18,14 @@
           <tbody id="newRankBooks2">
             <tr v-for="(item, index) in booksList" :key="index">
               <td class="style">
-                <a href="javascript:void(0)" @click="bookDetail(item.id)">[{{ item.categoryName }}]</a>
+                <a href="javascript:void(0)" @click="bookDetail(item.id)"
+                  >[{{ item.categoryName }}]</a
+                >
               </td>
               <td class="name">
-                <a href="javascript:void(0)" @click="bookDetail(item.id)">{{ item.bookName }}</a>
+                <a href="javascript:void(0)" @click="bookDetail(item.id)">{{
+                  item.bookName
+                }}</a>
               </td>
               <td class="chapter">
                 <a href="javascript:void(0)" @click="bookDetail(item.id)">{{
@@ -52,9 +56,12 @@
             >
               <div class="book_name">
                 <i>{{ index + 1 }}</i
-                ><a class="name" href="javascript:void(0)" @click="bookDetail(item.id)">{{
-                  item.bookName
-                }}</a>
+                ><a
+                  class="name"
+                  href="javascript:void(0)"
+                  @click="bookDetail(item.id)"
+                  >{{ item.bookName }}</a
+                >
               </div>
               <div class="book_intro">
                 <div class="cover">
@@ -67,7 +74,8 @@
                 </div>
                 <a
                   class="txt"
-                  href="javascript:void(0)" @click="bookDetail(item.id)"
+                  href="javascript:void(0)"
+                  @click="bookDetail(item.id)"
                   v-html="item.bookDesc"
                 ></a>
               </div>
@@ -83,37 +91,37 @@
 </template>
 
 <script>
-import { reactive, toRefs, onMounted } from "vue";
-import { useRouter, useRoute } from "vue-router";
-import { listUpdateRankBooks } from "@/api/book";
+import { reactive, toRefs, onMounted } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import { listUpdateRankBooks } from '@/api/book';
 export default {
-  name: "BookUpdateRank",
+  name: 'BookUpdateRank',
   setup() {
     const route = useRoute();
     const router = useRouter();
     const state = reactive({
       booksRank: [],
       booksList: [],
-      imgBaseUrl: process.env.VUE_APP_BASE_IMG_URL,
+      imgBaseUrl: import.meta.env.VITE_APP_BASE_IMG_URL
     });
 
     onMounted(async () => {
       const { data } = await listUpdateRankBooks();
       state.booksList = data;
-      await data.forEach((book) => {
+      await data.forEach(book => {
         if (state.booksRank.length < 10) {
           state.booksRank[state.booksRank.length] = book;
         }
       });
     });
 
-    const bookDetail = (bookId) => {
+    const bookDetail = bookId => {
       router.push({ path: `/book/${bookId}` });
     };
     return {
       ...toRefs(state),
-      bookDetail,
+      bookDetail
     };
-  },
+  }
 };
 </script>

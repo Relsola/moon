@@ -58,23 +58,20 @@
                   </td>
                   <td class="goread">{{ item.chapterUpdateTime }}<br />更新</td>
                   <td class="goread" valsc="291|2037554|1">
-                    {{ item.isVip == 1 ? "收费" : "免费" }}
+                    {{ item.isVip == 1 ? '收费' : '免费' }}
                   </td>
 
                   <td class="goread" id="opt1358314029098041344">
                     <router-link
-                      
                       :to="{
                         name: 'authorChapterUpdate',
-                        query: { id: item.id },
+                        query: { id: item.id }
                       }"
                       >修改</router-link
                     >
 
                     <br />
-                    <a
-                      href="javascript:void(0);"
-                      @click="deleteBookChapter(item.id)"
+                    <a href="javascript:void(0);" @click="deleteBookChapter(item.id)"
                       >删除 </a
                     ><br />
                   </td>
@@ -129,15 +126,15 @@
 </template>
 
 <script>
-import "@/assets/styles/book.css";
-import { reactive, toRefs, onMounted, ref } from "vue";
-import { useRouter, useRoute } from "vue-router";
-import { listChapters, deleteChapter } from "@/api/author";
-import AuthorHeader from "@/components/author/Header.vue";
+import '@/assets/styles/book.css';
+import { reactive, toRefs, onMounted, ref } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import { listChapters, deleteChapter } from '@/api/author';
+import AuthorHeader from '@/components/author/Header.vue';
 export default {
-  name: "authorChapterList",
+  name: 'authorChapterList',
   components: {
-    AuthorHeader,
+    AuthorHeader
   },
   setup() {
     const route = useRoute();
@@ -150,7 +147,7 @@ export default {
       backgroud: true,
       total: 0,
       pageSize: 10,
-      imgBaseUrl: process.env.VUE_APP_BASE_IMG_URL,
+      imgBaseUrl: import.meta.env.VITE_APP_BASE_IMG_URL
     });
     onMounted(() => {
       load();
@@ -164,12 +161,12 @@ export default {
       state.total = Number(data.total);
     };
 
-    const handleCurrentChange = (pageNum) => {
+    const handleCurrentChange = pageNum => {
       state.searchCondition.pageNum = pageNum;
       load();
     };
 
-    const deleteBookChapter = async (id) => {
+    const deleteBookChapter = async id => {
       await deleteChapter(id);
       load();
     };
@@ -178,9 +175,9 @@ export default {
       ...toRefs(state),
       handleCurrentChange,
       load,
-      deleteBookChapter,
+      deleteBookChapter
     };
-  },
+  }
 };
 </script>
 
@@ -712,7 +709,7 @@ a.redBtn:hover {
   width: 660px;
 }
 .comment_list .li_0 {
-  font-family: "宋体";
+  font-family: '宋体';
 }
 .comment_list .li_0 strong {
   font-size: 14px;

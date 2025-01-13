@@ -64,7 +64,7 @@
                   <td class="goread" valsc="291|2037554|1">{{ wordCountFormat(item.wordCount) }}</td>
                   <td class="goread" id="opt1431636515973345292">
                     <router-link class="redBtn" :to="{'name':'authorChapterList','query':{'id':item.id}}">章节管理</router-link>
-                    
+
                   </td>
                 </tr>
               </tbody>
@@ -137,7 +137,7 @@ export default {
       backgroud: true,
       total: 0,
       pageSize: 10,
-      imgBaseUrl: process.env.VUE_APP_BASE_IMG_URL,
+      imgBaseUrl: import.meta.env.VITE_APP_BASE_IMG_URL,
     });
     onMounted(() => {
       load();

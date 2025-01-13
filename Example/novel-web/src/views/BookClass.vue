@@ -254,7 +254,7 @@ export default {
       backgroud: true,
       total: 0,
       pageSize: 10,
-      imgBaseUrl: process.env.VUE_APP_BASE_IMG_URL,
+      imgBaseUrl: import.meta.env.VITE_APP_BASE_IMG_URL,
       workDirectionOn: 0,
       categoryOn: 0,
       bookStatusOn: null,

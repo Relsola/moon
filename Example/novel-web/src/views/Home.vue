@@ -243,7 +243,7 @@ export default {
       hotRecommend: [],
       // 精品推荐
       goodRecommend: [],
-      imgBaseUrl: process.env.VUE_APP_BASE_IMG_URL,
+      imgBaseUrl: import.meta.env.VITE_APP_BASE_IMG_URL,
     });
 
     onMounted(async () => {

@@ -4,8 +4,11 @@
     <div class="userBox cf">
       <div class="my_l">
         <ul class="log_list">
-          <li>            <router-link class="link_4 on" :to="{'name':'authorBookList'}">小说管理</router-link>
-</li>
+          <li>
+            <router-link class="link_4 on" :to="{ name: 'authorBookList' }"
+              >小说管理</router-link
+            >
+          </li>
           <!--<li><a class="link_1 " href="/user/userinfo.html">批量小说爬取</a></li>
 <li><a class="link_4 " href="/user/favorites.html">单本小说爬取</a></li>-->
         </ul>
@@ -22,7 +25,7 @@
                   <b>作品方向：</b>
                   <li>
                     <select
-                    v-model="book.workDirection"
+                      v-model="book.workDirection"
                       class="s_input"
                       id="workDirection"
                       name="workDirection"
@@ -34,9 +37,20 @@
                   </li>
                   <b>分类：</b>
                   <li>
-                    <select class="s_input" id="catId" name="catId" v-model="book.categoryId" @change="categoryChange">
-                      <option :value="item.id" v-for="(item,index) in bookCategorys" :key="index">{{item.name}}</option>
-                      
+                    <select
+                      class="s_input"
+                      id="catId"
+                      name="catId"
+                      v-model="book.categoryId"
+                      @change="categoryChange"
+                    >
+                      <option
+                        :value="item.id"
+                        v-for="(item, index) in bookCategorys"
+                        :key="index"
+                      >
+                        {{ item.name }}
+                      </option>
                     </select>
                   </li>
                   <input
@@ -65,9 +79,7 @@
                       :before-upload="beforeAvatarUpload"
                     >
                       <img
-                        :src="
-                          book.picUrl ? imgBaseUrl + book.picUrl : picUpload
-                        "
+                        :src="book.picUrl ? imgBaseUrl + book.picUrl : picUpload"
                         class="avatar"
                       />
                     </el-upload>
@@ -137,40 +149,40 @@
 </template>
 
 <script>
-import "@/assets/styles/book.css";
-import { reactive, toRefs, onMounted, ref } from "vue";
-import { useRouter, useRoute } from "vue-router";
-import { ElMessage } from "element-plus";
-import { publishBook } from "@/api/author";
-import { listCategorys } from "@/api/book";
-import AuthorHeader from "@/components/author/Header.vue";
-import picUpload from "@/assets/images/pic_upload.png";
+import '@/assets/styles/book.css';
+import { reactive, toRefs, onMounted, ref } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import { ElMessage } from 'element-plus';
+import { publishBook } from '@/api/author';
+import { listCategorys } from '@/api/book';
+import AuthorHeader from '@/components/author/Header.vue';
+import picUpload from '@/assets/images/pic_upload.png';
 export default {
-  name: "authorBookAdd",
+  name: 'authorBookAdd',
   components: {
-    AuthorHeader,
+    AuthorHeader
   },
   setup() {
     const route = useRoute();
     const router = useRouter();
 
     const state = reactive({
-      book: {'workDirection' : 0,'isVip':0},
+      book: { workDirection: 0, isVip: 0 },
       bookCategorys: [],
-      baseUrl: process.env.VUE_APP_BASE_API_URL,
-      imgBaseUrl: process.env.VUE_APP_BASE_IMG_URL,
+      baseUrl: import.meta.env.VITE_APP_BASE_API_URL,
+      imgBaseUrl: import.meta.env.VITE_APP_BASE_IMG_URL
     });
 
     onMounted(() => {
-      loadCategoryList()
-    })
+      loadCategoryList();
+    });
 
-    const beforeAvatarUpload = (rawFile) => {
-      if (rawFile.type !== "image/jpeg") {
-        ElMessage.error("必须上传 JPG 格式的图片!");
+    const beforeAvatarUpload = rawFile => {
+      if (rawFile.type !== 'image/jpeg') {
+        ElMessage.error('必须上传 JPG 格式的图片!');
         return false;
       } else if (rawFile.size / 1024 / 1024 > 5) {
-        ElMessage.error("图片大小最多 5MB!");
+        ElMessage.error('图片大小最多 5MB!');
         return false;
       }
       return true;
@@ -181,39 +193,41 @@ export default {
     };
 
     const loadCategoryList = async () => {
-      const { data } = await listCategorys({ workDirection: state.book.workDirection });
-      state.book.categoryId = data[0].id
-      state.book.categoryName = data[0].name
+      const { data } = await listCategorys({
+        workDirection: state.book.workDirection
+      });
+      state.book.categoryId = data[0].id;
+      state.book.categoryName = data[0].name;
       state.bookCategorys = data;
     };
 
-    const categoryChange = async (event) => {
-      console.log("categoryChange======",event.target.value)
-     state.bookCategorys.forEach((category)=>{
-        if(category.id == event.target.value){
-          state.book.categoryName = category.name
-          return
+    const categoryChange = async event => {
+      console.log('categoryChange======', event.target.value);
+      state.bookCategorys.forEach(category => {
+        if (category.id == event.target.value) {
+          state.book.categoryName = category.name;
+          return;
         }
       });
-    }
+    };
 
     const saveBook = async () => {
-      console.log("sate=========",state.book)
+      console.log('sate=========', state.book);
       if (!state.book.bookName) {
-        ElMessage.error("书名不能为空！");
+        ElMessage.error('书名不能为空！');
         return;
       }
       if (!state.book.picUrl) {
-        ElMessage.error("封面不能为空！");
+        ElMessage.error('封面不能为空！');
         return;
       }
       if (!state.book.bookDesc) {
-        ElMessage.error("简介不能为空！");
+        ElMessage.error('简介不能为空！');
         return;
       }
-      await publishBook(state.book)
-      router.push({'name':'authorBookList'})
-    }
+      await publishBook(state.book);
+      router.push({ name: 'authorBookList' });
+    };
 
     return {
       ...toRefs(state),
@@ -224,7 +238,7 @@ export default {
       categoryChange,
       saveBook
     };
-  },
+  }
 };
 </script>
 
@@ -756,7 +770,7 @@ a.redBtn:hover {
   width: 660px;
 }
 .comment_list .li_0 {
-  font-family: "宋体";
+  font-family: '宋体';
 }
 .comment_list .li_0 strong {
   font-size: 14px;

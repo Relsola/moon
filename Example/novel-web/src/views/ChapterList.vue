@@ -2,7 +2,7 @@
   <Header />
   <div class="main box_center cf">
     <div class="nav_sub">
-      
+
     </div>
     <div class="channelWrap channelChapterlist cf mb50">
       <div class="bookMain">
@@ -37,7 +37,7 @@
                 </a>
               </li>
             </ul>
-            
+
           </div>
         </div>
       </div>
@@ -67,7 +67,7 @@ export default {
     const state = reactive({
       book: {},
       chapterList: [],
-      imgBaseUrl: process.env.VUE_APP_BASE_IMG_URL,
+      imgBaseUrl: import.meta.env.VITE_APP_BASE_IMG_URL,
     });
     onMounted(() => {
       const bookId = route.params.bookId;

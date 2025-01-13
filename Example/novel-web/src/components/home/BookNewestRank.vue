@@ -47,35 +47,35 @@
 </template>
 
 <script>
-import { reactive, toRefs, onMounted } from "vue";
-import { useRouter, useRoute } from "vue-router";
-import { listNewestRankBooks } from "@/api/book";
+import { reactive, toRefs, onMounted } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import { listNewestRankBooks } from '@/api/book';
 export default {
-  name: "BookNewestRank",
+  name: 'BookNewestRank',
   setup() {
     const route = useRoute();
     const router = useRouter();
     const state = reactive({
       books: [],
-      imgBaseUrl: process.env.VUE_APP_BASE_IMG_URL,
+      imgBaseUrl: import.meta.env.VITE_APP_BASE_IMG_URL
     });
 
     onMounted(async () => {
       const { data } = await listNewestRankBooks();
 
-      await data.forEach((book) => {
+      await data.forEach(book => {
         if (state.books.length < 10) {
           state.books[state.books.length] = book;
         }
       });
     });
-    const bookDetail = (bookId) => {
+    const bookDetail = bookId => {
       router.push({ path: `/book/${bookId}` });
     };
     return {
       ...toRefs(state),
-      bookDetail,
+      bookDetail
     };
-  },
+  }
 };
 </script>

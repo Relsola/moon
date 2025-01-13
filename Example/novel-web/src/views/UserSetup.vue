@@ -74,20 +74,20 @@
 </template>
 
 <script>
-import "@/assets/styles/user.css";
-import man from "@/assets/images/man.png";
-import { reactive, toRefs, onMounted, ref } from "vue";
-import { useRouter, useRoute } from "vue-router";
-import { ElMessage } from "element-plus";
-import { Plus } from "@element-plus/icons-vue";
-import { UploadProps } from "element-plus";
-import { getImgVerifyCode } from "@/api/resource";
-import { getUserinfo, updateUserInfo } from "@/api/user";
-import Header from "@/components/common/Header";
-import Footer from "@/components/common/Footer";
-import UserMenu from "@/components/user/Menu";
+import '@/assets/styles/user.css';
+import man from '@/assets/images/man.png';
+import { reactive, toRefs, onMounted, ref } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import { ElMessage } from 'element-plus';
+import { Plus } from '@element-plus/icons-vue';
+import { UploadProps } from 'element-plus';
+import { getImgVerifyCode } from '@/api/resource';
+import { getUserinfo, updateUserInfo } from '@/api/user';
+import Header from '@/components/common/Header';
+import Footer from '@/components/common/Footer';
+import UserMenu from '@/components/user/Menu';
 export default {
-  name: "userSetup",
+  name: 'userSetup',
   components: {
     Header,
     Footer,
@@ -98,10 +98,10 @@ export default {
     const router = useRouter();
 
     const state = reactive({
-      userPhoto: "",
-      nickName: "",
-      baseUrl: process.env.VUE_APP_BASE_API_URL,
-      imgBaseUrl: process.env.VUE_APP_BASE_IMG_URL,
+      userPhoto: '',
+      nickName: '',
+      baseUrl: import.meta.env.VITE_APP_BASE_API_URL,
+      imgBaseUrl: import.meta.env.VITE_APP_BASE_IMG_URL
     });
 
     onMounted(async () => {
@@ -110,12 +110,12 @@ export default {
       state.nickName = data.nickName;
     });
 
-    const beforeAvatarUpload = (rawFile) => {
-      if (rawFile.type !== "image/jpeg") {
-        ElMessage.error("必须上传 JPG 格式的图片!");
+    const beforeAvatarUpload = rawFile => {
+      if (rawFile.type !== 'image/jpeg') {
+        ElMessage.error('必须上传 JPG 格式的图片!');
         return false;
       } else if (rawFile.size / 1024 / 1024 > 5) {
-        ElMessage.error("图片大小最多 5MB!");
+        ElMessage.error('图片大小最多 5MB!');
         return false;
       }
       return true;
@@ -130,9 +130,9 @@ export default {
       ...toRefs(state),
       man,
       beforeAvatarUpload,
-      handleAvatarSuccess,
+      handleAvatarSuccess
     };
-  },
+  }
 };
 </script>
 
@@ -641,7 +641,7 @@ export default {
   width: 660px;
 }
 .comment_list .li_0 {
-  font-family: "宋体";
+  font-family: '宋体';
 }
 .comment_list .li_0 strong {
   font-size: 14px;

@@ -364,7 +364,7 @@ export default {
       chapterAbout: {},
       commentContent: "",
       newestComments: {},
-      imgBaseUrl: process.env.VUE_APP_BASE_IMG_URL,
+      imgBaseUrl: import.meta.env.VITE_APP_BASE_IMG_URL,
       dialogUpdateCommentFormVisible: false,
       commentId: "",
       updateComment: "",

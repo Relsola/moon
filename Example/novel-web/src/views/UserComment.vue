@@ -6,32 +6,58 @@
       <UserMenu />
       <div class="my_r">
         <div class="my_bookshelf">
-                <div class="title cf">
-                    <h2 class="fl">我的书评</h2>
-                    <div class="fr"></div>
-                </div>
-                <div class="bookComment">
-                    <div v-if="total == 0" class="no_contet no_comment" >
-                        您还没有发表过评论！
-                    </div>
-                    <div v-if="total > 0" class="commentBar" id="commentBar">
-                      <div v-for="(item, index) in comments"
-                  :key="index" class="comment_list cf"><div class="user_heads fl" vals="389"><img :src="
-                        imgBaseUrl + item.commentBookPic
-                         
-                      " class="user_head" alt="" onerror="this.src='default.gif';this.onerror=null"><span class="user_level1" style="display: none;">见习</span></div><ul class="pl_bar fr">			<li class="name">{{ item.commentBook }}</li><li class="dec" v-html="item.commentContent"></li><li class="other cf"><span class="time fl">{{ item.commentTime }}</span><span class="fr"><a href="javascript:void(0);" onclick="javascript:BookDetail.AddAgreeTotal(77,this);" class="zan" style="display: none;">赞<i class="num">(0)</i></a></span></li>		</ul>	</div>
-                    </div>
-                </div>
-                <el-pagination v-if="total > 0"
-          small
-          layout="prev, pager, next"
-          :background="backgroud"
-          :page-size="pageSize"
-          :total="total"
-          class="mt-4"
-          @current-change="handleCurrentChange"
-        />
+          <div class="title cf">
+            <h2 class="fl">我的书评</h2>
+            <div class="fr"></div>
+          </div>
+          <div class="bookComment">
+            <div v-if="total == 0" class="no_contet no_comment">
+              您还没有发表过评论！
             </div>
+            <div v-if="total > 0" class="commentBar" id="commentBar">
+              <div
+                v-for="(item, index) in comments"
+                :key="index"
+                class="comment_list cf"
+              >
+                <div class="user_heads fl" vals="389">
+                  <img
+                    :src="imgBaseUrl + item.commentBookPic"
+                    class="user_head"
+                    alt=""
+                    onerror="this.src='default.gif';this.onerror=null"
+                  /><span class="user_level1" style="display: none">见习</span>
+                </div>
+                <ul class="pl_bar fr">
+                  <li class="name">{{ item.commentBook }}</li>
+                  <li class="dec" v-html="item.commentContent"></li>
+                  <li class="other cf">
+                    <span class="time fl">{{ item.commentTime }}</span
+                    ><span class="fr"
+                      ><a
+                        href="javascript:void(0);"
+                        onclick="javascript:BookDetail.AddAgreeTotal(77,this);"
+                        class="zan"
+                        style="display: none"
+                        >赞<i class="num">(0)</i></a
+                      ></span
+                    >
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <el-pagination
+            v-if="total > 0"
+            small
+            layout="prev, pager, next"
+            :background="backgroud"
+            :page-size="pageSize"
+            :total="total"
+            class="mt-4"
+            @current-change="handleCurrentChange"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -39,16 +65,16 @@
 </template>
 
 <script>
-import "@/assets/styles/user.css";
-import man from "@/assets/images/man.png";
-import { listComments } from '@/api/user'
-import { reactive, toRefs, onMounted, ref } from "vue";
-import { useRouter, useRoute } from "vue-router";
-import Header from "@/components/common/Header";
-import Footer from "@/components/common/Footer";
-import UserMenu from "@/components/user/Menu";
+import '@/assets/styles/user.css';
+import man from '@/assets/images/man.png';
+import { listComments } from '@/api/user';
+import { reactive, toRefs, onMounted, ref } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import Header from '@/components/common/Header';
+import Footer from '@/components/common/Footer';
+import UserMenu from '@/components/user/Menu';
 export default {
-  name: "userComment",
+  name: 'userComment',
   components: {
     Header,
     Footer,
@@ -61,13 +87,12 @@ export default {
     const state = reactive({
       total: 0,
       pageSize: 10,
-      comments:[],
-      baseUrl: process.env.VUE_APP_BASE_API_URL,
-      imgBaseUrl: process.env.VUE_APP_BASE_IMG_URL,
+      comments: [],
+      baseUrl: import.meta.env.VITE_APP_BASE_API_URL,
+      imgBaseUrl: import.meta.env.VITE_APP_BASE_IMG_URL
     });
 
-    const handleCurrentChange = (pageNum) => {
-      
+    const handleCurrentChange = pageNum => {
       loadComments(pageNum);
     };
 
@@ -75,22 +100,21 @@ export default {
       loadComments(0);
     });
 
-    const loadComments = async (pageNum) => {
-      const { data } = await listComments({'pageNum':pageNum,'pageSize':state.pageSize});
+    const loadComments = async pageNum => {
+      const { data } = await listComments({
+        pageNum: pageNum,
+        pageSize: state.pageSize
+      });
       state.comments = data.list;
       state.total = Number(data.total);
     };
 
-    
-    
-
     return {
       ...toRefs(state),
       handleCurrentChange,
-      man,
-      
+      man
     };
-  },
+  }
 };
 </script>
 
@@ -613,7 +637,7 @@ export default {
   width: 660px;
 }
 .comment_list .li_0 {
-  font-family: "宋体";
+  font-family: '宋体';
 }
 .comment_list .li_0 strong {
   font-size: 14px;
