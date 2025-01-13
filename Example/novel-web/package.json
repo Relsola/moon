@@ -3,11 +3,9 @@
   "version": "3.4.0",
   "private": true,
   "scripts": {
-    "dev": "vue-cli-service serve",
-    "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "vite-dev": "vite",
-    "vite-build": "vue-tsc -b && vite build",
+    "dev": "vite",
+    "build": "vue-tsc -b && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -19,15 +17,11 @@
     "vue-router": "^4.5.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.26.0",
-    "@babel/eslint-parser": "^7.26.5",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vue/cli-plugin-babel": "~5.0.8",
     "@vue/cli-plugin-eslint": "~5.0.8",
     "@vue/cli-service": "~5.0.8",
     "@vue/tsconfig": "^0.7.0",
-    "eslint": "^7.32.0",
-    "eslint-plugin-vue": "^8.7.1",
     "typescript": "~5.6.3",
     "vite": "^6.0.7",
     "vue-tsc": "^2.2.0"
