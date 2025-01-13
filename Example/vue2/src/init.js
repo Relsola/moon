@@ -10,7 +10,7 @@ import { mergeOptions } from './utils';
  */
 export function initMixin(Vue) {
   Vue.prototype._init = function (options) {
-    // this 就是 Vue 实例，经常写 this 太烦，又容易混淆 this，取别名
+    // this 别名
     const vm = this;
 
     // 将用户选项挂载到 Vue 实例上，便于其他地方使用
