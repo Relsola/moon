@@ -12,7 +12,7 @@ const router = createRouter({
     {
       path: '/home',
       name: 'home',
-      component: () => import('@/views/Home')
+      component: () => import('@/views/home')
     },
     {
       path: '/register',
