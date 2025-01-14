@@ -3,13 +3,13 @@ import { reactive, toRefs, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { listHomeBooks } from '@/api/home';
 import { ElLoading } from 'element-plus';
-import Header from '@/components/common/Header';
-import Footer from '@/components/common/Footer';
-import LatestNews from '@/components/home/LatestNews';
-import FriendLink from '@/components/home/FriendLink';
-import BookVisitRank from '@/components/home/BookVisitRank';
-import BookNewestRank from '@/components/home/BookNewestRank';
-import BookUpdateRank from '@/components/home/BookUpdateRank';
+import Header from '@components/common/Header.vue';
+import Footer from '@components/common/Footer.vue';
+import LatestNews from '@components/home/LatestNews.vue';
+import FriendLink from '@components/home/FriendLink.vue';
+import BookVisitRank from '@components/home/BookVisitRank.vue';
+import BookNewestRank from '@components/home/BookNewestRank.vue';
+import BookUpdateRank from '@components/home/BookUpdateRank.vue';
 
 onMounted(async () => {
   const loadingInstance = ElLoading.service({

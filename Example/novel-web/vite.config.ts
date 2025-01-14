@@ -3,13 +3,10 @@ import vue from '@vitejs/plugin-vue';
 import jquery from 'jquery';
 import { resolve } from 'path';
 
-/** 当前执行 node 命令时文件夹的地址（工作目录） */
-const root: string = process.cwd();
+// Vite 配置路径别名的
+const root = process.cwd();
+const path = (path: string) => resolve(root, path);
 
-/** 路径拼接函数，简化代码 */
-const pathResolve = (path: string): string => resolve(root, path);
-
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [vue()],
 
@@ -20,7 +17,7 @@ export default defineConfig({
   },
 
   resolve: {
-    alias: [{ find: '@', replacement: pathResolve('src') }],
+    alias: [{ find: '@', replacement: path('src') }],
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.json', '.vue'] // 添加 .vue 扩展名
   },
 
