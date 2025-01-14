@@ -20,26 +20,16 @@ onMounted(async () => {
   loadingInstance.close();
 
   await data.forEach(book => {
-    if (book.type == 0) {
-      // 轮播图
-      state.sliderContent[state.sliderContent.length] = book;
-    }
-    if (book.type == 1) {
-      // 顶部栏
-      state.topBooks1[state.topBooks1.length] = book;
-    }
-    if (book.type == 2) {
-      //本周强推
-      state.weekcommend[state.weekcommend.length] = book;
-    }
-    if (book.type == 3) {
-      //热门推荐
-      state.hotRecommend[state.hotRecommend.length] = book;
-    }
-    if (book.type == 4) {
-      //精品推荐
-      state.goodRecommend[state.goodRecommend.length] = book;
-    }
+    // 轮播图
+    if (book.type == 0) state.sliderContent.push(book);
+    // 顶部栏
+    if (book.type == 1) state.topBooks1.push(book);
+    //本周强推
+    if (book.type == 2) state.weekcommend.push(book);
+    //热门推荐
+    if (book.type == 3) state.hotRecommend.push(book);
+    //精品推荐
+    if (book.type == 4) state.goodRecommend.push(book);
   });
 
   var $div = $('.scBigImg dl'); //放置大图容器

@@ -17,13 +17,10 @@ export default defineConfig({
   },
 
   resolve: {
-    alias: [{ find: '@', replacement: path('src') }],
+    alias: [
+      { find: '@', replacement: path('src') },
+      { find: '@components', replacement: path('src/components') }
+    ],
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.json', '.vue'] // 添加 .vue 扩展名
-  },
-
-  server: {
-    hmr: {
-      overlay: false
-    }
   }
 });
