@@ -5,10 +5,10 @@
 
 # VitePress build output
 .vitepress/cache
-.vitepress/dist
 
 # Node.js
 node_modules
+dist/
 
 # Java Logs and cache
 target/

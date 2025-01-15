@@ -1,4 +1,4 @@
-import Watcher from './observe/watcher';
+import Watcher from './observer/watcher';
 import { createElement, createTextVNode } from './vdom/index';
 import { patch } from './vdom/patch';
 

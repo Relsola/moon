@@ -1,6 +1,6 @@
-import Dep from './observe/dep';
-import { observe } from './observe/index';
-import Watcher, { nextTick } from './observe/watcher';
+import Dep from './observer/dep';
+import { observe } from './observer/index';
+import Watcher, { nextTick } from './observer/watcher';
 
 /**
  * 初始化状态，分发init

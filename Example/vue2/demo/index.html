@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app">
+    <p>最后一项改为4：{{arr1}}</p>
+    <p>name改为'李四'：{{arr2}}</p>
+    <p>将删除数字6：{{arr3}}</p>
+  </div>
+  <div id="mount-point">
+    <p>最后一项改为4：{{arr1}}</p>
+    <p>name改为'李四'：{{arr2}}</p>
+    <p>将删除数字6：{{arr3}}</p>
+  </div>
+  <script src="../dist/vue.js"></script>
+  <script type="module">
+    // 数组响应式测试
+    var vm = new Vue({
+      data: {
+        arr1: [1, 2, 3],
+        arr2: [1, 2, { name: 'zs' }],
+        arr3: [1, 2, 3, 4, 5, 6]
+      }
+    })
+    vm.$mount('#app')
+    setTimeout(() => {
+      vm.arr1[2] = 4
+      vm.arr2[2].name = '姓名'
+      vm.arr3.pop()
+    }, 2000);
+
+    var Profile = Vue.extend({
+        template: '<p>{{firstName}}{{lastName}}会{{alias}}</p>',
+        data: function () {
+          return {
+            firstName: '李',
+            lastName: '白',
+            alias: '写诗'
+          }
+        }
+      })
+      // 创建 Profile 实例，并挂载到一个元素上。
+      new Profile().$mount('#mount-point')
+  </script>
+</body>
+
+</html>
