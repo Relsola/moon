@@ -1,5 +1,5 @@
 import { initMixin } from './init.js';
-import { stateMixin } from './state';
+import { stateMixin } from './state.js';
 import { renderMixin } from './render';
 import { eventsMixin } from './events';
 import { lifecycleMixin } from './lifecycle';
