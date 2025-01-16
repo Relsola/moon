@@ -25,7 +25,7 @@ onMounted(async () => {
     // 顶部栏
     if (book.type == 1) state.topBooks1.push(book);
     //本周强推
-    if (book.type == 2) state.weekcommend.push(book);
+    if (book.type == 2) state.weekCommend.push(book);
     //热门推荐
     if (book.type == 3) state.hotRecommend.push(book);
     //精品推荐
@@ -87,14 +87,14 @@ const state = reactive({
   // 顶部栏
   topBooks1: [],
   //本周强推
-  weekcommend: [],
+  weekCommend: [],
   // 热门推荐
   hotRecommend: [],
   // 精品推荐
   goodRecommend: []
 });
 
-const { sliderContent, topBooks1, weekcommend, hotRecommend, goodRecommend } =
+const { sliderContent, topBooks1, weekCommend, hotRecommend, goodRecommend } =
   toRefs(state);
 </script>
 
@@ -214,13 +214,13 @@ const { sliderContent, topBooks1, weekcommend, hotRecommend, goodRecommend } =
         </div>
       </div>
       <div class="rightBox">
-        <div class="title cf" id="weekcommend">
+        <div class="title cf" id="weekCommend">
           <h3>本周强推</h3>
         </div>
         <div class="rightList">
           <ul id="currentWeek">
             <li
-              v-for="(item, index) in weekcommend"
+              v-for="(item, index) in weekCommend"
               :key="index"
               :class="['num' + (Number(`${index}`) + 1), { on: index == 0 }]"
             >
