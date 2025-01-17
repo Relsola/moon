@@ -70,6 +70,15 @@
   {
     "label": "Other",
     "name": "other",
-    "data": []
+    "data": [
+      {
+        "name": "HelloGitHub",
+        "href": "https://hellogithub.com/"
+      },
+      {
+        "name": "JSON 在线工具",
+        "href": "https://www.sojson.com/"
+      }
+    ]
   }
 ]
