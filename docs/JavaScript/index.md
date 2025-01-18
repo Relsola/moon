@@ -152,21 +152,21 @@ console.log(0.1 + 0.2 === 0.3); // false
 再加上前面的 1，其实就是保留 53 位有效数字，剩余的需要舍去，遵从"0 舍 1 入"的原则  
 根据这个原则，0.1 和 0.2 的二进制数相加，再转化为十进制数就是：0.30000000000000004
 
-## 构造函数与原型链
+## 原型和原型链
 
 继承是 OO 语言中的一个最为人津津乐道的概念。许多 OO 语言都支持两种继承方式: `接口继承` 和 `实现继承`。接口继承只继承方法签名，而实现继承则继承实际的方法。由于 js 中方法没有签名，在 ECMAScript 中无法实现接口继承。ECMAScript 只支持实现继承，而且其 `实现继承` 主要是依靠原型链来实现的。
 
 ### 构造函数、原型和实例的关系
 
-1. 每个构造函数(constructor)都有一个原型对象(prototype),原型对象都包含一个指向构造函数的指针,而实例(instance)都包含一个指向原型对象的内部指针.
+1. 每个构造函数(`constructor`)都有一个原型对象(`prototype`)，原型对象都包含一个指向构造函数的指针(`constructor`),而实例都包含一个指向原型对象的内部指针(`__proto__`)。
 
-2. 如果试图引用对象(实例 instance)的某个属性,会首先在对象内部寻找该属性,直至找不到,然后才在该对象的原型(instance.prototype)里去找这个属性.
+2. 如果试图引用对象(实例 `instance`)的某个属性,会首先在对象内部寻找该属性，直至找不到，然后才在该对象的原型(`instance.prototype`)里去找这个属性。
 
-如果让原型对象指向另一个类型的实例，即: `constructor1.prototype = instance2`,如果试图引用 constructor1 构造的实例 instance1 的某个属性 p1:
+如果让原型对象指向另一个类型的实例，即: `constructor1.prototype = instance2`，如果试图引用 `constructor1` 构造的实例 `instance1` 的某个属性 `p1`：
 
-1. 首先会在 instance1 内部属性中找一遍
-2. 接着会在 `instance1.__proto__` (constructor1.prototype) 中找一遍,而 `constructor1.prototype` 实际上是 instance2, 也就是说在 instance2 中寻找该属性 p1
-3. 如果 instance2 中还是没有,此时程序不会灰心,它会继续在 `instance2.__proto__`(constructor2.prototype)中寻找...直至 Object 的原型对象
+1. 首先会在 `instance1` 内部属性中找一遍
+2. 接着会在 `instance1.__proto__` (`constructor1.prototype`) 中找一遍，而 `constructor1.prototype` 实际上是 `instance2`，也就是说在 `instance2` 中寻找该属性 `p1`
+3. 如果 `instance2` 中还是没有,此时程序不会灰心，它会继续在 `instance2.__proto__`(`constructor2.prototype`)中寻找...直至 `Object` 的原型对象，如果依然没有找到，则返回 `undefined`。
 
 > 搜索轨迹: instance1--> instance2 --> constructor2.prototype…-->Object.prototype
 
@@ -1157,34 +1157,6 @@ Object.create(null);
   console.log(son1);
 }
 ```
-
-### 原型和原型链
-
-- 一切都是对象
-- 属性分共有和私有
-- 每一个对象身上都有一个隐式原型**proto**
-- 每一个构造器身上都有一个 prototype 显示原型
-- 一个对象的隐式原型和其构造器对应的显示原型指向的是一样的
-- 每一个原型对象都有一个叫 constructor 指向构造器
-
-  为什么要有原型？
-
-- 构造函数中的实例每调用一次方法，就会在内存中开辟一块空间，从而造成内存浪费
-- 在函数对象中，有一个属性 prototype，它指向了一个对象，这个对象就是原型对象
-- 这个对象的所有属性和方法，都会被构造函数所拥有
-- 普通函数调用，prototype 没有任何作用
-- 构造函数调用，该类所有实例有隐藏一个属性（proto）指向函数的 prototype
-- 实例的隐式原型指向类的显示原型
-- 原型就相当于一个公共区域，可以被类和该类的所有实例访问到
-
-优点: 资源共享，节省内存；改变原型指向，实现继承  
-缺点：查找数据的时候有的时候不是在自身对象中查找。
-
-原型链:实际上是指隐式原型链,从对象的**proto**开始，连接所有的对象，就是对象查找属性或方法的过程。
-
-1. 当访问一个对象属性时，先往实例化对象在自身中寻找，找到则是使用。
-2. 找不到（通过*proto*属性）去它的原型对象中找，找到则是使用。
-3. 没有找到再去原型对象的原型（Object 原型对象）中寻找，直到找到 Object 为止，如果依然没有找到，则返回 undefined。
 
 ## 由浅入深掌握 Javascript
 
