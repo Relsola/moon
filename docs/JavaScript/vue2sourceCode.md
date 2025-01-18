@@ -25,18 +25,29 @@ new Vue({
 `initMixin` 把 `_init` 方法挂载在 `Vue` 原型 供 `Vue` 实例调用  
 通过引入文件的方式进行原型挂载，这样做有利于代码分割。
 
-```js
-// index.js
-import { initMixin } from './init.js';
+> instance/index.js
 
-// Vue就是一个构造函数 通过new关键字进行实例化
+```js
+import { initGlobalAPI } from './globalAPI';
+import { initMixin } from './init';
+import { initLifeCycle } from './lifecycle';
+import { initStateMixin } from './state';
+
+/**
+ * Vue就是一个构造函数 通过new关键字进行实例化
+ * Vue 实例的构造函数，options 为用户传入的选项（Vue2 的选项式API）
+ */
 function Vue(options) {
   // Vue 初始化
   this._init(options);
 }
 
-// _init方法进行原型挂载需要传入Vue
+// 将 _init 方法添加到 Vue 实例原型上，供 Vue 实例调用
 initMixin(Vue);
+initLifeCycle(Vue);
+initStateMixin(Vue);
+initGlobalAPI(Vue);
+
 export default Vue;
 ```
 

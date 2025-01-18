@@ -4,22 +4,22 @@ import Watcher, { nextTick } from './observer/watcher';
 
 /**
  * 初始化状态，分发init
+ * 初始化的顺序依次是 prop > methods > data > computed > watch
  * @param {Object} vm Vue 实例
  */
 export function initState(vm) {
+  // 获取传入的数据对象
   const opts = vm.$options;
-  // 是否传入data
-  if (opts.data) {
-    initData(vm);
-  }
-  // 是否使用计算属性
-  if (opts.computed) {
-    initComputed(vm);
-  }
-  // 初始化 watch
-  if (opts.watch) {
-    initWatch(vm);
-  }
+  // 初始化props
+  if (opts.props) initProps(vm);
+  // 初始化methods
+  if (opts.methods) initMethod(vm);
+  // 初始化data
+  if (opts.data) initData(vm);
+  // 初始化computed
+  if (opts.computed) initComputed(vm);
+  // 初始化watch
+  if (opts.watch) initWatch(vm);
 }
 
 /**
