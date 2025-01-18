@@ -152,6 +152,96 @@ console.log(0.1 + 0.2 === 0.3); // false
 再加上前面的 1，其实就是保留 53 位有效数字，剩余的需要舍去，遵从"0 舍 1 入"的原则  
 根据这个原则，0.1 和 0.2 的二进制数相加，再转化为十进制数就是：0.30000000000000004
 
+## 构造函数与原型链
+
+继承是 OO 语言中的一个最为人津津乐道的概念。许多 OO 语言都支持两种继承方式: `接口继承` 和 `实现继承`。接口继承只继承方法签名，而实现继承则继承实际的方法。由于 js 中方法没有签名，在 ECMAScript 中无法实现接口继承。ECMAScript 只支持实现继承，而且其 `实现继承` 主要是依靠原型链来实现的。
+
+### 构造函数、原型和实例的关系
+
+1. 每个构造函数(constructor)都有一个原型对象(prototype),原型对象都包含一个指向构造函数的指针,而实例(instance)都包含一个指向原型对象的内部指针.
+
+2. 如果试图引用对象(实例 instance)的某个属性,会首先在对象内部寻找该属性,直至找不到,然后才在该对象的原型(instance.prototype)里去找这个属性.
+
+如果让原型对象指向另一个类型的实例，即: `constructor1.prototype = instance2`,如果试图引用 constructor1 构造的实例 instance1 的某个属性 p1:
+
+1. 首先会在 instance1 内部属性中找一遍
+2. 接着会在 `instance1.__proto__` (constructor1.prototype) 中找一遍,而 `constructor1.prototype` 实际上是 instance2, 也就是说在 instance2 中寻找该属性 p1
+3. 如果 instance2 中还是没有,此时程序不会灰心,它会继续在 `instance2.__proto__`(constructor2.prototype)中寻找...直至 Object 的原型对象
+
+> 搜索轨迹: instance1--> instance2 --> constructor2.prototype…-->Object.prototype
+
+```js
+function Father() {
+  this.property = true;
+}
+Father.prototype.getFatherValue = function () {
+  return this.property;
+};
+function Son() {
+  this.sonProperty = false;
+}
+// 继承 Father
+// Son.prototype 被重写,导致 Son.prototype.constructor 也一同被重写
+Son.prototype = new Father();
+Son.prototype.getSonValue = function () {
+  return this.sonProperty;
+};
+const instance = new Son();
+console.log(instance.getFatherValue()); //true
+```
+
+这里借用下图解示例：
+
+![alt text](/image/JavaScript/prototype.png)
+
+### 确定原型和实例的关系
+
+1. 使用 `instanceof` 操作符
+
+```js
+console.log(instance instanceof Object); // true
+console.log(instance instanceof Father); // true
+console.log(instance instanceof Son); // true
+```
+
+2. 使用 `isPrototypeOf()` 方法
+
+> `__proto__` 已经废弃了，现在使用 `Object.getPrototypeOf()` 获取
+
+```js
+console.log(Object.prototype.isPrototypeOf(instance)); // true
+console.log(Father.prototype.isPrototypeOf(instance)); // true
+console.log(Son.prototype.isPrototypeOf(instance)); // true
+```
+
+### 原型链的问题
+
+1. 当原型链中包含引用类型值的原型时,该引用类型值会被所有实例共享
+
+2. 在创建子类型(例如创建 Son 的实例)时,不能向超类型(例如 Father)的构造函数中传递参数
+
+### 借用构造函数
+
+为解决原型链中上述两个问题, 我们开始使用一种叫做借用构造函数(constructor stealing)的技术(也叫经典继承).
+
+> 基本思想:即在子类型构造函数的内部调用超类型构造函数.
+
+```js
+function Father() {
+  this.colors = ['red', 'blue', 'green'];
+}
+function Son() {
+  Father.call(this); // 继承了Father,且向父类型传递参数
+}
+
+const instance1 = new Son();
+instance1.colors.push('black');
+console.log(instance1.colors); // "red,blue,green,black"
+
+const instance2 = new Son();
+console.log(instance2.colors); // "red,blue,green"
+```
+
 ## BOM
 
 ### URL 的组成
