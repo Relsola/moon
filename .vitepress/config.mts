@@ -28,8 +28,9 @@ export default defineConfig({
       { text: 'Java 后端', link: '/Java/' },
       { text: '数据库', link: '/SQL/' },
       { text: 'Python', link: '/Python/' },
-      { text: 'Game', link: '/Game/cpp' },
+      { text: 'Other', link: '/Other/git' },
       { text: 'Tools', link: '/Tools/link' },
+      { text: 'Game', link: '/Game/cpp' },
       {
         text: 'GitHub',
         items: [
@@ -58,16 +59,22 @@ export default defineConfig({
         { text: 'MySQL', link: '/SQL/mysql' },
         { text: 'Redis', link: '/SQL/redis' }
       ],
-      '/Game/': [
-        { text: 'C++ 知识笔记', link: '/Game/cpp' },
-        { text: 'C# 知识笔记', link: '/Game/csharp' },
-        { text: 'Godot 知识笔记', link: '/Game/godot' }
+      '/Other/': [
+        { text: 'Git 指南', link: '/Other/git' },
+        { text: '数据结构与算法', link: '/Other/algorithm' },
+        { text: '操作系统', link: '/Other/system' },
+        { text: '编译原理', link: '/Other/compilation' }
       ],
       '/Tools/': [
         { text: '链接导航', link: '/Tools/link' },
         { text: '正则测试器', link: '/Tools/regexp' },
         { text: '图片取色器', link: '/Tools/color' },
         { text: 'Movie', link: '/Tools/movie' }
+      ],
+      '/Game/': [
+        { text: 'C++ 知识笔记', link: '/Game/cpp' },
+        { text: 'C# 知识笔记', link: '/Game/csharp' },
+        { text: 'Godot 知识笔记', link: '/Game/godot' }
       ]
     },
 
