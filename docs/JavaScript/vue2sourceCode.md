@@ -51,15 +51,20 @@ initGlobalAPI(Vue);
 export default Vue;
 ```
 
+> instance/init.js
+
 ```js
-// init.js
 import { initState } from './state.js';
+
+/** 定义 Vue.prototype._init, 初始化 Vue */
 export function initMixin(Vue) {
   Vue.prototype._init = function (options) {
-    // 这里的this指Vue实例对象
     const vm = this;
+    vm._uid = uid++;
+
     //  this.$options就是用户new Vue的时候传入的属性
     vm.$options = options;
+
     // 初始化状态
     initState(vm);
   };
