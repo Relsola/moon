@@ -19,15 +19,13 @@ import {
   noop,
   hasOwn,
   hyphenate,
-  isReserved,
   handleError,
   nativeWatch,
   validateProp,
-  isPlainObject,
   isServerRendering,
   isReservedAttribute,
   invokeWithErrorHandling
-} from '../util/index';
+} from '../util/index.js';
 
 const sharedPropertyDefinition = {
   enumerable: true,
@@ -36,6 +34,7 @@ const sharedPropertyDefinition = {
   set: noop
 };
 
+/** 数据代理 */
 export function proxy(target, sourceKey, key) {
   sharedPropertyDefinition.get = function proxyGetter() {
     return this[sourceKey][key];
@@ -112,31 +111,26 @@ function initProps(vm, propsOptions) {
   toggleObserving(true);
 }
 
+/** 将 data 的每个属性转换为响应式并代理到 vm 上 */
 function initData(vm) {
   let data = vm.$options.data;
   data = vm._data = typeof data === 'function' ? getData(data, vm) : data || {};
-  if (!isPlainObject(data)) {
-    data = {};
-  }
-  // proxy data on instance
+
+  // 将 data 数据代理到 Vue 实例上
+  // data 对象上的属性不能和 props、methods 对象上的属性相同
   const keys = Object.keys(data);
   const props = vm.$options.props;
   const methods = vm.$options.methods;
   let i = keys.length;
   while (i--) {
     const key = keys[i];
-    if (props && hasOwn(props, key)) {
-      process.env.NODE_ENV !== 'production' &&
-        warn(
-          `The data property "${key}" is already declared as a prop. ` +
-            `Use prop default value instead.`,
-          vm
-        );
-    } else if (!isReserved(key)) {
-      proxy(vm, `_data`, key);
+    if ((methods && hasOwn(methods, key)) || (props && hasOwn(props, key))) {
+      continue;
     }
+    proxy(vm, `_data`, key);
   }
-  // observe data
+
+  // 数据劫持
   observe(data, true /* asRootData */);
 }
 
@@ -270,10 +264,6 @@ function initWatch(vm, watch) {
 }
 
 function createWatcher(vm, expOrFn, handler, options) {
-  if (isPlainObject(handler)) {
-    options = handler;
-    handler = handler.handler;
-  }
   if (typeof handler === 'string') {
     handler = vm[handler];
   }
@@ -312,9 +302,6 @@ export function stateMixin(Vue) {
 
   Vue.prototype.$watch = function (expOrFn, cb, options) {
     const vm = this;
-    if (isPlainObject(cb)) {
-      return createWatcher(vm, expOrFn, cb, options);
-    }
     options = options || {};
     options.user = true;
     const watcher = new Watcher(vm, expOrFn, cb, options);

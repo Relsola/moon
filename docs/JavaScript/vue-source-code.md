@@ -77,59 +77,78 @@ export function initMixin(Vue) {
 
 ```js
 import { observe } from './observer/index.js';
+import { noop, hasOwn } from '../util/index.js';
 
 export function initState(vm) {
   vm._watchers = [];
-
   const opts = vm.$options;
 
-  const opts = vm.$options;
-  // 初始化props
-  if (opts.props) initProps(vm);
-  // 初始化methods
-  if (opts.methods) initMethod(vm);
-  // 初始化data
-  if (opts.data) initData(vm);
-  // 初始化computed
-  if (opts.computed) initComputed(vm);
-  // 初始化watch
-  if (opts.watch) initWatch(vm);
+  if (opts.props) {
+    initProps(vm);
+  }
 
-  if (opts.props) initProps(vm, opts.props);
-  if (opts.methods) initMethods(vm, opts.methods);
+  if (opts.methods) {
+    initMethod(vm);
+  }
+
   if (opts.data) {
     initData(vm);
   } else {
-    observe((vm._data = {}), true /* asRootData */);
+    // 没有传 data 的情况下，在 vm 上挂载 vm._data 默认值为空对象 {}
+    observe((vm._data = {}), true);
   }
-  if (opts.computed) initComputed(vm, opts.computed);
+
+  if (opts.computed) {
+    initComputed(vm, opts.computed);
+  }
+
   if (opts.watch && opts.watch !== nativeWatch) {
     initWatch(vm, opts.watch);
   }
 }
 
-// 初始化data数据
+/** 将 data 的每个属性转换为响应式并代理到 vm 上 */
 function initData(vm) {
-  // 实例的 _data 属性就是传入的 data
   let data = vm.$options.data;
-  // vue组件data推荐使用函数 防止数据在组件之间共享
+
+  // vue 组件 data 推荐使用函数 防止数据在组件之间共享
   data = vm._data = typeof data === 'function' ? data.call(vm) : data || {};
+
   // 将 data 数据代理到 Vue 实例上
-  for (const key in data) proxy(vm, `_data`, key);
-  // 数据劫持 --响应式数据核心
-  observe(data);
+  // data 对象上的属性不能和 props、methods 对象上的属性相同
+  const keys = Object.keys(data);
+  const props = vm.$options.props;
+  const methods = vm.$options.methods;
+  let i = keys.length;
+  while (i--) {
+    const key = keys[i];
+    if ((methods && hasOwn(methods, key)) || (props && hasOwn(props, key))) {
+      continue;
+    }
+
+    proxy(vm, `_data`, key);
+  }
+
+  // 数据劫持
+  observe(data, true);
 }
 
-// 数据代理
-function proxy(object, sourceKey, key) {
-  Object.defineProperty(object, key, {
-    get() {
-      return object[sourceKey][key];
-    },
-    set(newValue) {
-      object[sourceKey][key] = newValue;
-    }
-  });
+const sharedPropertyDefinition = {
+  enumerable: true,
+  configurable: true,
+  get: noop,
+  set: noop
+};
+
+/** 数据代理 */
+export function proxy(target, sourceKey, key) {
+  sharedPropertyDefinition.get = function proxyGetter() {
+    return this[sourceKey][key];
+  };
+  sharedPropertyDefinition.set = function proxySetter(val) {
+    this[sourceKey][key] = val;
+  };
+  Object.defineProperty(target, key, sharedPropertyDefinition);
 }
 ```
 
