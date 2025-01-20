@@ -4,8 +4,7 @@ sidebar: auto
 
 # Vue2 源码解读
 
-源码阅读中...  
-这里只是简单实现核心功能，详细还请阅读源码。
+简单的实现核心功能。
 
 ## 响应式原理
 
@@ -22,7 +21,7 @@ new Vue({
 });
 ```
 
-`initMixin` 把 `_init` 方法挂载在 `Vue` 原型 供 `Vue` 实例调用  
+`initMixin` 把 `_init` 方法挂载在 `Vue` 原型 供 `Vue` 实例调用。  
 通过引入文件的方式进行原型挂载，这样做有利于代码分割。
 
 > instance/index.js
@@ -71,15 +70,19 @@ export function initMixin(Vue) {
 }
 ```
 
-这里进行数据初始化，响应式数据核心是 `observe`
+这里进行数据初始化，响应式数据核心是 `observe`。  
+初始化的顺序依次是 `prop` > `methods` > `data` > `computed` > `watch`
+
+> instance/state.js
 
 ```js
-// state.js
 import { observe } from './observer/index.js';
 
-// 这里初始化的顺序依次是 prop > methods > data > computed > watch
 export function initState(vm) {
-  // 获取传入的数据对象
+  vm._watchers = [];
+
+  const opts = vm.$options;
+
   const opts = vm.$options;
   // 初始化props
   if (opts.props) initProps(vm);
@@ -91,6 +94,18 @@ export function initState(vm) {
   if (opts.computed) initComputed(vm);
   // 初始化watch
   if (opts.watch) initWatch(vm);
+
+  if (opts.props) initProps(vm, opts.props);
+  if (opts.methods) initMethods(vm, opts.methods);
+  if (opts.data) {
+    initData(vm);
+  } else {
+    observe((vm._data = {}), true /* asRootData */);
+  }
+  if (opts.computed) initComputed(vm, opts.computed);
+  if (opts.watch && opts.watch !== nativeWatch) {
+    initWatch(vm, opts.watch);
+  }
 }
 
 // 初始化data数据

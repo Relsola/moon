@@ -47,7 +47,7 @@ export default defineConfig({
         { text: 'ES6+', link: '/JavaScript/es6' },
         { text: 'TypeScript', link: '/JavaScript/typescript' },
         { text: 'TS 类型挑战', link: '/JavaScript/type-challenges' },
-        { text: 'Vue2 源码解读', link: '/JavaScript/vue2sourceCode' },
+        { text: 'Vue2 源码解读', link: '/JavaScript/vue-source-code' },
         { text: 'Canvas', link: '/JavaScript/canvas' }
       ],
       '/Java/': [
