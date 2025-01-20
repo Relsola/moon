@@ -43,7 +43,7 @@ export default defineConfig({
     sidebar: {
       '/JavaScript/': [
         { text: 'JavaScript 知识笔记', link: '/JavaScript/' },
-        { text: '最佳实践', link: '/JavaScript/best-practice' },
+        { text: '前端最佳实践', link: '/JavaScript/best-practice' },
         { text: 'ES6+', link: '/JavaScript/es6' },
         { text: 'TypeScript', link: '/JavaScript/typescript' },
         { text: 'TS 类型挑战', link: '/JavaScript/type-challenges' },
