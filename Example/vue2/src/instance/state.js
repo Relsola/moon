@@ -48,14 +48,26 @@ export function proxy(target, sourceKey, key) {
 export function initState(vm) {
   vm._watchers = [];
   const opts = vm.$options;
-  if (opts.props) initProps(vm, opts.props);
-  if (opts.methods) initMethods(vm, opts.methods);
+
+  if (opts.props) {
+    initProps(vm);
+  }
+
+  if (opts.methods) {
+    initMethod(vm);
+  }
+
   if (opts.data) {
     initData(vm);
   } else {
-    observe((vm._data = {}), true /* asRootData */);
+    // 没有传 data 的情况下，在 vm 上挂载 vm._data 默认值为空对象 {}
+    observe((vm._data = {}), true);
   }
-  if (opts.computed) initComputed(vm, opts.computed);
+
+  if (opts.computed) {
+    initComputed(vm, opts.computed);
+  }
+
   if (opts.watch && opts.watch !== nativeWatch) {
     initWatch(vm, opts.watch);
   }

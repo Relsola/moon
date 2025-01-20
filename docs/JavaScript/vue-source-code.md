@@ -154,15 +154,13 @@ export function proxy(target, sourceKey, key) {
 
 ### 2.对象的数据劫持
 
-::: tip
-
 - 数据劫持核心是 `defineReactive` 函数，主要使用 `Object.defineProperty` 来对数据 `get` 和 `set` 进行劫持
 - 对于数组，如果对每一个元素下标都添加 `get` 和 `set` 方法，当数组里的元素太多，对于性能来说是承担不起的， 所以此方法只用来劫持对象
 - 对象新增或者删除的属性无法被 `set` 监听到，只有对象本身存在的属性修改才会被劫持
-  :::
+
+> observer/index.js
 
 ```js
-// observer/index.js
 class Observer {
   // 观测值
   constructor(value) {
