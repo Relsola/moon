@@ -135,6 +135,24 @@ JavaScript 中，类型转换只有三种：
 2. 转换成布尔值
 3. 转换成字符串
 
+> 经典类型面试题
+
+```js
+console.log([] == ![]); // true
+```
+
+代码分析：
+
+1. 左侧是一个对象(数组)
+2. 右侧是一个布尔值，对象`[]`转换成布尔值 `true`，因为除了 `null` 所有对象都转换成布尔值，所以`![]`结果为 `false`
+3. 此时相当于`对象==布尔值`，依据类型转换规则，转换成数字类型进行比较
+4. 对象(空数组)转换成 `0`，布尔值 `false` 转换成 `0`
+5. 即 `0==0`，返回 `true`
+
+类型转换规则:
+
+![JavaScript 类型转换](/image/JavaScript/type-conversion.png)
+
 ### `0.1 + 0.2 !== 0.3`
 
 ```js
@@ -192,7 +210,7 @@ console.log(instance.getFatherValue()); //true
 
 这里借用下图解示例：
 
-![alt text](/image/JavaScript/prototype.png)
+![JavaScript 原型链](/image/JavaScript/prototype.png)
 
 ### 确定原型和实例的关系
 
