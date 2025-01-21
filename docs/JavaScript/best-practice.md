@@ -32,4 +32,22 @@ tbody.addEventListener('click', function (event) {
 });
 ```
 
+### 三元表达式简化 if-else
+
+```js
+let a;
+
+if (n > 0) {
+  a = n ** 2;
+} else {
+  a = -n + 1;
+}
+
+a = n > 0 ? n ** 2 : -n + 1;
+```
+
+::: warning 注意
+三元嵌套三元不利于可读性，且不适合复杂表达式。
+:::
+
 ## 用户体验优化
