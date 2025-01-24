@@ -1,7 +1,3 @@
----
-sidebar: auto
----
-
 # Vue2 源码解读
 
 简单的实现核心功能。
@@ -84,11 +80,11 @@ export function initState(vm) {
   const opts = vm.$options;
 
   if (opts.props) {
-    initProps(vm);
+    initProps(vm, opts.props);
   }
 
   if (opts.methods) {
-    initMethod(vm);
+    if (opts.methods) initMethods(vm, opts.methods);
   }
 
   if (opts.data) {

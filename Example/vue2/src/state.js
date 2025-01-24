@@ -4,22 +4,22 @@ import Watcher, { nextTick } from './observer/watcher';
 
 /**
  * 初始化状态，分发init
- * 初始化的顺序依次是 prop > methods > data > computed > watch
  * @param {Object} vm Vue 实例
  */
 export function initState(vm) {
-  // 获取传入的数据对象
-  const opts = vm.$options;
-  // 初始化props
-  if (opts.props) initProps(vm);
-  // 初始化methods
-  if (opts.methods) initMethod(vm);
-  // 初始化data
-  if (opts.data) initData(vm);
-  // 初始化computed
-  if (opts.computed) initComputed(vm);
-  // 初始化watch
-  if (opts.watch) initWatch(vm);
+    const opts = vm.$options
+    // 是否传入data
+    if (opts.data) {
+        initData(vm)
+    }
+    // 是否使用计算属性
+    if (opts.computed) {
+        initComputed(vm)
+    }
+    // 初始化 watch
+    if (opts.watch) {
+        initWatch(vm)
+    }
 }
 
 /**
@@ -27,20 +27,20 @@ export function initState(vm) {
  * @param {*} vm Vue实例
  */
 function initWatch(vm) {
-  let watch = vm.$options.watch;
+    let watch = vm.$options.watch
 
-  // 取出 watch 中的每一个属性
-  for (let key in watch) {
-    const handler = watch[key]; // 可能是数组、字符串、函数
-    if (Array.isArray(handler)) {
-      //如果是数组，则循环创建 watcher
-      for (let i = 0; i < handler.length; i++) {
-        createWatcher(vm, key, handler[i]);
-      }
-    } else {
-      createWatcher(vm, key, handler);
+    // 取出 watch 中的每一个属性
+    for (let key in watch) {
+        const handler = watch[key] // 可能是数组、字符串、函数
+        if (Array.isArray(handler)) {
+            //如果是数组，则循环创建 watcher
+            for (let i = 0; i < handler.length; i++) {
+                createWatcher(vm, key, handler[i])
+            }
+        } else {
+            createWatcher(vm, key, handler)
+        }
     }
-  }
 }
 
 /**
@@ -51,12 +51,12 @@ function initWatch(vm) {
  * @returns
  */
 function createWatcher(vm, key, handler) {
-  // 可能是字符串、函数
-  if (typeof handler == 'string') {
-    handler = vm[handler];
-  }
+    // 可能是字符串、函数
+    if (typeof handler == 'string') {
+        handler = vm[handler]
+    }
 
-  return vm.$watch(key, handler);
+    return vm.$watch(key, handler)
 }
 
 /**
@@ -66,15 +66,15 @@ function createWatcher(vm, key, handler) {
  * @param {String} key target的建
  */
 function proxy(vm, target, key) {
-  Object.defineProperty(vm, key, {
-    get() {
-      // 访问 vm[key] 就是在访问 vm._data[key]，即 vm[target][key]
-      return vm[target][key];
-    },
-    set(newValue) {
-      vm[target][key] = newValue;
-    }
-  });
+    Object.defineProperty(vm, key, {
+        get() {
+            // 访问 vm[key] 就是在访问 vm._data[key]，即 vm[target][key]
+            return vm[target][key]
+        },
+        set(newValue) {
+            vm[target][key] = newValue
+        }
+    })
 }
 
 /**
@@ -83,17 +83,17 @@ function proxy(vm, target, key) {
  */
 
 function initData(vm) {
-  let data = vm.$options.data;
-  // 判断 data 的类型，如果是函数，执行它，获得对象。要注意this问题，this应该是Vue实例
-  data = typeof data === 'function' ? data.call(vm) : data;
+    let data = vm.$options.data
+    // 判断 data 的类型，如果是函数，执行它，获得对象。要注意this问题，this应该是Vue实例
+    data = typeof data === 'function' ? data.call(vm) : data
 
-  vm._data = data;
-  // 对数据对象进行劫持
-  observe(data);
-  // 代理一层，方便用户访问
-  for (let key in data) {
-    proxy(vm, '_data', key);
-  }
+    vm._data = data
+    // 对数据对象进行劫持
+    observe(data)
+    // 代理一层，方便用户访问
+    for (let key in data) {
+        proxy(vm, '_data', key)
+    }
 }
 
 /**
@@ -101,19 +101,19 @@ function initData(vm) {
  * @param {*} vm Vue实例
  */
 function initComputed(vm) {
-  const computed = vm.$options.computed;
-  const watchers = (vm._computedWatchers = {}); // 存储所有计算属性的 watcher，并保存到 vm 上
-  // computed 中书写的可能是对象，也可能是函数
-  for (let key in computed) {
-    let userDef = computed[key];
+    const computed = vm.$options.computed
+    const wacthers = vm._computedWatchers = {} // 存储所有计算属性的 watcher，并保存到 vm 上
+    // computed 中书写的可能是对象，也可能是函数
+    for (let key in computed) {
+        let userDef = computed[key]
 
-    let fn = typeof userDef === 'function' ? userDef : userDef.get;
-    // 为每一个计算属性创建一个 watcher，每次调用 watcher 时，执行 get 方法获取最新值
-    watchers[key] = new Watcher(vm, fn, { lazy: true }); // new Watcher 默认会执行一次 fn，但 computed 默认是不初始化的，所以加入 lazy 配置项
+        let fn = typeof userDef === 'function' ? userDef : userDef.get
+        // 为每一个计算属性创建一个 watcher，每次调用 watcher 时，执行 get 方法获取最新值
+        wacthers[key] = new Watcher(vm, fn, { lazy: true }) // new Watcher 默认会执行一次 fn，但 computed 默认是不初始化的，所以加入 lazy 配置项
 
-    // 把 computed 中定义的变量挂载到 vm 上去
-    defineComputed(vm, key, userDef);
-  }
+        // 把 computed 中定义的变量挂载到 vm 上去
+        defineComputed(vm, key, userDef)
+    }
 }
 
 /**
@@ -123,13 +123,13 @@ function initComputed(vm) {
  * @param {Object} userDef 用户传入的计算属性对象
  */
 function defineComputed(target, key, userDef) {
-  const getter = typeof userDef === 'function' ? userDef : userDef.get;
-  const setter = userDef.set || (() => {});
+    const getter = typeof userDef === 'function' ? userDef : userDef.get
+    const setter = userDef.set || (() => { })
 
-  Object.defineProperty(target, key, {
-    get: createComputedGetter(key),
-    set: setter
-  });
+    Object.defineProperty(target, key, {
+        get: createComputedGetter(key),
+        set: setter
+    })
 }
 
 /**
@@ -138,33 +138,34 @@ function defineComputed(target, key, userDef) {
  * @returns 加入了脏值监测机制的 get 方法
  */
 function createComputedGetter(key) {
-  return function () {
-    // 获取到对应计算属性的watcher
-    const watcher = this._computedWatchers[key];
-    // 如果是脏值，那么重新执行用户定义的 get 方法，进行计算
-    if (watcher.dirty) {
-      // 是脏值
-      watcher.evaluate();
+    return function () {
+        // 获取到对应计算属性的watcher
+        const watcher = this._computedWatchers[key]
+        // 如果是脏值，那么重新执行用户定义的 get 方法，进行计算
+        if (watcher.dirty) {
+            // 是脏值
+            watcher.evaluate()
+        }
+        if (Dep.target) {
+            // 计算属性 watcher 出栈之后，如果还栈中还存在 watcher ，那么继续收集上层 watcher
+            // 要让计算属性中的 watcher 所对应的响应式数据，也去收集渲染 watcher。换句话说就是，收集了计算属性 watcher 的数据，也必须收集当前的渲染 watcher，
+            // 这样才能实现数据变化，页面自动重新渲染
+            watcher.depend()
+        }
+        return watcher.value
     }
-    if (Dep.target) {
-      // 计算属性 watcher 出栈之后，如果还栈中还存在 watcher ，那么继续收集上层 watcher
-      // 要让计算属性中的 watcher 所对应的响应式数据，也去收集渲染 watcher。换句话说就是，收集了计算属性 watcher 的数据，也必须收集当前的渲染 watcher，
-      // 这样才能实现数据变化，页面自动重新渲染
-      watcher.depend();
-    }
-    return watcher.value;
-  };
 }
 
+
 export function initStateMixin(Vue) {
-  Vue.prototype.$nextTick = nextTick;
-  /**
-   * $watch API
-   * @param {string | function} exprOrFn 字符串或者函数
-   * @param {Function} cb watch的回调函数
-   */
-  Vue.prototype.$watch = function (exprOrFn, cb) {
-    // exprOrFn 变化直接执行 cd 回调
-    new Watcher(this, exprOrFn, { user: true }, cb);
-  };
+    Vue.prototype.$nextTick = nextTick
+    /**
+     * $watch API
+     * @param {string | function} exprOrFn 字符串或者函数
+     * @param {Function} cb watch的回调函数
+     */
+    Vue.prototype.$watch = function (exprOrFn, cb) {
+        // exprOrFn 变化直接执行 cd 回调
+        new Watcher(this, exprOrFn, { user: true }, cb)
+    }
 }
