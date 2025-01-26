@@ -68,6 +68,10 @@
       {
         "name": "游戏开发-技术图谱",
         "href": "https://github.com/gonglei007/GameDevMind"
+      },
+      {
+        "name": "微软官方 C# 文档",
+        "href": "https://learn.microsoft.com/zh-cn/dotnet/csharp/tour-of-csharp/?source=docs"
       }
     ]
   },
