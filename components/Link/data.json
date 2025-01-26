@@ -86,6 +86,10 @@
       {
         "name": "JSON 在线工具",
         "href": "https://www.sojson.com/"
+      },
+      {
+        "name": "在线工具",
+        "href": "https://tool.lu/"
       }
     ]
   }
