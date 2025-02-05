@@ -89,6 +89,73 @@ console.log(window.num); // undefined
 
 ## 代理和反射
 
+代理（`Proxy`）：代理可以拦截 `JavaScript` 引擎内部目标的底层对象操作，这些底层操作被拦截后会触发响应特定操作的陷阱函数。
+
+反射（`Reflect`）：反射 API 以 `Reflect` 对象的形式出现，对象中方法的默认特性与相同的底层操作一致，而代理可以覆写这些操作，每个代理陷阱对应一个命名和参数都相同的 `Reflect` 方法。
+
+| 代理陷阱                   | 覆写特性                                                                    |
+| :------------------------- | :-------------------------------------------------------------------------- |
+| `get`                      | 读取一个属性值                                                              |
+| `set`                      | 写入一个属性                                                                |
+| `has`                      | `in` 操作符                                                                 |
+| `apply`                    | 调用一个函数                                                                |
+| `deleteProperty`           | `delete` 操作符                                                             |
+| `construct`                | 用 `new` 调用一个函数                                                       |
+| `getPrototypeOf`           | `Object.getPrototypeOf`                                                     |
+| `setPrototypeOf`           | `Object.setPrototypeOf `                                                    |
+| `isExtensible`             | `Object.isExtensible`                                                       |
+| `preventExtensions`        | `Object.preventExtensions`                                                  |
+| `getOwnPropertyDescriptor` | `Object.getOwnPropertyDescriptor`                                           |
+| `defineProperty`           | `Object.defineProperty`                                                     |
+| `ownKeys`                  | `Object.keys`、`Object.getOwnPropertyNames`、`Object.getOwnPropertySymbols` |
+
+### 创建一个简单的代理
+
+用 `Proxy` 构造函数创建代理需要传入两个参数：目标 `target` 和处理程序 `handler`。
+
+处理程序 `handler` 是定义了一个或者多个陷阱的对象，在代理中，除了专门为操作定义的陷阱外，其余操作均使用默认特性，即意味着：不使用任何陷阱的处理程序等价于简单的转发代理。
+
+```js
+const target = {};
+const proxy = new Proxy(target, {});
+```
+
+### 使用 `set` 陷阱
+
+set 陷阱接受 4 个参数：
+
+1. `trapTarget` 用于接受属性(代理的目标)的对象。
+2. `key` 要写入的属性键(字符串或者 `Symbol` 类型)。
+3. `value` 被写入属性的值。
+4. `receiver` 操作发生的对象。
+
+特点：`Reflect.set()`是 `set` 陷阱对应的反射方法和默认特性，它和 `set` 代理陷阱一样也接受相同的四个参数，以方便在陷阱中使用。如果属性已设置陷阱应该返回 `true`，否则返回 `false`。
+
+```js
+const target = {
+  name: 'target'
+};
+const proxy = new Proxy(target, {
+  set(trapTarget, key, value, receiver) {
+    if (!trapTarget.hasOwnProperty(key)) {
+      if (isNaN(value)) {
+        throw new TypeError('属性值必须为数字');
+      }
+    }
+    return Reflect.set(trapTarget, key, value, receiver);
+  }
+});
+
+proxy.count = 1;
+console.log(proxy.count); // 1
+proxy.name = 'AAA';
+console.log(proxy.name); // AAA
+
+proxy.anotherName = 'BBB'; // 属性值非数字，抛出错误
+```
+
+### 使用 `get` 陷阱
+
 ```js
 console.log(typeof Proxy); // function
 
@@ -598,7 +665,7 @@ function setCookie(name, value, { path, domain, expires } = {}) {
 }
 ```
 
-## Proxy 代理
+## 代理 Proxy
 
 ```js
 //  Object.defineProperty() 实际上就是一个函数，给一个对象添加一个属性
