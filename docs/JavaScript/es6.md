@@ -181,6 +181,38 @@ console.log(proxy.name); // proxy
 console.log(proxy.nme); // Error
 ```
 
+### 使用 `has` 陷阱
+
+`has` 陷阱接受 2 个参数：
+
+1. `trapTarget` 读取属性的对象(代理的目标)。
+2. `key` 要检查的属性键(字符串或者 Symbol)。
+
+`in` 操作符可以用来检测对象中是否含有某个属性，如果自有属性或原型属性匹配这个名称或者 `Symbol` 就返回 `true`，否则返回 `false`。
+
+```js
+const target = {
+  value: 123,
+  name: 'AAA'
+};
+console.log('value' in target); // 自有属性返回 true
+console.log('toString' in target); // 原型属性，继承自 Object，也返回 true
+
+const proxy = new Proxy(target, {
+  has(trapTarget, key) {
+    // 屏蔽value属性
+    if (key === 'value') {
+      return false;
+    } else {
+      return Reflect.has(trapTarget, key);
+    }
+  }
+});
+console.log('value' in proxy); // false
+console.log('name' in proxy); // true
+console.log('toString' in proxy); // true
+```
+
 ```js
 console.log(typeof Proxy); // function
 
