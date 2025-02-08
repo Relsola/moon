@@ -122,7 +122,7 @@ const proxy = new Proxy(target, {});
 
 ### 使用 `set` 陷阱
 
-set 陷阱接受 4 个参数：
+`set` 陷阱接受 4 个参数：
 
 1. `trapTarget` 用于接受属性(代理的目标)的对象。
 2. `key` 要写入的属性键(字符串或者 `Symbol` 类型)。
@@ -155,6 +155,31 @@ proxy.anotherName = 'BBB'; // 属性值非数字，抛出错误
 ```
 
 ### 使用 `get` 陷阱
+
+`get` 陷阱接受 3 个参数：
+
+1. `trapTarget` 被读取属性的源对象(代理的目标)。
+2. `key` 要读取的属性键(字符串或者 Symbol)。
+3. `receiver` 操作发生的对象。
+
+`JavaScript` 有一个我们很常见的特性，当我们试图访问某个对象不存在的属性的时候，不会报错而是返回 `undefined`。如果这不是你想要的结果，那么可以通过 `get` 陷阱来验证对象结构。
+
+```js
+const proxy = new Proxy(
+  {},
+  {
+    get(trapTarget, key, receiver) {
+      if (!(key in trapTarget)) {
+        throw new Error(`属性${key}不存在`);
+      }
+      return Reflect.get(trapTarget, key, receiver);
+    }
+  }
+);
+proxy.name = 'proxy';
+console.log(proxy.name); // proxy
+console.log(proxy.nme); // Error
+```
 
 ```js
 console.log(typeof Proxy); // function
