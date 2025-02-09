@@ -159,7 +159,7 @@ proxy.anotherName = 'BBB'; // 属性值非数字，抛出错误
 `get` 陷阱接受 3 个参数：
 
 1. `trapTarget` 被读取属性的源对象(代理的目标)。
-2. `key` 要读取的属性键(字符串或者 Symbol)。
+2. `key` 要读取的属性键(字符串或者 `Symbol`)。
 3. `receiver` 操作发生的对象。
 
 `JavaScript` 有一个我们很常见的特性，当我们试图访问某个对象不存在的属性的时候，不会报错而是返回 `undefined`。如果这不是你想要的结果，那么可以通过 `get` 陷阱来验证对象结构。
@@ -186,7 +186,7 @@ console.log(proxy.nme); // Error
 `has` 陷阱接受 2 个参数：
 
 1. `trapTarget` 读取属性的对象(代理的目标)。
-2. `key` 要检查的属性键(字符串或者 Symbol)。
+2. `key` 要检查的属性键(字符串或者 `Symbol`)。
 
 `in` 操作符可以用来检测对象中是否含有某个属性，如果自有属性或原型属性匹配这个名称或者 `Symbol` 就返回 `true`，否则返回 `false`。
 
@@ -211,6 +211,330 @@ const proxy = new Proxy(target, {
 console.log('value' in proxy); // false
 console.log('name' in proxy); // true
 console.log('toString' in proxy); // true
+```
+
+### 使用 `deleteProperty` 陷阱
+
+`deleteProperty` 陷阱接受 2 个参数：
+
+1. `trapTarget` 要删除属性的对象(代理的目标)。
+2. `key` 要删除的属性键(字符串或者 `Symbol`)。
+
+`delete` 操作符可以删除对象中的某个属性，删除成功则返回 `true`，删除失败则返回 `false`。如果有一个对象属性是不可以被删除的，我们可以通过 `deleteProperty` 陷阱方法来处理
+
+```js
+const target = {
+  name: 'AAA',
+  value: 123
+};
+const proxy = new Proxy(target, {
+  deleteProperty(trapTarget, key) {
+    if (key === 'value') {
+      return false;
+    } else {
+      return Reflect.deleteProperty(trapTarget, key);
+    }
+  }
+});
+
+let result = delete proxy.value;
+console.log(result); // false
+console.log('value' in proxy); // true
+
+result = delete proxy.name;
+console.log(result); // true
+console.log('name' in proxy); // false
+```
+
+### 使用原型代理陷阱
+
+`setPrototypeOf` 陷阱接受 2 个参数：
+
+1. `trapTarget` 接受原型设置的对象(代理的目标)。
+2. `proto` 作为原型使用的对象。
+
+`getPrototypeOf` 陷阱接受 1 个参数：
+
+1. `trapTarget` 接受获取原型的对象(代理的目标)。
+
+`ES6` 新增了 `Object.setPrototypeOf()` 方法，它是 `ES5` 中 `Object.getPrototypeOf()` 方法的补充。当我们想要在一个对象被设置原型或者读取原型的时候做一点什么，可以使用 `setPrototypeOf()` 陷阱和 `getPrototypeOf()` 陷阱。
+
+```js
+const target = {};
+const proxy = new Proxy(target, {
+  getPrototypeOf(trapTarget) {
+    // 必须返回对象或者 null
+    return null;
+  },
+  setPrototypeOf(trapTarget, proto) {
+    // 只要返回的不是 false 的值，就代表设置原型成功。
+    return false;
+  }
+});
+
+const targetProto = Object.getPrototypeOf(target);
+const proxyProto = Object.getPrototypeOf(proxy);
+console.log(targetProto === Object.prototype); // true
+console.log(proxyProto === Object.prototype); // false
+console.log(proxyProto); // null
+
+Object.setPrototypeOf(target, {}); // 设置成功
+Object.setPrototypeOf(proxy, {}); // 抛出错误
+```
+
+#### 两组方法的区别
+
+`Reflect.getPrototypeOf()` 方法和 `Reflect.setPrototypeOf()` 方法看起来和 `Object.getPrototypeOf()` 和 `Object.setPrototypeOf()` 看起来执行相似的操作，但它们还是有一些不同之处的：
+
+1. `Reflect.getPrototypeOf()` 方法和 `Reflect.setPrototypeOf()` 方法底层操作，其赋予开发者可以访问之前只在内部操作的 `[[GetPrototypeOf]]` 和 `[[SetPrototypeOf]]` 权限。而 `Object.getPrototypeOf()` 和 `Object.setPrototypeOf()` 方法是高级操作，创建伊始就是方便开发者使用的。
+
+2. 如果传入的参数不是对象，则 `Reflect.getPrototypeOf()` 会抛出错误，而 `Object.getPrototypeOf()` 方法则会在操作前先将参数强制转换为一个对象。
+
+3. `Object.setPrototypeOf()` 方法会通过一个布尔值来表示操作是否成功，成功时返回 `true`，失败时返回 `false`。而 `Reflect.setPrototypeOf()` 设置失败时会抛出错误。
+
+```js
+const result = Object.getPrototypeOf(1);
+console.log(result === Number.prototype); // true
+Reflect.getPrototypeOf(1); // 抛出错误
+```
+
+### 使用对象可扩展陷阱
+
+在 `ES6` 之前对象已经有两个方法来修正对象的可扩展性：`Object.isExtensible()` 和 `Object.preventExtensions()`，在 `ES6` 中可以通过代理中的 `isExtensible()` 和 `preventExtensions()` 陷阱拦截这两个方法并调用底层对象。
+
+- `isExtensible()` 陷阱返回一个布尔值，表示对象是否可扩展，接受唯一参数 `trapTarget`。
+- `preventExtensions()` 陷阱返回一个布尔值，表示操作是否成功，接受唯一参数 `trapTarget`。
+
+```js
+const target = {};
+let proxy = new Proxy(target, {
+  isExtensible(trapTarget) {
+    return Reflect.isExtensible(trapTarget);
+  },
+  preventExtensions(trapTarget) {
+    return Reflect.preventExtensions(trapTarget);
+  }
+});
+console.log(Object.isExtensible(target)); // true
+console.log(Object.isExtensible(proxy)); // true
+Object.preventExtensions(proxy);
+console.log(Object.isExtensible(target)); // false
+console.log(Object.isExtensible(proxy)); // false
+
+proxy = new Proxy(target, {
+  isExtensible(trapTarget) {
+    return Reflect.isExtensible(trapTarget);
+  },
+  preventExtensions(trapTarget) {
+    return false;
+  }
+});
+console.log(Object.isExtensible(target)); // true
+console.log(Object.isExtensible(proxy)); // true
+Object.preventExtensions(proxy);
+console.log(Object.isExtensible(target)); // true
+console.log(Object.isExtensible(proxy)); // true
+```
+
+- `Object.preventExtensions()` 无论传入的是否为一个对象，它总是返回该参数，而 `Reflect.isExtensible()` 方法如果传入一个非对象，则会抛出一个错误。
+- `Object.isExtensible()` 当传入一个非对象值时，返回 `false`，而 `Reflect.isExtensible()` 则会抛出一个错误。
+
+### 使用属性描述符陷阱
+
+`Object.defineProperty` 陷阱接受 3 个参数：
+
+1. `trapTarget` 要定义属性的对象(代理的目标)
+2. `key` 属性的键。
+3. `descriptor` 属性的描述符对象。
+
+`Object.getOwnPropertyDescriptor` 陷阱接受 2 个参数：
+
+1. `trapTarget` 要获取属性的对象(代理的目标)。
+2. `key` 属性的键。
+
+在代理中可以使用 `defineProperty` 和 `getOwnPropertyDescriptor` 陷阱函数分别拦截 `Object.defineProperty()` 和 `Object.getOwnPropertyDescriptor()` 方法的调用。
+
+```js
+const proxy = new Proxy(
+  {},
+  {
+    defineProperty(trapTarget, key, descriptor) {
+      if (typeof key === 'symbol') {
+        return false;
+      }
+      return Reflect.defineProperty(trapTarget, key, descriptor);
+    },
+    getOwnPropertyDescriptor(trapTarget, key) {
+      return Reflect.getOwnPropertyDescriptor(trapTarget, key);
+    }
+  }
+);
+Object.defineProperty(proxy, 'name', { value: 'AAA' });
+console.log(proxy.name); // AAA
+const descriptor = Object.getOwnPropertyDescriptor(proxy, 'name');
+console.log(descriptor.value); // AAA
+
+const nameSymbol = Symbol('name');
+// 抛出错误
+Object.defineProperty(proxy, nameSymbol, { value: 'BBB' });
+```
+
+::: warning 注意
+`getOwnPropertyDescriptor()` 陷阱的返回值必须是一个 `null`、`undefined` 或者一个对象。如果返回的是一个对象，则对象的属性只能是 `enumerable`、`configurable`、`value`、`writable`、`get` 和 `set`，使用不被允许的属性会抛出一个错误。
+:::
+
+两组方法对比：
+
+- `Object.defineProperty()` 方法和 `Reflect.defineProperty()` 方法只有返回值不同，前者只返回第一个参数；而后者返回值与操作有关，成功则返回 `true`，失败则返回 `false`。
+
+```js
+const target = {};
+const result1 = Object.defineProperty(target, 'name', { value: 'AAA' });
+const result2 = Reflect.defineProperty(target, 'name', { value: 'AAA' });
+console.log(result1 === target); // true
+console.log(result2); // true
+```
+
+- `Object.getOwnPropertyDescriptor()` 方法传入一个原始值作为参数，内部会把这个值强制转换为一个对象；而 `Reflect.getOwnPropertyDescriptor()` 方法传入一个原始值，则会抛出错误。
+
+```js
+const descriptor1 = Object.getOwnPropertyDescriptor(2, 'name');
+console.log(descriptor1); // undefined
+
+const descriptor2 = Reflect.getOwnPropertyDescriptor(2, 'name'); // Error
+```
+
+```js
+let descriptor1 = Object.getOwnPropertyDescriptor(2, 'name');
+console.log(descriptor1); // undefined
+// 抛出错误
+let descriptor2 = Reflect.getOwnPropertyDescriptor(2, 'name');
+```
+
+### 使用 `ownKeys` 陷阱
+
+`ownKeys` 代理陷阱可以拦截内部方法 `[[OwnPropertyKeys]]`，我们通过返回一个数组的值来覆写其行为。这个数组被用于 `Object.keys()`、`Object.getOwnPropertyNames()`、`Object.getOwnPropertySymbols()` 和 `Object.assign()` 四个方法，其中 `Object.assign()`方法用数组来确定需要复制的属性。`ownKeys` 陷阱唯一接受的参数是操作的目标，返回值是一个数组或者类数组对象，否则就会抛出错误。
+
+几种方法的区别：
+
+- `Reflect.ownKeys()` 返回的数组中包含所有对象的自有属性的键名，包括字符串类型和 `Symbol` 类型。
+- `Object.getOwnPropertyNames()`、`Object.keys()` 返回的数组中排除了 `Symbol` 类型。
+- `Object.getOwnPropertySymbols()` 返回的数组中排出了字符串类型。
+- `Object.assign()` 字符串和 `Symbol` 类型都支持。
+
+```js
+const proxy = new Proxy(
+  {},
+  {
+    ownKeys(trapTarget) {
+      return Reflect.ownKeys(trapTarget).filter(key => {
+        // 排除属性开头带有_的键
+        return typeof key !== 'string' || key[0] !== '_';
+      });
+    }
+  }
+);
+
+const nameSymbol = Symbol('name');
+proxy.name = 'AAA';
+proxy._name = '_AAA';
+proxy[nameSymbol] = 'Symbol';
+
+console.log(Object.getOwnPropertyNames(proxy)); // ['name']
+console.log(Object.keys(proxy)); // ['name']
+console.log(Object.getOwnPropertySymbols(proxy)); // ['Symbol(name)']
+```
+
+### 使用 `apply` 和 `construct` 陷阱
+
+`apply` 陷阱接 3 个参数：
+
+1. `trapTarget` 被执行的函数(代理的目标)。
+2. `thisArg` 函数被调用时内部 this 的值。
+3. `argumentsList` 传递给函数的参数数组。
+
+`construct` 陷阱函数接受 2 个参数：
+
+1. `trapTarget` 被执行的函数(代理的目标)。
+2. `argumentsList` 传递给函数的参数数组。
+
+函数有两个内部方法 `[[Call]]` 和 `[[Construct]]`，当使用 `new` 调用时，执行 `[[Construct]]` 方法，不用 `new` 调用时，执行`[[Call]]` 方法。
+
+#### 验证函数参数
+
+```js
+function sum(...values) {
+  return values.reduce((pre, cur) => pre + cur, 0);
+}
+const sumProxy = new Proxy(sum, {
+  apply(trapTarget, thisArg, argumentsList) {
+    argumentsList.forEach(item => {
+      if (typeof item !== 'number') {
+        throw new TypeError('所有参数必须是数字类型');
+      }
+    });
+    return Reflect.apply(trapTarget, thisArg, argumentsList);
+  },
+  construct(trapTarget, argumentsList) {
+    throw new TypeError('该函数不能通过new来调用');
+  }
+});
+console.log(sumProxy(1, 2, 3, 4, 5)); // 15
+const proxy = new sumProxy(1, 2, 3, 4, 5); // Error
+```
+
+#### 不用 `new` 调用构造函数
+
+`new.target` 元属性，它是用 `new` 调用函数时对该函数的引用，可以使用 `new.target` 的值来确定函数是否是通过 `new` 来调用
+
+```js
+function Numbers(...values) {
+  if (typeof new.target === 'undefined') {
+    throw new TypeError('该函数必须通过new来调用。');
+  }
+  this.values = values;
+}
+
+const NumbersProxy = new Proxy(Numbers, {
+  construct(trapTarget, argumentsList) {
+    return Reflect.construct(trapTarget, argumentsList);
+  },
+  apply(trapTarget, thisArg, argumentsList) {
+    // 非 new 调用的形式来使用
+    return Reflect.construct(trapTarget, argumentsList);
+  }
+});
+
+const instance1 = new NumbersProxy(1, 2, 3, 4, 5);
+const instance2 = NumbersProxy(1, 2, 3, 4, 5);
+console.log(instance1.values); // [1, 2, 3, 4, 5]
+console.log(instance2.values); // [1, 2, 3, 4, 5]
+
+const instance = new Numbers(1, 2, 3, 4, 5);
+console.log(instance.values); // [1, 2, 3, 4, 5]
+Numbers(1, 2, 3, 4); // Error
+```
+
+#### 覆写抽象基类构造函数
+
+`construct` 陷阱还接受第三个可选参数函数，其作用是被用作构造函数内部的 `new.target` 的值。
+
+```js
+class AbstractNumbers {
+  constructor(...values) {
+    if (new.target === AbstractNumbers) {
+      throw new TypeError('此函数必须被继承');
+    }
+    this.values = values;
+  }
+}
+let AbstractNumbersProxy = new Proxy(AbstractNumbers, {
+  construct(trapTarget, argumentsList) {
+    return Reflect.construct(trapTarget, argumentsList, function () {});
+  }
+});
+let instance = new AbstractNumbersProxy(1, 2, 3, 4, 5);
+console.log(instance.values); // 1, 2, 3, 4, 5
 ```
 
 ```js
