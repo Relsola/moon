@@ -24,7 +24,7 @@ export default defineConfig({
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Web 前端', link: '/JavaScript/' },
-      { text: 'Flutter', link: '/Flutter/' },
+      // { text: 'Flutter', link: '/Flutter/' },
       { text: 'Java 后端', link: '/Java/' },
       { text: '数据库', link: '/SQL/' },
       { text: 'Python', link: '/Python/' },
@@ -47,8 +47,8 @@ export default defineConfig({
         { text: 'ES6+', link: '/JavaScript/es6' },
         { text: 'TypeScript', link: '/JavaScript/typescript' },
         { text: 'TS 类型挑战', link: '/JavaScript/type-challenges' },
-        { text: 'Vue2 源码解读', link: '/JavaScript/vue-source-code' },
-        { text: 'Canvas', link: '/JavaScript/canvas' }
+        { text: 'Vue2 源码解读', link: '/JavaScript/vue-source-code' }
+        // { text: 'Canvas', link: '/JavaScript/canvas' }
       ],
       '/Java/': [
         { text: 'Java 知识笔记', link: '/Java/' },
