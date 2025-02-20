@@ -26,7 +26,7 @@ export default defineConfig({
       { text: 'Web 前端', link: '/JavaScript/' },
       { text: 'Java 后端', link: '/Java/' },
       { text: '数据库', link: '/SQL/' },
-      { text: '计算机', link: '/Other/git' },
+      { text: 'Component', link: '/Component/git' },
       { text: 'Tools', link: '/Tools/link' },
       { text: 'Game', link: '/Game/cpp' },
       {
@@ -34,6 +34,7 @@ export default defineConfig({
         items: [
           { text: 'cmd-games', link: 'https://github.com/Relsola/sudoku' },
           { text: 'osu!', link: 'https://github.com/ppy/osu' },
+          { text: 'DungeonShooting', link: 'https://github.com/' },
           { text: 'pure-admin-web', link: 'https://github.com/' },
           { text: 'pure-admin-server', link: 'https://github.com/' }
         ]
@@ -44,34 +45,37 @@ export default defineConfig({
       '/JavaScript/': [
         { text: 'JavaScript 知识笔记', link: '/JavaScript/' },
         { text: 'ES6+', link: '/JavaScript/es6' },
+        { text: 'JavaScript 工具函数', link: '/JavaScript/function' },
         { text: '前端最佳实践', link: '/JavaScript/best-practice' },
         { text: 'TypeScript', link: '/JavaScript/typescript' },
         { text: 'TS 类型挑战', link: '/JavaScript/type-challenges' },
-        { text: 'Vue2 源码学习', link: '/JavaScript/vue-source-code' },
-        { text: 'Vue3 源码学习', link: '/JavaScript/vue-source-code' },
-        { text: 'ElementPlus 源码学习', link: '/JavaScript/vue-source-code' },
-        { text: 'Vite 源码学习', link: '/JavaScript/vue-source-code' }
+        { text: 'Vue3 源码学习', link: '/JavaScript/vue3-source-code' },
+        {
+          text: 'ElementPlus 源码学习',
+          link: '/JavaScript/element-plus-source-code'
+        },
+        { text: 'Vite 源码学习', link: '/JavaScript/vite-source-code' }
       ],
       '/Java/': [
         { text: 'Java 知识笔记', link: '/Java/' },
         { text: 'Java 进阶', link: '/Java/advanced' },
         { text: 'Spring 开发', link: '/Java/spring' },
-        { text: 'Spring Boot 源码学习', link: '/Java/spring' },
-        { text: 'JDK1.8 源码学习', link: '/Java/spring' }
+        { text: 'Spring Boot 源码学习', link: '/Java/spring-source-code' },
+        { text: 'JDK1.8 源码学习', link: '/Java/jdk-source-code' }
       ],
       '/SQL/': [
         { text: 'SQL 语言', link: '/SQL/' },
-        { text: 'MySQL', link: '/SQL/mysql' },
+        { text: 'MySQL 进阶', link: '/SQL/mysql' },
         { text: 'Redis', link: '/SQL/redis' }
       ],
-      '/Other/': [
-        { text: 'Git 指南', link: '/Other/git' },
-        { text: 'Linux', link: '/Other/linux' },
-        { text: 'Shell 脚本', link: '/Other/linux' },
-        { text: 'Docker 容器', link: '/Other/linux' },
-        { text: '数据结构与算法', link: '/Other/algorithm' },
-        { text: '操作系统', link: '/Other/system' },
-        { text: '编译原理', link: '/Other/compilation' }
+      '/Component/': [
+        { text: 'Git 指南', link: '/Component/git' },
+        { text: 'Linux', link: '/Component/linux' },
+        { text: 'Shell 脚本', link: '/Component/shell' },
+        { text: 'Docker 容器', link: '/Component/docker' },
+        { text: '数据结构与算法', link: '/Component/algorithm' },
+        { text: '操作系统', link: '/Component/system' },
+        { text: '编译原理', link: '/Component/compilation' }
       ],
       '/Tools/': [
         { text: '链接导航', link: '/Tools/link' },
