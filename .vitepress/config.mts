@@ -34,6 +34,7 @@ export default defineConfig({
         items: [
           { text: 'cmd-games', link: 'https://github.com/Relsola/sudoku' },
           { text: 'osu!', link: 'https://github.com/ppy/osu' },
+          { text: 'osu-framework', link: 'https://github.com/ppy/osu-framework' },
           { text: 'DungeonShooting', link: 'https://github.com/' },
           { text: 'pure-admin-web', link: 'https://github.com/' },
           { text: 'pure-admin-server', link: 'https://github.com/' }
