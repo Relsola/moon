@@ -1,3 +1,7 @@
+---
+outline: [2, 3]
+---
+
 # ES6+
 
 ## 块级作用域绑定
@@ -1003,32 +1007,6 @@ import { first } from 'example1.js';
 import { second } from 'example/example2.js';
 ```
 
-## 对象的扩展
-
-### 对象字面量的扩展
-
-- 属性初始值的简写：当对象的属性和本地变量同名时，只写属性即可。
-- 对象方法的简写： 消除了冒号和 `function` 关键字。
-- 可计算属性名：在定义对象时，对象的属性值可通过变量来计算。
-
-```js
-const name = 'Rel';
-const firstName = 'first name';
-const person = {
-  name,
-  [firstName]: 'sola',
-  sayName() {
-    console.log(this.name);
-  }
-};
-```
-
-### 新增方法
-
-1. `Object.is`
-
-2. `Object.assign`
-
 ## 函数
 
 ### 形参默认值
@@ -1116,7 +1094,9 @@ console.log(Math.max(...arr)); // 32
 
 ### 箭头函数
 
-在 ES6 中，箭头函数是一种使用箭头 => 定义函数的新语法，但它和传统的 JavaScript 函数有些许不同：
+在 `ES6` 中，箭头函数是一种使用箭头 `=>` 定义函数的新语法，提供简洁的语法和解决 `this` 绑定问题，使得 `JavaScript` 编程更加方便和直观，消除了函数的二义性，尤其是在处理回调函数和高阶函数时。
+
+与和传统的 `JavaScript` 函数的不同：
 
 - 没有 `this`、`super`、`arguments` 和 `new.target` 绑定，箭头函数中的 `this`、`super`、`arguments` 和 `new.target` 这些值由外围最近一层非箭头函数所决定。
 - 不能通过 `new` 关键词调用：因为箭头函数没有[[Construct]]函数，所以不能通过 `new` 关键词进行调用，如果使用 `new` 进行调用会抛出错误。
@@ -1124,6 +1104,10 @@ console.log(Math.max(...arr)); // 32
 - 不可以改变 `this` 的绑定，在箭头函数的内部，`this` 的值不可改变(即不能通过 `call`、`apply` 或者 `bind` 等方法来改变)。
 - 不支持 `arguments` 对象：箭头函数没有 `arguments` 绑定，所以必须使用命名参数或者不定参数这两种形式访问参数。
 - 不支持重复的命名参数：无论是否处于严格模式，箭头函数都不支持重复的命名参数。
+
+::: tip
+箭头函数
+:::
 
 #### 箭头函数的语法
 
@@ -1664,20 +1648,33 @@ console.log(6);
 // 1 6 2 3 4 5
 ```
 
-## 其余特性
+## ES6+ 其他新增特性
 
-1. `Array.includes()` 判断元素是否在数组里 返回布尔
-2. 指数运算符 `2 ** 3`
-3. `Object.values()` `Object.keys()` `Object.entries()`
-4. String.padStart() String.padEnd()
-5. Object.getOwnPropertyDescriptors() 获取到对象的描述
-6. Array.flat() Array.flatMap() -> 先 map 再 flat
-7. Object.fromEntries() 与 Object.entries() 相反
-8. String.trimStart() String.trimEnd() String.trim() // 去空格
-9. BigInt let bigInt = 9007199254740992n; Number.MAX_SAFE_INTEGER
-10. ?? 空值合并操作符
-11. ?. 可选链 判断 undefined 和 null 的时候更加简洁
-12. globalThis
-13. ||= &&= ??=
-14. Array.at() 返回某一位的元素
-15. hasOwn 可以用于判断隐式原型是 null 的情况
+### 对象字面量的扩展
+
+- 属性初始值的简写：当对象的属性和本地变量同名时，只写属性即可。
+- 对象方法的简写： 消除了冒号和 `function` 关键字。
+- 可计算属性名：在定义对象时，对象的属性值可通过变量来计算。
+
+```js
+const name = 'Rel';
+const firstName = 'first name';
+const person = {
+  name,
+  [firstName]: 'sola',
+  sum(a, b) {
+    return a + b;
+  }
+};
+```
+
+### 模板字符串
+
+- 模板字符串是 `ES6` 中引入的一种新的字符串语法，它允许在字符串中插入变量或表达式，而不需要使用字符串拼接符号。
+- 模板字符串使用反引号 ` `` `包围，并使用 `${}` 语法来插入变量或表达式。
+- 在 `${}` 语法中，我们可以放置任何有效的 `JavaScript` 表达式，这些表达式的值将被插入到字符串中。
+
+```js
+const name = 'world';
+console.log(`hello ${name}`); // hello world
+```
