@@ -1184,11 +1184,17 @@ type newTestInterfaceType = {
 
 - [`Readonly<T>` 将某个类型所有属性变为只读](#readonly)
 
-- [`Pick<T, K>` 从某个类型中挑出一些属性出来](#pick)
-
 - [`Record<K, T>` 将 K 中所有的属性的值转化为 T 类型](#record)
 
+- [`Parameters<T>` 用于获得函数的参数类型组成的元组类型](#parameters)
+
 - [`ReturnType<T>` 得到一个函数的返回值类型](#returntype)
+
+- [`ConstructorParameters<T>` 获取构造函数类型 T 的参数类型](#constructorparameters)
+
+- [`InstanceType<T>` 获取构造函数类型 T 的实例类型](#instancetype)
+
+- [`Pick<T, K>` 从某个类型中挑出一些属性出来](#pick)
 
 - [`Exclude<T, U>` 将某个类型中属于另一个的类型移除掉](#exclude)
 
@@ -1198,37 +1204,11 @@ type newTestInterfaceType = {
 
 - [`NonNullable<T>` 过滤类型中的 null 及 undefined 类型](#nonnullable)
 
-- [`Parameters<T>` 用于获得函数的参数类型组成的元组类型](#parameters)
+- [`Awaited<T>` 获取 Promise 的返回值类型](#awaited)
 
-```ts
-interface Todo {
-  title: string;
-  description: string;
-  completed?: boolean;
-}
+- [`NoInfer<T>` 防止 `TypeScript` 从泛型函数内部推断类型](#noinfer)
 
-type k = Partial<Todo>;
-
-type k = Required<Todo>;
-
-type k = Readonly<Todo>;
-
-type k = Pick<Todo, 'title' | 'completed'>;
-
-type k = Record<string, string | number>;
-
-type k = ReturnType<() => number>;
-
-type k = Exclude<'a' | 'b' | 'c', 'a' | 'b'>;
-
-type k = Extract<'a' | 'b' | 'c', 'a' | 'b'>;
-
-type k = Omit<Todo, 'title'>;
-
-type k = NonNullable<string | number | null | undefined | void>;
-
-type k = Parameters<(a: number, b: boolean) => string>;
-```
+- [`Intrinsic String Manipulation Types` 字符串操作类型](#intrinsic-string-manipulation-types)
 
 #### Partial
 
@@ -1314,30 +1294,6 @@ const todo: Readonly<Todo> = {
 todo.title = 'Hello'; // Error
 ```
 
-#### Pick
-
-`Pick` 从某个类型中挑出一些属性出来
-
-```ts
-// 定义
-type Pick<T, K extends keyof T> = {
-  [P in K]: T[P];
-};
-
-interface Todo {
-  title: string;
-  description: string;
-  completed: boolean;
-}
-
-type TodoPreview = Pick<Todo, 'title' | 'completed'>;
-
-const todo: TodoPreview = {
-  title: 'Clean room',
-  completed: false
-};
-```
-
 #### Record
 
 `Record<K extends keyof any, T> `的作用是将 `K` 中所有的属性的值转化为 `T` 类型。
@@ -1367,6 +1323,24 @@ const x: Record<Page, PageInfo> = {
 };
 ```
 
+#### Parameters
+
+`Parameters<T>` 的作用是用于获得函数的参数类型组成的元组类型。
+
+```ts
+// 定义
+type Parameters<T extends (...args: any) => any> = T extends (
+  ...args: infer P
+) => any
+  ? P
+  : never;
+
+type A = Parameters<() => void>; // []
+type B = Parameters<typeof Array.isArray>; // [any]
+type C = Parameters<typeof parseInt>; // [string, (number | undefined)?]
+type D = Parameters<typeof Math.max>; // number[]
+```
+
 #### ReturnType
 
 `ReturnType<F>` 用来得到一个函数的返回值类型
@@ -1384,6 +1358,70 @@ type Func = (value: number) => string;
 const foo: ReturnType<Func> = 'string';
 ```
 
+#### ConstructorParameters
+
+`ConstructorParameters<T>` 获取构造函数类型 T 的参数类型
+
+```ts
+// 定义
+type ConstructorParameters<T extends abstract new (...args: any) => any> =
+  T extends abstract new (...args: infer P) => any ? P : never;
+
+class Moon {
+  abs: string;
+
+  constructor(abs: string) {
+    this.abs = abs;
+  }
+}
+
+type MoonConstructor = ConstructorParameters<typeof Moon>; // [abs: string]
+```
+
+#### InstanceType
+
+`InstanceType<T>` 获取构造函数类型 T 的实例类型
+
+```ts
+// 定义
+type InstanceType<T extends abstract new (...args: any) => any> =
+  T extends abstract new (...args: any) => infer R ? R : any;
+
+class Moon {
+  abs: string;
+
+  constructor(abs: string) {
+    this.abs = abs;
+  }
+}
+
+type MoonInstance = InstanceType<typeof Moon>; // Moon
+```
+
+#### Pick
+
+`Pick` 从某个类型中挑出一些属性出来
+
+```ts
+// 定义
+type Pick<T, K extends keyof T> = {
+  [P in K]: T[P];
+};
+
+interface Todo {
+  title: string;
+  description: string;
+  completed: boolean;
+}
+
+type TodoPreview = Pick<Todo, 'title' | 'completed'>;
+
+const todo: TodoPreview = {
+  title: 'Clean room',
+  completed: false
+};
+```
+
 #### Exclude
 
 `Exclude<T, U>` 的作用是将某个类型中属于另一个的类型移除掉。
@@ -1392,7 +1430,8 @@ const foo: ReturnType<Func> = 'string';
 // 定义
 type Exclude<T, U> = T extends U ? never : T;
 
-// 如果 T 能赋值给 U 类型的话，那么就会返回 never 类型，否则返回 T 类型。最终实现的效果就是将 T 中某些属于 U 的类型移除掉。
+// 如果 T 能赋值给 U 类型的话，那么就会返回 never 类型
+// 否则返回 T 类型。最终实现的效果就是将 T 中某些属于 U 的类型移除掉。
 
 type T0 = Exclude<'a' | 'b' | 'c', 'a'>; // "b" | "c"
 type T1 = Exclude<'a' | 'b' | 'c', 'a' | 'b'>; // "c"
@@ -1446,22 +1485,51 @@ type T0 = NonNullable<string | number | undefined>; // string | number
 type T1 = NonNullable<string[] | null | undefined>; // string[]
 ```
 
-#### Parameters
+#### Awaited
 
-`Parameters<T>` 的作用是用于获得函数的参数类型组成的元组类型。
+`Awaited<T>` 获取 `Promise` 的返回值类型：
+
+- 该类型需要支持递归：它需要将嵌套的 `Promise` 的类型展开，直至得到 `Promise` 的最终返回值类型。
+- 递归的结束条件是：对非 `PromiseLike` 的类型（没有 `then` 方法的对象类型）返回 `never`。
 
 ```ts
-// 定义
-type Parameters<T extends (...args: any) => any> = T extends (
-  ...args: infer P
-) => any
-  ? P
-  : never;
+// 简化定义
+// PromiseLike<T> 是一个内置接口，表示一个具有 then 方法的对象类型 Promise 的鸭子类型。
+type Awaited<T> = T extends PromiseLike<infer R> ? Awaited<R> : T;
+```
 
-type A = Parameters<() => void>; // []
-type B = Parameters<typeof Array.isArray>; // [any]
-type C = Parameters<typeof parseInt>; // [string, (number | undefined)?]
-type D = Parameters<typeof Math.max>; // number[]
+#### NoInfer
+
+`NoInfer<Type>` 用于防止 `TypeScript` 从泛型函数内部推断类型。它是一个固有类型，没有更底层的实现。
+
+```ts
+// 以从函数入惨里推断出 result1 类型是 'hello'
+const rs1 = <T>(value: T) => value;
+const result1 = rs1('hello'); // 'hello'
+
+// NoInfer<T> 包装 value, 使 value 无法成为有效推断来源 T
+const rs2 = <T>(value: NoInfer<T>) => value;
+const result2 = rs2('hello'); // unknown
+
+// 需要明确提供范型才能获得 rs2 的返回类型
+const result3 = rs2<'hello'>('hello'); //  "hello"
+```
+
+#### Intrinsic String Manipulation Types
+
+四个固有的字符串操作类型：
+
+- `Uppercase<S>` ：将字符串中的每个字符转换为大写。
+- `Lowercase<S>` ：将字符串中的每个字符转换为小写。
+- `Capitalize<S>` ：将字符串中的第一个字符转换为大写。
+- `Uncapitalize<S>` ：将字符串中的第一个字符转换为小写。
+
+```ts
+type Greeting = 'Hello, world';
+type UpperGreeting = Uppercase<Greeting>; // "HELLO, WORLD"
+type LowercaseGreeting = Lowercase<Greeting>; // "hello, world"
+type CapitalizedGreeting = Capitalize<Greeting>; // "Hello, world"
+type UncapitalizedGreeting = Uncapitalize<Greeting>; // "hello, world"
 ```
 
 ## tsconfig.json 配置解释
