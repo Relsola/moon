@@ -1184,7 +1184,7 @@ type newTestInterfaceType = {
 
 - [`Readonly<T>` 将某个类型所有属性变为只读](#readonly)
 
-- [`Record<K, T>` 将 K 中所有的属性的值转化为 T 类型](#record)
+- [`Record<K, T>` 将 K 中所有的属性的值映射为 T 类型](#record)
 
 - [`Parameters<T>` 用于获得函数的参数类型组成的元组类型](#parameters)
 
@@ -1296,7 +1296,7 @@ todo.title = 'Hello'; // Error
 
 #### Record
 
-`Record<K extends keyof any, T> `的作用是将 `K` 中所有的属性的值转化为 `T` 类型。
+`Record<K extends keyof any, T> `的作用是将 `K` 中所有的属性的值映射为 `T` 类型。
 
 ```ts
 // 定义
