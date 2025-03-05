@@ -1346,6 +1346,160 @@ proxyObj.age;
 delete proxyObj.age;
 ```
 
+## Set 和 Map 集合
+
+### Set
+
+`Set` 集合是一种有序列表，其中含有一些相互独立的非重复值，在 `Set` 集合中，不会对所存的值进行强制类型转换。
+
+`Set` 集合的属性和方法：
+
+- `Set` 构造函数：可以使用此构造函数创建一个 `Set` 集合。
+- `add` 方法：可以向 `Set` 集合中添加一个元素。
+- `delete` 方法：可以移除 `Set` 集合中的某一个元素。
+- `clear` 方法：可以移除 `Set` 集合中所有的元素。
+- `has` 方法：判断给定的元素是否在 `Set` 集合中。
+- `size` 属性：`Set` 集合的长度。
+
+```js
+const set = new Set();
+set.add(5);
+set.add('5');
+
+// 重复添加的值会被忽略
+set.add(5);
+console.log(set.size); // 2
+
+// 移除元素
+console.log(set.has(5)); // true
+set.delete(5);
+console.log(set.has(5)); // false
+console.log(set.size); // 1
+```
+
+::: tip 补充
+`Set` 集合的构造函数可以接受任何可迭代对象作为参数，如 `Array`、`Set`、`Map`。  
+`Set `集合的 `forEach()` 迭代第一和第二个参数是一样的。
+:::
+
+#### `Set` 集合转换为数组
+
+因为 `Set` 集合不可以像数组那样通过索引去访问元素，最好的做法是将 `Set` 集合转换为数组。
+
+```js
+const set = new Set([1, 2, 3, 4]);
+
+// 方法一：展开运算符
+const arr1 = [...set];
+
+// 方法二：Array.from方法
+const arr2 = Array.from(set);
+```
+
+### WeakSet
+
+因为 `Set` 实例中的引用存在，垃圾回收机制就不能释放该对象的内存空间，所以 `Set` 集合可以看作是一个强引用的集合。  
+为了更好的处理 `Set` 集合的垃圾回收，引入了一个叫 `Weak Set` 的集合。
+
+`Weak Set`集合只支持三种方法：`add`、`has`、`delete`。
+
+```js
+const weakSet = new WeakSet();
+const key = {};
+weakSet.add(key);
+console.log(weakSet.has(key)); // true
+weakSet.delete(key);
+console.log(weakSet.has(key)); // false
+```
+
+`Set` 和 `WeakSet` 有许多共同的特性，也有一定的差别的：
+
+- `Weak Set` 只能存储对象元素，向其添加非对象元素会导致抛出错误，同理 `has()` 和 `delete()` 传递非对象也同样会报错。
+- `Weak Set` 不可迭代，也不暴露任何迭代器，因此也不支持 `forEach()` 方法。
+- `Weak Set` 不支持 `size` 属性。
+
+### Map
+
+`Map` 类型是一种存储着许多键值对的有序列表，其中的键名和对应的值支持所有的数据类型，键名的等价性判断是通过调用 `Object.is` 方法来实现的。
+
+`Map` 集合的方法和属性与 `Set` 类似，不过使用 `set` 添加键值对，`get` 获取值。
+
+```js
+const map = new Map();
+map.set('name', 'AAA');
+map.set('age', 23);
+console.log(map.size); // 2
+console.log(map.has('name')); // true
+console.log(map.get('name')); // AAA
+map.delete('name');
+console.log(map.has('name')); // false
+map.clear();
+console.log(map.size); // 0
+```
+
+#### Map 集合的初始化方法
+
+在初始化 `Map` 集合的时候，也可以像 `Set` 集合传入数组，但此时数组中的每一个元素都是一个子数组，子数组中包含一个键值对的键名和值两个元素。
+
+```js
+const map = new Map([
+  ['name', 'AAA'],
+  ['age', 23]
+]);
+```
+
+#### Map 集合的 forEach() 方法
+
+`Map` 集合中的 `forEach()` 方法的回调参数和数组类似，每一个参数的解释如下：
+
+- 第一个参数是键名
+- 第二个参数是值
+- 第三个参数是`Map`集合本身
+
+```js
+const map = new Map([
+  ['name', 'AAA'],
+  ['age', 23]
+]);
+map.forEach((key, value, ownMap) => {
+  console.log(`${key} ${value}`);
+  console.log(ownMap === map);
+});
+// name AAA
+// true
+// age 23
+// true
+```
+
+### WeakMap
+
+`WeakMap` 它是一种存储着许多键值对的无序列表，集合中的键名必须是一个对象，如果使用非对象键名会报错。
+
+`Weak Map` 集合只支持 `set()`、`get()`、`has()`、`delete()`。
+
+```js
+const key1 = {};
+const key2 = {};
+const key3 = {};
+const weakMap = new WeakMap([
+  [key1, 'AAA'],
+  [key2, 23]
+]);
+weakMap.set(key3, '广东');
+
+console.log(weakMap.has(key1)); // true
+console.log(weakMap.get(key1)); // AAA
+weakMap.delete(key1);
+console.log(weakMap.has(key)); // false
+```
+
+`Map` 和 `Weak Map` 的差别的：
+
+- `WeakMap` 集合的键名必须为对象，添加非对象会报错。
+- `WeakMap` 集合不可迭代，因此不支持 `forEach()` 方法。
+- `WeakMap` 集合不支持 `clear` 方法。
+- `WeakMap` 集合不支持 `size` 属性。
+
 ## ES6+ 数据类型
 
 `Symbol` `Number` `String` `Boolean` `Undefined` `Null` `Object`
