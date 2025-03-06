@@ -1346,7 +1346,7 @@ proxyObj.age;
 delete proxyObj.age;
 ```
 
-## Set 和 Map 集合
+## Set 和 Map
 
 ### Set
 
@@ -1499,6 +1499,8 @@ console.log(weakMap.has(key)); // false
 - `WeakMap` 集合不可迭代，因此不支持 `forEach()` 方法。
 - `WeakMap` 集合不支持 `clear` 方法。
 - `WeakMap` 集合不支持 `size` 属性。
+
+## Symbol
 
 ## ES6+ 数据类型
 
