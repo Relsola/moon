@@ -23,21 +23,14 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'Web 前端', link: '/JavaScript/' },
-      { text: 'Java 后端', link: '/Java/' },
-      { text: '数据库', link: '/SQL/' },
-      { text: 'Component', link: '/Component/git' },
-      { text: 'Tools', link: '/Tools/link' },
-      { text: 'Game', link: '/Game/cpp' },
+      { text: 'Archives', link: '/Archives/' },
+      { text: 'Learn', link: '/Learn/' },
+      { text: 'Link', link: '/Link/' },
       {
         text: 'GitHub',
         items: [
           { text: 'cmd-games', link: 'https://github.com/Relsola/sudoku' },
-          { text: 'osu!', link: 'https://github.com/ppy/osu' },
-          { text: 'osu-framework', link: 'https://github.com/ppy/osu-framework' },
-          { text: 'DungeonShooting', link: 'https://github.com/' },
-          { text: 'pure-admin-web', link: 'https://github.com/' },
-          { text: 'pure-admin-server', link: 'https://github.com/' }
+          { text: 'osu!', link: 'https://github.com/ppy/osu' }
         ]
       }
     ],
