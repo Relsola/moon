@@ -9,17 +9,17 @@ hero:
     alt: 个人头像
 
 features:
-  - icon: 📖
-    title: MDN
-    link: 'https://developer.mozilla.org/zh-CN/'
+  - icon: 🔥
+    title: About
+    details: ...
 
   - icon: 🗨️
-    title: LeetCode 刷题攻略
-    link: 'https://github.com/youngyangyang04/leetcode-master'
+    title: Interest
+    details: ...
 
-  - icon: 🌥️
-    title: TS 类型挑战通关手册
-    link: 'https://blog.maxiaobo.com.cn/type-challenge/dist/'
+  - icon: ✨
+    title: Plan
+    details: ...
 ---
 
 <style>
