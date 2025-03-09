@@ -1,10 +1,10 @@
 <script setup>
-import Regex from '@components/Regex/index.vue'
+// import Regex from '@components/Regex/index.vue'
 </script>
 
 ## 正则测试器
 
-<Regex />
+<!-- <Regex /> -->
 
 ## 字符组
 
