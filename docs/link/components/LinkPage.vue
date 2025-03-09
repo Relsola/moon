@@ -1,10 +1,3 @@
-<script lang="ts" setup>
-import { ref } from 'vue';
-import data from './data.json';
-
-const activeName = ref('web');
-</script>
-
 <template>
   <el-tabs v-model="activeName">
     <el-tab-pane v-for="{ label, name, data } in data" :label="label" :name="name">
@@ -18,3 +11,9 @@ const activeName = ref('web');
 
   <el-backtop :right="100" :bottom="100" />
 </template>
+
+<script setup lang="ts">
+import data from './data.json';
+
+const activeName = ref('web');
+</script>

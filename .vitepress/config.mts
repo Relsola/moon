@@ -23,9 +23,9 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'Archives', link: '/Archives/' },
-      { text: 'Learn', link: '/Learn/' },
-      { text: 'Link', link: '/Link/' },
+      { text: 'Archives', link: '/archives/' },
+      { text: 'Learn', link: '/learn/' },
+      { text: 'Link', link: '/link/' },
       {
         text: 'GitHub',
         items: [
@@ -101,12 +101,22 @@ export default defineConfig({
   vite: {
     plugins: [
       UnoCSS(),
-      AutoImport({ resolvers: [ElementPlusResolver()] }),
-      Components({ resolvers: [ElementPlusResolver()] })
+      AutoImport({
+        dts: path('types/auto-imports.d.ts'),
+        imports: ['vue'],
+        resolvers: [ElementPlusResolver()]
+      }),
+      Components({
+        resolvers: [ElementPlusResolver()],
+        dts: path('types/components.d.ts')
+      })
     ],
 
     resolve: {
-      alias: [{ find: '@components', replacement: path('components') }]
+      alias: [
+        { find: '@components', replacement: path('components') },
+        { find: '@assets', replacement: path('assets') }
+      ]
     },
 
     ssr: {
