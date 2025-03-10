@@ -47,13 +47,22 @@ export default defineConfig({
 				{
 					text: 'JavaScript',
 					collapsed: false,
-					items: [{ text: 'ES6+', link: '/learn/es6' }]
+					items: [
+						{ text: 'ES6+', link: '/learn/es6' },
+						{ text: 'TypeScript', link: '/learn/typescript' }
+					]
 				},
 				{
 					text: 'Java',
 					collapsed: false,
 					items: []
 				},
+				{
+					text: 'SQL',
+					collapsed: false,
+					items: []
+				},
+
 				{
 					text: '计算机基础',
 					collapsed: false,

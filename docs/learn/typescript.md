@@ -53,7 +53,7 @@ TS 的函数声明
 
 ```ts
 function sum(x: number, y: number): number {
-  return x + y;
+	return x + y;
 }
 ```
 
@@ -63,7 +63,7 @@ function sum(x: number, y: number): number {
 
 ```ts
 interface SearchFunc {
-  (source: string, subString: string): boolean;
+	(source: string, subString: string): boolean;
 }
 
 const search: SearchFunc = (a, b) => a === b;
@@ -73,10 +73,10 @@ const search: SearchFunc = (a, b) => a === b;
 
 ```ts
 const reduce = (x: number = 0, y?: number): number => {
-  if (y === undefined) {
-    return x;
-  }
-  return y - x;
+	if (y === undefined) {
+		return x;
+	}
+	return y - x;
 };
 ```
 
@@ -84,7 +84,7 @@ const reduce = (x: number = 0, y?: number): number => {
 
 ```ts
 const push = (arr: any[], ...items: any[]): void => {
-  items.forEach(item => arr.push(item));
+	items.forEach(item => arr.push(item));
 };
 ```
 
@@ -96,10 +96,10 @@ function add(x: number, y: string): string;
 function add(x: string, y: number): string;
 function add(x: string, y: string): string;
 function add(x: number | string, y: number | string) {
-  if (typeof x === 'string' || typeof y === 'string') {
-    return x.toString() + y.toString();
-  }
-  return x + y;
+	if (typeof x === 'string' || typeof y === 'string') {
+		return x.toString() + y.toString();
+	}
+	return x + y;
 }
 ```
 
@@ -136,7 +136,7 @@ const rt1: ResTuple = [666, '99', '88'];
 
 ```ts
 const fun = (): void => {
-  // ...
+	// ...
 };
 ```
 
@@ -153,11 +153,11 @@ const fun = (): void => {
 
 ```ts
 const err = (msg: string): never => {
-  throw new Error(msg);
+	throw new Error(msg);
 };
 
 const lop = (): never => {
-  while (true) {}
+	while (true) {}
 };
 ```
 
@@ -169,14 +169,14 @@ const lop = (): never => {
 type Foo = string | number;
 
 function controlFlowAnalysisWithNever(foo: Foo) {
-  if (typeof foo === 'string') {
-    // 这里 foo 被收窄为 string 类型
-  } else if (typeof foo === 'number') {
-    // 这里 foo 被收窄为 number 类型
-  } else {
-    // foo 在这里是 never
-    const check: never = foo;
-  }
+	if (typeof foo === 'string') {
+		// 这里 foo 被收窄为 string 类型
+	} else if (typeof foo === 'number') {
+		// 这里 foo 被收窄为 number 类型
+	} else {
+		// foo 在这里是 never
+		const check: never = foo;
+	}
 }
 ```
 
@@ -193,7 +193,7 @@ a = 7;
 let c; // any
 c = [7];
 if (c.name === undefined) {
-  // ...
+	// ...
 }
 ```
 
@@ -226,8 +226,8 @@ const dog: unknown = { hello: getDog };
 dog.hello(); // Error
 
 const getCat = () => {
-  let x: unknown;
-  return x;
+	let x: unknown;
+	return x;
 };
 
 const cat = getCat();
@@ -236,7 +236,7 @@ const upName = cat.toLowerCase(); // Error
 
 // typeof
 if (typeof cat === 'string') {
-  const upName = cat.toLowerCase();
+	const upName = cat.toLowerCase();
 }
 
 // 类型断言
@@ -383,8 +383,8 @@ str!.toString(); // OK
 type n = () => number;
 
 const fn = (ns: n | undefined) => {
-  const num = ns(); // Error
-  const num = ns!(); // OK
+	const num = ns(); // Error
+	const num = ns!(); // OK
 };
 ```
 
@@ -459,9 +459,9 @@ const str: 'this is string' = 'this is string'; // 'this is string'
 let str2 = str; // 'this is string'
 
 interface Vector3 {
-  x: number;
-  y: number;
-  z: number;
+	x: number;
+	y: number;
+	z: number;
 }
 const getComponent = (vector: Vector3, axis: 'x' | 'y' | 'z') => vector[axis];
 
@@ -498,21 +498,21 @@ const arr2 = [1, 2, 3] as const; // readonly [1, 2, 3]
 ```ts
 // 类型守卫
 const func = (anything: any) => {
-  if (typeof anything === 'string') {
-    return anything;
-  } else if (typeof anything === 'number') {
-    return anything;
-  }
-  return null;
+	if (typeof anything === 'string') {
+		return anything;
+	} else if (typeof anything === 'number') {
+		return anything;
+	}
+	return null;
 };
 
 // 同样，我们可以使用类型守卫将联合类型缩小到明确的子类型
 const fun = (anything: string | number) => {
-  if (typeof anything === 'string') {
-    return anything;
-  } else if (typeof anything === 'number') {
-    return anything;
-  }
+	if (typeof anything === 'string') {
+		return anything;
+	} else if (typeof anything === 'number') {
+		return anything;
+	}
 };
 ```
 
@@ -522,35 +522,35 @@ const fun = (anything: string | number) => {
 type Goods = 'pen' | 'pencil' | 'ruler';
 
 const getConst = (item: Goods) => {
-  if (item === 'pen') {
-    item; // item => 'pen'
-  } else {
-    item; // => 'pencil' | 'ruler'
-  }
+	if (item === 'pen') {
+		item; // item => 'pen'
+	} else {
+		item; // => 'pencil' | 'ruler'
+	}
 };
 
 interface UploadEvent {
-  type: 'upload';
-  filename: string;
-  contents: string;
+	type: 'upload';
+	filename: string;
+	contents: string;
 }
 
 interface DownloadEvent {
-  type: 'download';
-  filename: string;
+	type: 'download';
+	filename: string;
 }
 
 type AppEvent = UploadEvent | DownloadEvent;
 
 function handleEvent(e: AppEvent) {
-  switch (e.type) {
-    case 'download':
-      e; // Type is DownloadEvent
-      break;
-    case 'upload':
-      e; // Type is UploadEvent
-      break;
-  }
+	switch (e.type) {
+		case 'download':
+			e; // Type is DownloadEvent
+			break;
+		case 'upload':
+			e; // Type is UploadEvent
+			break;
+	}
 }
 ```
 
@@ -603,34 +603,34 @@ const m1: t = { id: 1, name: '张三', age: 18 };
 ```ts
 // 1. 同名属性的类型不兼容
 type One = { id: number; name: 2 } & {
-  age: number;
-  name: number;
+	age: number;
+	name: number;
 };
 const obj: One = { id: 1, name: 'string', age: 2 }; //Error
 // 'string' 类型不能赋给 'never' 类型
 
 // 2. 同名属性的类型兼容
 type Tow = { id: number; name: 2 } & {
-  age: number;
-  name: number;
+	age: number;
+	name: number;
 };
 // number & 2  --> 子类型 2
 const obj: Tow = {
-  id: 1,
-  name: 2, // OK
-  // name: 18, // Error
-  age: 18
+	id: 1,
+	name: 2, // OK
+	// name: 18, // Error
+	age: 18
 };
 
 // 3. 属性是非基本数据类型
 interface A {
-  x: { d: true };
+	x: { d: true };
 }
 interface B {
-  x: { e: string };
+	x: { e: string };
 }
 interface C {
-  x: { f: number };
+	x: { f: number };
 }
 type ABC = A & B & C;
 
@@ -649,9 +649,9 @@ const abc: ABC = { x: { d: true, e: '', f: 666 } }; // OK
 
 ```ts
 interface Person {
-  name: string;
-  age: number;
-  once?: number; // 可选属性
+	name: string;
+	age: number;
+	once?: number; // 可选属性
 }
 
 let Tom: Person = { name: 'Tom', age: 18 };
@@ -669,15 +669,15 @@ let Tom2: Person = { name: 'Tom' }; // Error
 
 ```ts
 interface Person {
-  readonly name: string;
-  age?: number; // 这里真实的类型应该为：number | undefined
-  [key: string]: string | number | undefined;
+	readonly name: string;
+	age?: number; // 这里真实的类型应该为：number | undefined
+	[key: string]: string | number | undefined;
 }
 
 const tom: Person = {
-  name: 'Tom',
-  age: 17,
-  gender: 'male'
+	name: 'Tom',
+	age: 17,
+	gender: 'male'
 };
 ```
 
@@ -714,15 +714,15 @@ a = ro; // Error
 
 ```ts
 interface Point {
-  x: number;
+	x: number;
 }
 
 interface Point {
-  y: number;
+	y: number;
 }
 
 interface SetPoint {
-  (x: number, y: number): void;
+	(x: number, y: number): void;
 }
 
 const point: Point = { x: 1, y: 2 };
@@ -752,11 +752,11 @@ type B = typeof div;
 // 映射
 type Keys = 'name' | 'age';
 type DudeType = {
-  [key in Keys]: string | number;
+	[key in Keys]: string | number;
 };
 const tom: DudeType = {
-  name: 'Tom',
-  age: 18
+	name: 'Tom',
+	age: 18
 };
 ```
 
@@ -769,11 +769,11 @@ const tom: DudeType = {
 
 ```ts
 interface PointX {
-  x: number;
+	x: number;
 }
 
 interface Point extends PointX {
-  y: number;
+	y: number;
 }
 
 let point: Point = { x: 1, y: 2 };
@@ -794,7 +794,7 @@ let point: Point = { x: 1, y: 2 };
 type PointX = { x: number };
 
 interface Point extends PointX {
-  y: number;
+	y: number;
 }
 ```
 
@@ -802,7 +802,7 @@ interface Point extends PointX {
 
 ```ts
 interface PointX {
-  x: number;
+	x: number;
 }
 
 type Point = PointX & { y: number };
@@ -818,11 +818,11 @@ type Point = PointX & { y: number };
 
 ```ts
 interface LabeledValue {
-  label: string;
+	label: string;
 }
 
 function printLabel(labeledObj: LabeledValue) {
-  console.log(labeledObj.label);
+	console.log(labeledObj.label);
 }
 
 printLabel({ size: 10, label: 'Size 10 Object' }); // Error
@@ -837,16 +837,16 @@ printLabel(myObj); // OK
 
 ```ts
 interface Props {
-  name: string;
-  age: number;
-  money?: number;
+	name: string;
+	age: number;
+	money?: number;
 }
 
 let p: Props = {
-  name: '张三',
-  age: 25,
-  money: -100000,
-  girl: false
+	name: '张三',
+	age: 25,
+	money: -100000,
+	girl: false
 } as Props; // OK
 ```
 
@@ -854,18 +854,18 @@ let p: Props = {
 
 ```ts
 interface Props {
-  name: string;
-  age: number;
-  money?: number;
-  [key: string]: boolean | string | number | undefined;
+	name: string;
+	age: number;
+	money?: number;
+	[key: string]: boolean | string | number | undefined;
 }
 
 let p: Props = {
-  name: '张三',
-  age: 25,
-  money: -100000,
-  girl: false,
-  once: 123
+	name: '张三',
+	age: 25,
+	money: -100000,
+	girl: false,
+	once: 123
 }; // OK
 ```
 
@@ -882,8 +882,8 @@ let p: Props = {
 
 ```ts
 const identities = <T, U>(value: T, message: U): T => {
-  console.log(message);
-  return value;
+	console.log(message);
+	return value;
 };
 
 console.log(identities<number, string>(12, 'string'));
@@ -900,19 +900,19 @@ console.log(identities(17, 'semLinker'));
 
 ```ts
 function trace<T>(arg: T): T {
-  console.log(arg.size); // Error
-  return arg;
+	console.log(arg.size); // Error
+	return arg;
 }
 
 // 解决
 interface Sizeable {
-  size: number;
-  push: Function;
+	size: number;
+	push: Function;
 }
 const fn = <T extends Sizeable>(arg: T): T => {
-  console.log(arg.size);
-  arg.push(12);
-  return arg;
+	console.log(arg.size);
+	arg.push(12);
+	return arg;
 };
 ```
 
@@ -936,8 +936,8 @@ const fn = <T extends Sizeable>(arg: T): T => {
 
 ```ts
 interface Person {
-  name: string;
-  age: number;
+	name: string;
+	age: number;
 }
 
 const sem: Person = { name: '张三', age: 18 };
@@ -945,17 +945,17 @@ type Sem = typeof sem; // type Sem = Person
 const son: Sem = { name: '李四', age: 17 };
 
 const message = {
-  name: 'jimmy',
-  age: 18,
-  address: {
-    province: '四川',
-    city: '成都'
-  }
+	name: 'jimmy',
+	age: 18,
+	address: {
+		province: '四川',
+		city: '成都'
+	}
 };
 type Message = typeof message;
 
 function toArray(x: number): Array<number> {
-  return [x];
+	return [x];
 }
 
 type Func = typeof toArray; // -> (x: number) => number[]
@@ -972,13 +972,13 @@ type n = typeof num; // 也支持基本类型和字面量类型
 type Keys = 'name' | 'age' | 'gender';
 
 type Person = {
-  [p in Keys]: number | string;
+	[p in Keys]: number | string;
 };
 
 const tom: Person = {
-  name: 'Relsola',
-  age: 17,
-  gender: 'man'
+	name: 'Relsola',
+	age: 17,
+	gender: 'man'
 };
 ```
 
@@ -995,8 +995,8 @@ JavaScript 在执行索引操作时，会先把数值索引先转换为字符串
 
 ```ts
 interface Person {
-  name: string;
-  age: number;
+	name: string;
+	age: number;
 }
 type K1 = keyof Person; // "name" | "age"
 type K2 = keyof []; // "length"  | "pop" | "push" ...
@@ -1025,23 +1025,23 @@ let K3: keyof symbol; // let K1: "valueOf" ...
 ```ts
 // 返回值是any
 function prop(obj: object, key: string) {
-  return obj[key];
+	return obj[key];
 }
 
 function props<T extends object, K extends keyof T>(obj: T, key: K) {
-  return obj[key];
+	return obj[key];
 }
 
 type Todo = {
-  id: number;
-  text: string;
-  done: boolean;
+	id: number;
+	text: string;
+	done: boolean;
 };
 
 const todo: Todo = {
-  id: 1,
-  text: 'learn typescript keyof',
-  done: false
+	id: 1,
+	text: 'learn typescript keyof',
+	done: false
 };
 
 const id = props(todo, 'id'); // const id: number
@@ -1077,8 +1077,8 @@ type NumberType = ArrayElementType<typeof numbers>; // string | number
 ```ts
 type ResolvedType<T> = T extends Promise<infer R> ? R : never;
 async function fetchData() {
-  // 省略异步操作
-  return 'data';
+	// 省略异步操作
+	return 'data';
 } // Promise<string>
 
 type DataType = ResolvedType<ReturnType<typeof fetchData>>; // string
@@ -1090,12 +1090,12 @@ type DataType = ResolvedType<ReturnType<typeof fetchData>>; // string
 
 ```ts
 interface Lengthwise {
-  length: number;
+	length: number;
 }
 
 function loggingIdentity<T extends Lengthwise>(arg: T): T {
-  console.log(arg.length);
-  return arg;
+	console.log(arg.length);
+	return arg;
 }
 
 // 现在这个泛型函数被定义了约束，因此它不再是适用于任意类型：
@@ -1106,14 +1106,14 @@ loggingIdentity({ length: 10, value: 3 });
 
 // 条件类型约束
 type TypeName<T> = T extends string
-  ? 'string'
-  : T extends number
-  ? 'number'
-  : T extends boolean
-  ? 'boolean'
-  : T extends undefined
-  ? 'undefined'
-  : 'object';
+	? 'string'
+	: T extends number
+	? 'number'
+	: T extends boolean
+	? 'boolean'
+	: T extends undefined
+	? 'undefined'
+	: 'object';
 
 type TypeA = TypeName<string>; // "string"
 type TypeB = TypeName<number>; // "number"
@@ -1134,17 +1134,16 @@ type FlattenedArray = Flatten<NestedArray>; // 1 | 2 | 3 | 4
 可以用索引类型让 `TS` 报错 排除可以返回的 `undefined`，且让代码提示变得更加丰富
 
 ```ts
-const getValue = <T, K extends keyof T>(person: T, keys: K[]) =>
-  keys.map(key => person[key]); // T[K][]
+const getValue = <T, K extends keyof T>(person: T, keys: K[]) => keys.map(key => person[key]); // T[K][]
 
 interface Person {
-  name: string;
-  age: number;
+	name: string;
+	age: number;
 }
 
 const person: Person = {
-  name: 'tom',
-  age: 17
+	name: 'tom',
+	age: 17
 };
 
 getValue(person, ['name', 'age']); // ['tom', 17]
@@ -1158,21 +1157,21 @@ getValue(person, ['gender']); // Error
 
 ```ts
 interface TestInterface {
-  name: string;
-  age: number;
+	name: string;
+	age: number;
 }
 // 我们可以通过 + / - 来指定添加还是删除
 
 type OptionalTestInterface<T> = {
-  +readonly [p in keyof T]+?: T[p];
+	+readonly [p in keyof T]+?: T[p];
 };
 
 type newTestInterface = OptionalTestInterface<TestInterface>;
 
 // 等价于
 type newTestInterfaceType = {
-  readonly name?: string;
-  readonly age?: number;
+	readonly name?: string;
+	readonly age?: number;
 };
 ```
 
@@ -1217,12 +1216,12 @@ type newTestInterfaceType = {
 ```ts
 // 定义
 type Partial<T> = {
-  [K in keyof T]?: T[K];
+	[K in keyof T]?: T[K];
 };
 
 interface UserInfo {
-  id: number;
-  name: string;
+	id: number;
+	name: string;
 }
 
 const Relsola: Partial<UserInfo> = { name: 'Relsola' };
@@ -1234,23 +1233,23 @@ const Relsola: Partial<UserInfo> = { name: 'Relsola' };
 
 ```ts
 interface UserInfo {
-  id: number;
-  name: string;
-  fruits: {
-    appleNumber: number;
-    orangeNumber: number;
-  };
+	id: number;
+	name: string;
+	fruits: {
+		appleNumber: number;
+		orangeNumber: number;
+	};
 }
 
 const Relsola: Partial<UserInfo> = { fruits: { orangeNumber: 1 } }; // Error
 
 type DeepPartial<T> = {
-  // 如果是 object，则递归类型
-  [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K];
+	// 如果是 object，则递归类型
+	[K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K];
 };
 
 const Relsola: DeepPartial<UserInfo> = {
-  fruits: { orangeNumber: 1 }
+	fruits: { orangeNumber: 1 }
 };
 ```
 
@@ -1261,13 +1260,13 @@ const Relsola: DeepPartial<UserInfo> = {
 ```ts
 // 定义
 type Required<T> = {
-  // -? 移除可选
-  [K in keyof T]-?: T[K];
+	// -? 移除可选
+	[K in keyof T]-?: T[K];
 };
 
 interface UserInfo {
-  id?: number;
-  name?: string;
+	id?: number;
+	name?: string;
 }
 
 const tom: Required<UserInfo> = { id: 1, name: 'tom' };
@@ -1280,15 +1279,15 @@ const tom: Required<UserInfo> = { id: 1, name: 'tom' };
 ```ts
 // 定义
 type Readonly<T> = {
-  readonly [K in keyof T]: T[K];
+	readonly [K in keyof T]: T[K];
 };
 
 interface Todo {
-  title: string;
+	title: string;
 }
 
 const todo: Readonly<Todo> = {
-  title: 'Delete inactive users'
+	title: 'Delete inactive users'
 };
 
 todo.title = 'Hello'; // Error
@@ -1301,25 +1300,25 @@ todo.title = 'Hello'; // Error
 ```ts
 // 定义
 type Record<K extends keyof any, T> = {
-  [P in K]: T;
+	[P in K]: T;
 };
 
 type Info = Record<string, string | number>;
 const tom: Info = {
-  id: 1,
-  name: 'tom',
-  age: 17
+	id: 1,
+	name: 'tom',
+	age: 17
 };
 
 interface PageInfo {
-  title: string;
+	title: string;
 }
 type Page = 'home' | 'about' | 'contact';
 
 const x: Record<Page, PageInfo> = {
-  about: { title: 'about' },
-  contact: { title: 'contact' },
-  home: { title: 'home' }
+	about: { title: 'about' },
+	contact: { title: 'contact' },
+	home: { title: 'home' }
 };
 ```
 
@@ -1329,11 +1328,7 @@ const x: Record<Page, PageInfo> = {
 
 ```ts
 // 定义
-type Parameters<T extends (...args: any) => any> = T extends (
-  ...args: infer P
-) => any
-  ? P
-  : never;
+type Parameters<T extends (...args: any) => any> = T extends (...args: infer P) => any ? P : never;
 
 type A = Parameters<() => void>; // []
 type B = Parameters<typeof Array.isArray>; // [any]
@@ -1347,11 +1342,9 @@ type D = Parameters<typeof Math.max>; // number[]
 
 ```ts
 // 定义
-type ReturnType<T extends (...arg: any[]) => any> = T extends (
-  ...arg: any[]
-) => infer R
-  ? R
-  : never;
+type ReturnType<T extends (...arg: any[]) => any> = T extends (...arg: any[]) => infer R
+	? R
+	: never;
 
 type Func = (value: number) => string;
 
@@ -1364,15 +1357,18 @@ const foo: ReturnType<Func> = 'string';
 
 ```ts
 // 定义
-type ConstructorParameters<T extends abstract new (...args: any) => any> =
-  T extends abstract new (...args: infer P) => any ? P : never;
+type ConstructorParameters<T extends abstract new (...args: any) => any> = T extends abstract new (
+	...args: infer P
+) => any
+	? P
+	: never;
 
 class Moon {
-  abs: string;
+	abs: string;
 
-  constructor(abs: string) {
-    this.abs = abs;
-  }
+	constructor(abs: string) {
+		this.abs = abs;
+	}
 }
 
 type MoonConstructor = ConstructorParameters<typeof Moon>; // [abs: string]
@@ -1384,15 +1380,18 @@ type MoonConstructor = ConstructorParameters<typeof Moon>; // [abs: string]
 
 ```ts
 // 定义
-type InstanceType<T extends abstract new (...args: any) => any> =
-  T extends abstract new (...args: any) => infer R ? R : any;
+type InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (
+	...args: any
+) => infer R
+	? R
+	: any;
 
 class Moon {
-  abs: string;
+	abs: string;
 
-  constructor(abs: string) {
-    this.abs = abs;
-  }
+	constructor(abs: string) {
+		this.abs = abs;
+	}
 }
 
 type MoonInstance = InstanceType<typeof Moon>; // Moon
@@ -1405,20 +1404,20 @@ type MoonInstance = InstanceType<typeof Moon>; // Moon
 ```ts
 // 定义
 type Pick<T, K extends keyof T> = {
-  [P in K]: T[P];
+	[P in K]: T[P];
 };
 
 interface Todo {
-  title: string;
-  description: string;
-  completed: boolean;
+	title: string;
+	description: string;
+	completed: boolean;
 }
 
 type TodoPreview = Pick<Todo, 'title' | 'completed'>;
 
 const todo: TodoPreview = {
-  title: 'Clean room',
-  completed: false
+	title: 'Clean room',
+	completed: false
 };
 ```
 
@@ -1459,16 +1458,16 @@ type T1 = Extract<string | number | (() => void), Function>; // () =>void
 type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;
 
 interface Todo {
-  title: string;
-  description: string;
-  completed: boolean;
+	title: string;
+	description: string;
+	completed: boolean;
 }
 
 type TodoPreview = Omit<Todo, 'description'>;
 
 const todo: TodoPreview = {
-  title: 'Clean room',
-  completed: false
+	title: 'Clean room',
+	completed: false
 };
 ```
 
@@ -1551,69 +1550,69 @@ type UncapitalizedGreeting = Uncapitalize<Greeting>; // "hello, world"
 */
 // compilerOptions 选项
 {
-  /* 根选项 */
-  "include": ["./src/**/*"], // 指定被编译文件所在的目录
-  "exclude": [], // 指定不需要被编译的目录
-  //使用小技巧：在填写路径时 ** 表示任意目录， * 表示任意文件。
+	/* 根选项 */
+	"include": ["./src/**/*"], // 指定被编译文件所在的目录
+	"exclude": [], // 指定不需要被编译的目录
+	//使用小技巧：在填写路径时 ** 表示任意目录， * 表示任意文件。
 
-  /* 项目选项 */
-  "compilerOptions": {
-    /* 基本选项 */
-    "target": "es5", // 指定 ECMAScript 目标版本: 'ES3' (default), 'ES5', 'ES6'/'ES2015', 'ES2016', 'ES2017', or 'ESNEXT'
-    "module": "commonjs", // 指定使用模块: 'commonjs', 'amd', 'system', 'umd' or 'es2015'
-    "lib": [], // 指定要包含在编译中的库文件
-    "allowJs": true, // 允许编译 javascript 文件
-    "checkJs": true, // 报告 javascript 文件中的错误
-    "jsx": "preserve", // 指定 jsx 代码的生成: 'preserve', 'react-native', or 'react'
-    "declaration": true, // 生成相应的 '.d.ts' 文件
-    "sourceMap": true, // 生成相应的 '.map' 文件
-    "outFile": "./", // 将输出文件合并为一个文件
-    "outDir": "./", // 指定输出目录
-    "rootDir": "./", // 用来控制输出目录结构 --outDir.
-    "removeComments": true, // 删除编译后的所有的注释
-    "noEmit": true, // 不生成输出文件
-    "importHelpers": true, // 从 tslib 导入辅助工具函数
-    "isolatedModules": true, // 将每个文件做为单独的模块 （与 'ts.transpileModule' 类似）.
+	/* 项目选项 */
+	"compilerOptions": {
+		/* 基本选项 */
+		"target": "es5", // 指定 ECMAScript 目标版本: 'ES3' (default), 'ES5', 'ES6'/'ES2015', 'ES2016', 'ES2017', or 'ESNEXT'
+		"module": "commonjs", // 指定使用模块: 'commonjs', 'amd', 'system', 'umd' or 'es2015'
+		"lib": [], // 指定要包含在编译中的库文件
+		"allowJs": true, // 允许编译 javascript 文件
+		"checkJs": true, // 报告 javascript 文件中的错误
+		"jsx": "preserve", // 指定 jsx 代码的生成: 'preserve', 'react-native', or 'react'
+		"declaration": true, // 生成相应的 '.d.ts' 文件
+		"sourceMap": true, // 生成相应的 '.map' 文件
+		"outFile": "./", // 将输出文件合并为一个文件
+		"outDir": "./", // 指定输出目录
+		"rootDir": "./", // 用来控制输出目录结构 --outDir.
+		"removeComments": true, // 删除编译后的所有的注释
+		"noEmit": true, // 不生成输出文件
+		"importHelpers": true, // 从 tslib 导入辅助工具函数
+		"isolatedModules": true, // 将每个文件做为单独的模块 （与 'ts.transpileModule' 类似）.
 
-    /* 严格检查选项 */
-    "strict": true, // 开启所有严格的类型检查
-    "alwaysStrict": true, // 在代码中注入'use strict'
-    "noImplicitAny": true, // 不允许隐式的any类型
-    "noImplicitThis": true, // 不允许this有隐式的any类型
-    "strictNullChecks": true, // 不允许把null、undefined赋值给其他类型的变量
-    "strictBindCallApply": true, // 严格的bind/call/apply检查
-    "strictFunctionTypes": true, // 不允许函数参数双向协变
-    "strictPropertyInitialization": true, // 类的实例属性必须初始化
+		/* 严格检查选项 */
+		"strict": true, // 开启所有严格的类型检查
+		"alwaysStrict": true, // 在代码中注入'use strict'
+		"noImplicitAny": true, // 不允许隐式的any类型
+		"noImplicitThis": true, // 不允许this有隐式的any类型
+		"strictNullChecks": true, // 不允许把null、undefined赋值给其他类型的变量
+		"strictBindCallApply": true, // 严格的bind/call/apply检查
+		"strictFunctionTypes": true, // 不允许函数参数双向协变
+		"strictPropertyInitialization": true, // 类的实例属性必须初始化
 
-    /* 额外的检查 */
-    "noUnusedLocals": true, // 是否检查未使用的局部变量
-    "noUnusedParameters": true, // 是否检查未使用的参数
-    "noImplicitReturns": true, // 检查函数是否不含有隐式返回值
-    "noImplicitOverride": true, // 是否检查子类继承自基类时，其重载的函数命名与基类的函数不同步问题
-    "noFallthroughCasesInSwitch": true, // 检查switch中是否含有case没有使用break跳出
-    "noUncheckedIndexedAccess": true, // 是否通过索引签名来描述对象上有未知键但已知值的对象
-    "noPropertyAccessFromIndexSignature": true, // 是否通过" . “(obj.key) 语法访问字段和"索引”( obj[“key”])， 以及在类型中声明属性的方式之间的一致性
+		/* 额外的检查 */
+		"noUnusedLocals": true, // 是否检查未使用的局部变量
+		"noUnusedParameters": true, // 是否检查未使用的参数
+		"noImplicitReturns": true, // 检查函数是否不含有隐式返回值
+		"noImplicitOverride": true, // 是否检查子类继承自基类时，其重载的函数命名与基类的函数不同步问题
+		"noFallthroughCasesInSwitch": true, // 检查switch中是否含有case没有使用break跳出
+		"noUncheckedIndexedAccess": true, // 是否通过索引签名来描述对象上有未知键但已知值的对象
+		"noPropertyAccessFromIndexSignature": true, // 是否通过" . “(obj.key) 语法访问字段和"索引”( obj[“key”])， 以及在类型中声明属性的方式之间的一致性
 
-    /* 模块解析选项 */
-    "moduleResolution": "Node", // 选择模块解析策略： 'node' (Node.js) or 'classic' (TypeScript pre-1.6)
-    "baseUrl": "./", // 用于解析非相对模块名称的基目录
-    "paths": {}, // 模块名到基于 baseUrl 的路径映射的列表
-    "rootDirs": [], // 根文件夹列表，其组合内容表示项目运行时的结构内容
-    "typeRoots": [], // 包含类型声明的文件列表
-    "types": [], // 需要包含的类型声明文件名列表
-    "allowSyntheticDefaultImports": true, // 允许从没有设置默认导出的模块中默认导入。
+		/* 模块解析选项 */
+		"moduleResolution": "Node", // 选择模块解析策略： 'node' (Node.js) or 'classic' (TypeScript pre-1.6)
+		"baseUrl": "./", // 用于解析非相对模块名称的基目录
+		"paths": {}, // 模块名到基于 baseUrl 的路径映射的列表
+		"rootDirs": [], // 根文件夹列表，其组合内容表示项目运行时的结构内容
+		"typeRoots": [], // 包含类型声明的文件列表
+		"types": [], // 需要包含的类型声明文件名列表
+		"allowSyntheticDefaultImports": true, // 允许从没有设置默认导出的模块中默认导入。
 
-    /* Source Map Options */
-    "sourceRoot": "./", // 指定调试器应该找到 TypeScript 文件而不是源文件的位置
-    "mapRoot": "./", // 指定调试器应该找到映射文件而不是生成文件的位置
-    "inlineSourceMap": true, // 生成单个 sourcemaps 文件，而不是将 sourcemaps 生成不同的文件
-    "inlineSources": true, // 将代码与 sourcemaps 生成到一个文件中，要求同时设置了 --inlineSourceMap 或 --sourceMap 属性
+		/* Source Map Options */
+		"sourceRoot": "./", // 指定调试器应该找到 TypeScript 文件而不是源文件的位置
+		"mapRoot": "./", // 指定调试器应该找到映射文件而不是生成文件的位置
+		"inlineSourceMap": true, // 生成单个 sourcemaps 文件，而不是将 sourcemaps 生成不同的文件
+		"inlineSources": true, // 将代码与 sourcemaps 生成到一个文件中，要求同时设置了 --inlineSourceMap 或 --sourceMap 属性
 
-    /* 其他选项 */
-    "experimentalDecorators": true, // 启用装饰器
-    "emitDecoratorMetadata": true, // 为装饰器提供元数据的支持
-    "resolveJsonModule": true, //是否解析 JSON 模块
-    "esModuleInterop": true // 允许 export 导出 由import from 导入
-  }
+		/* 其他选项 */
+		"experimentalDecorators": true, // 启用装饰器
+		"emitDecoratorMetadata": true, // 为装饰器提供元数据的支持
+		"resolveJsonModule": true, //是否解析 JSON 模块
+		"esModuleInterop": true // 允许 export 导出 由import from 导入
+	}
 }
 ```
