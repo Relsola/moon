@@ -1,0 +1,91 @@
+[
+	{
+		"label": "JavaScript",
+		"data": [
+			{
+				"name": "MDN",
+				"href": "https://developer.mozilla.org/zh-CN/"
+			},
+			{
+				"name": "Vue3",
+				"href": "https://cn.vuejs.org/"
+			},
+			{
+				"name": "Element Plus",
+				"href": "https://element-plus.org/zh-CN/#/zh-CN"
+			},
+			{
+				"name": "TailwindCSS",
+				"href": "https://www.tailwindcss.cn/"
+			},
+			{
+				"name": "JS正则表达式完整教程",
+				"href": "https://juejin.cn/post/6844903487155732494?searchId=202412221741358057531E480441E6BB82"
+			}
+		]
+	},
+	{
+		"label": "Java",
+		"data": [
+			{
+				"name": "Java 进阶之路",
+				"href": "https://javabetter.cn/"
+			},
+			{
+				"name": "Java 全栈知识体系",
+				"href": "https://pdai.tech/"
+			},
+			{
+				"name": "Java 学习&面试指南",
+				"href": "https://javaguide.cn/home.html"
+			}
+		]
+	},
+	{
+		"label": "GitHub",
+		"data": [
+			{
+				"name": "C++ 编写的终端俄罗斯方块游戏",
+				"href": "https://github.com/taylorconor/tinytetris"
+			},
+			{
+				"name": "C++ 编写的终端 2048 游戏",
+				"href": "https://github.com/plibither8/2048.cpp"
+			}
+		]
+	},
+	{
+		"label": "Game",
+		"data": [
+			{
+				"name": "Godot Engine 简体中文文档",
+				"href": "https://docs.godotengine.org/zh-cn/4.x/about/introduction.html"
+			},
+			{
+				"name": "游戏开发-技术图谱",
+				"href": "https://github.com/gonglei007/GameDevMind"
+			},
+			{
+				"name": "微软官方 C# 文档",
+				"href": "https://learn.microsoft.com/zh-cn/dotnet/csharp/tour-of-csharp/?source=docs"
+			}
+		]
+	},
+	{
+		"label": "Other",
+		"data": [
+			{
+				"name": "HelloGitHub",
+				"href": "https://hellogithub.com/"
+			},
+			{
+				"name": "JSON 在线工具",
+				"href": "https://www.sojson.com/"
+			},
+			{
+				"name": "在线工具",
+				"href": "https://tool.lu/"
+			}
+		]
+	}
+]

@@ -4,7 +4,7 @@ title: Link
 ---
 
 <script setup>
-import LinkPage from './components/LinkPage.vue'
+import LinkPage from './LinkPage.vue'
 </script>
 
 <LinkPage />
