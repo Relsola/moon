@@ -14,83 +14,91 @@ const root = process.cwd();
 const path = (path: string) => resolve(root, path);
 
 export default defineConfig({
-  title: 'Relsola',
-  description: "Relsola's blog.",
-  srcDir: 'docs/',
-  base: '/moon/',
-  head: [['link', { rel: 'icon', href: '/moon/favicon.jpg' }]],
+	title: 'Relsola',
+	description: "Relsola's blog.",
+	srcDir: 'docs/',
+	base: '/moon/',
+	head: [['link', { rel: 'icon', href: '/moon/favicon.jpg' }]],
 
-  themeConfig: {
-    nav: [
-      { text: 'Home', link: '/' },
-      { text: 'Archives', link: '/archives/summer-pockets' },
-      { text: 'Learn', link: '/learn/es6' },
-      { text: 'Link', link: '/link/' },
-      {
-        text: 'GitHub',
-        items: [
-          { text: 'cmd-games', link: 'https://github.com/Relsola/sudoku' },
-          { text: 'osu!', link: 'https://github.com/ppy/osu' }
-        ]
-      }
-    ],
+	themeConfig: {
+		nav: [
+			{ text: 'Home', link: '/' },
+			{ text: 'Archives', link: '/archives/summer-pockets' },
+			{ text: 'Learn', link: '/learn/es6' },
+			{ text: 'Link', link: '/link/' },
+			{
+				text: 'GitHub',
+				items: [
+					{ text: 'cmd-games', link: 'https://github.com/Relsola/sudoku' },
+					{ text: 'osu!', link: 'https://github.com/ppy/osu' }
+				]
+			}
+		],
 
-    sidebar: {
-      'archives/': [
-        {
-          text: '2024',
-          collapsed: false,
-          items: [{ text: 'Summer Pockets', link: '/archives/summer-pockets' }]
-        }
-      ],
-      'learn/': [
-        {
-          text: 'JavaScript',
-          collapsed: false,
-          items: [{ text: 'ES6+', link: '/learn/es6' }]
-        },
-        {
-          text: 'Java',
-          collapsed: false,
-          items: []
-        }
-      ]
-    },
+		sidebar: {
+			'archives/': [
+				{
+					text: '2024',
+					collapsed: false,
+					items: [{ text: 'Summer Pockets', link: '/archives/summer-pockets' }]
+				}
+			],
+			'learn/': [
+				{
+					text: 'JavaScript',
+					collapsed: false,
+					items: [{ text: 'ES6+', link: '/learn/es6' }]
+				},
+				{
+					text: 'Java',
+					collapsed: false,
+					items: []
+				},
+				{
+					text: '计算机基础',
+					collapsed: false,
+					items: [{ text: '数据结构与算法', link: '/learn/algorithm' }]
+				}
+			]
+		},
 
-    outline: {
-      level: 2,
-      label: '页面导航'
-    },
+		outline: {
+			level: 2,
+			label: '页面导航'
+		},
 
-    socialLinks: [
-      { icon: 'github', link: 'https://github.com/Relsola' },
-      {
-        icon: 'steam',
-        link: 'https://steamcommunity.com/profiles/76561198871195039/'
-      }
-    ]
-  },
+		socialLinks: [
+			{ icon: 'github', link: 'https://github.com/Relsola' },
+			{
+				icon: 'steam',
+				link: 'https://steamcommunity.com/profiles/76561198871195039/'
+			}
+		]
+	},
 
-  vite: {
-    plugins: [
-      UnoCSS(),
-      AutoImport({
-        dts: path('types/auto-imports.d.ts'),
-        imports: ['vue'],
-        resolvers: [ElementPlusResolver()]
-      }),
-      Components({
-        resolvers: [ElementPlusResolver()],
-        dts: path('types/components.d.ts')
-      })
-    ],
+	vite: {
+		plugins: [
+			UnoCSS(),
+			AutoImport({
+				dts: path('types/auto-imports.d.ts'),
+				imports: ['vue'],
+				resolvers: [ElementPlusResolver()]
+			}),
+			Components({
+				resolvers: [ElementPlusResolver()],
+				dts: path('types/components.d.ts')
+			})
+		],
 
-    resolve: {
-      alias: [{ find: '@assets', replacement: path('assets') }]
-    },
+		resolve: {
+			alias: [
+				{ find: '@', replacement: path('') },
+				{ find: '@assets', replacement: path('assets') }
+			]
+		},
 
-    ssr: {
-      noExternal: [/element-plus/]
-    }
-  }
+		ssr: {
+			noExternal: [/element-plus/]
+		}
+	}
 });
