@@ -62,7 +62,11 @@ export default defineConfig({
 					collapsed: false,
 					items: []
 				},
-
+				{
+					text: 'C++',
+					collapsed: false,
+					items: []
+				},
 				{
 					text: '计算机基础',
 					collapsed: false,
