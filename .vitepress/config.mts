@@ -63,6 +63,11 @@ export default defineConfig({
 					items: []
 				},
 				{
+					text: 'C#',
+					collapsed: false,
+					items: [{ text: 'C# 开发', link: '/learn/csharp' }]
+				},
+				{
 					text: 'C++',
 					collapsed: false,
 					items: []
