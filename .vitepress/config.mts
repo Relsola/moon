@@ -45,6 +45,16 @@ export default defineConfig({
 			],
 			'learn/': [
 				{
+					text: 'C++',
+					collapsed: false,
+					items: []
+				},
+				{
+					text: 'C#',
+					collapsed: false,
+					items: [{ text: 'C# 开发', link: '/learn/csharp' }]
+				},
+				{
 					text: 'JavaScript',
 					collapsed: false,
 					items: [
@@ -58,24 +68,14 @@ export default defineConfig({
 					items: []
 				},
 				{
-					text: 'SQL',
-					collapsed: false,
-					items: []
-				},
-				{
-					text: 'C#',
-					collapsed: false,
-					items: [{ text: 'C# 开发', link: '/learn/csharp' }]
-				},
-				{
-					text: 'C++',
-					collapsed: false,
-					items: []
-				},
-				{
 					text: '计算机基础',
 					collapsed: false,
 					items: [{ text: '数据结构与算法', link: '/learn/algorithm' }]
+				},
+				{
+					text: 'SQL',
+					collapsed: false,
+					items: []
 				}
 			]
 		},
