@@ -4,13 +4,11 @@
 			<template #label>
 				{{ label }}
 			</template>
-			<template v-if="activeName === label">
-				<a v-for="{ name, href } in data" :href="href" target="_blank">
-					<el-card class="inline-block m2 w80" shadow="hover">
-						{{ name }}
-					</el-card>
-				</a>
-			</template>
+			<a v-for="{ name, href } in data" :href="href" target="_blank">
+				<el-card class="inline-block m2 w80" shadow="hover">
+					{{ name }}
+				</el-card>
+			</a>
 		</el-tab-pane>
 	</el-tabs>
 
