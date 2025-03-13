@@ -47,6 +47,10 @@
 			{
 				"name": "微软官方 C# 文档",
 				"href": "https://docs.microsoft.com/zh-cn/dotnet/csharp/"
+			},
+			{
+				"name": ".NET 官方文档",
+				"href": "https://learn.microsoft.com/zh-cn/dotnet/"
 			}
 		]
 	},
