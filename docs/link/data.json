@@ -78,7 +78,16 @@
 	},
 	{
 		"label": "开源书籍",
-		"data": []
+		"data": [
+			{
+				"name": "《ES6 入门教程》",
+				"href": "https://es6.ruanyifeng.com/"
+			},
+			{
+				"name": "《把时间当作朋友》",
+				"href": "https://github.com/xiaolai/time-as-a-friend"
+			}
+		]
 	},
 	{
 		"label": "Tools",
