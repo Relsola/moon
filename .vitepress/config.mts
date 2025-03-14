@@ -65,7 +65,7 @@ export default defineConfig({
 				{
 					text: 'Java',
 					collapsed: false,
-					items: []
+					items: [{ text: 'Java 开发', link: '/learn/java' }]
 				},
 				{
 					text: '计算机基础',
