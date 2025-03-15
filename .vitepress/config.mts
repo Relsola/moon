@@ -76,7 +76,7 @@ export default defineConfig({
 				{
 					text: 'SQL',
 					collapsed: false,
-					items: []
+					items: [{ text: 'SQL 语言', link: '/learn/sql' }]
 				}
 			]
 		},
