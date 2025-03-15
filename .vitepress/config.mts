@@ -59,7 +59,8 @@ export default defineConfig({
 					collapsed: false,
 					items: [
 						{ text: 'ES6+', link: '/learn/es6' },
-						{ text: 'TypeScript', link: '/learn/typescript' }
+						{ text: 'TypeScript', link: '/learn/typescript' },
+						{ text: 'Vue3 源码分析', link: '/learn/vue3-source-code' }
 					]
 				},
 				{
