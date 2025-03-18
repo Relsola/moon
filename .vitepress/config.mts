@@ -40,7 +40,10 @@ export default defineConfig({
 				{
 					text: '2024',
 					collapsed: false,
-					items: [{ text: 'Summer Pockets', link: '/archives/summer-pockets' }]
+					items: [
+						{ text: 'Summer Pockets', link: '/archives/summer-pockets' },
+						{ text: '程序设计', link: '/archives/programming' }
+					]
 				}
 			],
 			'learn/': [
