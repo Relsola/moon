@@ -1,7 +1,3 @@
----
-outline: [2, 3]
----
-
 # ES6+
 
 ## 块级作用域
@@ -1309,3 +1305,12 @@ console.log(it.next().value); // ['red', 'green', 'blue']
 console.log(it.next().value); // [1, 2, 3, 4]
 console.log(it.next().value); // undefined
 ```
+
+## Class 语法
+
+## Symbol
+
+## 参考资料
+
+- [ES6 标准入门（第 3 版）](https://es6.ruanyifeng.com/)
+- [深入理解 ES6](https://wangtunan.github.io/blog/books/javascript/es6.html)
