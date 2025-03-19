@@ -48,14 +48,12 @@ export default defineConfig({
 			],
 			'learn/': [
 				{
-					text: 'C++',
+					text: '游戏开发',
 					collapsed: false,
-					items: []
-				},
-				{
-					text: 'C#',
-					collapsed: false,
-					items: [{ text: 'C# 开发', link: '/learn/csharp' }]
+					items: [
+						{ text: 'C# 开发', link: '/learn/csharp' },
+						{ text: 'C++ 开发', link: '/learn/cpp' }
+					]
 				},
 				{
 					text: 'JavaScript',
