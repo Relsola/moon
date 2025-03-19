@@ -67,17 +67,15 @@ export default defineConfig({
 				{
 					text: 'Java',
 					collapsed: false,
-					items: [{ text: 'Java 开发', link: '/learn/java' }]
+					items: [
+						{ text: 'Java 开发', link: '/learn/java' },
+						{ text: 'SQL 语言', link: '/learn/sql' }
+					]
 				},
 				{
 					text: '计算机基础',
 					collapsed: false,
 					items: [{ text: '数据结构与算法', link: '/learn/algorithm' }]
-				},
-				{
-					text: 'SQL',
-					collapsed: false,
-					items: [{ text: 'SQL 语言', link: '/learn/sql' }]
 				}
 			]
 		},
