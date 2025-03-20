@@ -10,6 +10,5 @@
 node_modules
 dist/
 
-# Java Logs and cache
-target/
-Logs/
+#files
+pnpm-lock.yaml
