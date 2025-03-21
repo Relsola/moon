@@ -24,7 +24,7 @@ export default defineConfig({
 		nav: [
 			{ text: 'Home', link: '/' },
 			{ text: 'Archives', link: '/archives/summer-pockets' },
-			{ text: 'Learn', link: '/learn/es6' },
+			{ text: 'Learn', link: '/learn/frontend/es6' },
 			{ text: 'Link', link: '/link/' },
 			{
 				text: 'GitHub',
@@ -56,10 +56,10 @@ export default defineConfig({
 					]
 				},
 				{
-					text: 'JavaScript',
+					text: 'Frontend',
 					collapsed: false,
 					items: [
-						{ text: 'ES6+', link: '/learn/es6' },
+						{ text: 'ES6+', link: '/learn/frontend/es6' },
 						{ text: 'TypeScript', link: '/learn/typescript' },
 						{ text: 'Vue3 源码分析', link: '/learn/vue3-source-code' }
 					]
