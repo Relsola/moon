@@ -14,8 +14,7 @@
 		"baseUrl": ".",
 		"paths": {
 			"@theme/*": [".vitepress/theme/*"],
-			"@/*": ["./*"],
-			"@assets*": ["./assets/*"]
+			"@/*": ["./*"]
 		}
 	},
 	"include": ["env.d.ts", "components/**/*", ".vitepress/**/*"]

@@ -109,10 +109,7 @@ export default defineConfig({
 		],
 
 		resolve: {
-			alias: [
-				{ find: '@', replacement: path('') },
-				{ find: '@assets', replacement: path('assets') }
-			]
+			alias: [{ find: '@', replacement: path('') }]
 		},
 
 		ssr: {
