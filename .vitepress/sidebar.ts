@@ -16,10 +16,14 @@ export default {
 			]
 		}
 	],
+
 	'frontend/typescript': [
 		{
 			text: 'TypeScript',
-			items: [{ text: '数据类型', link: '/frontend/typescript/data-types' }]
+			items: [
+        { text: '数据类型', link: '/frontend/typescript/data-types' },
+        { text: '数据类型', link: '/frontend/typescript/data-types' }
+      ]
 		}
 	]
 
