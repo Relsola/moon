@@ -10,6 +10,7 @@ export default {
 				{ text: '数组的扩展', link: '/frontend/es6/array' },
 				{ text: '对象的扩展', link: '/frontend/es6/object' },
 				{ text: '解构赋值', link: '/frontend/es6/destructuring' },
+				{ text: '迭代器和生成器', link: '/frontend/es6/iterator-generator' },
 				{ text: '参考资料', link: '/frontend/es6/references' }
 			]
 		}
