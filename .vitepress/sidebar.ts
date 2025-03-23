@@ -7,6 +7,7 @@ export default {
 				{ text: '字符串的扩展', link: '/frontend/es6/string' },
 				{ text: '数值的扩展', link: '/frontend/es6/number' },
 				{ text: '函数的扩展', link: '/frontend/es6/function' },
+				{ text: '数组的扩展', link: '/frontend/es6/array' },
 				{ text: '参考资料', link: '/frontend/es6/references' }
 			]
 		}
