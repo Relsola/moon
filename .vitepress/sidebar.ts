@@ -4,6 +4,7 @@ export default {
 			text: 'ES6+',
 			items: [
 				{ text: '块级作用域', link: '/frontend/es6/block-scope' },
+				{ text: '函数的扩展', link: '/frontend/es6/function' },
 				{ text: '参考资料', link: '/frontend/es6/references' }
 			]
 		}
