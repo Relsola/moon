@@ -11,6 +11,7 @@ export default {
 				{ text: '对象的扩展', link: '/frontend/es6/object' },
 				{ text: '解构赋值', link: '/frontend/es6/destructuring' },
 				{ text: '迭代器和生成器', link: '/frontend/es6/iterator-generator' },
+				{ text: '模块化', link: '/frontend/es6/module' },
 				{ text: '参考资料', link: '/frontend/es6/references' }
 			]
 		}
