@@ -9,6 +9,7 @@ export default {
 				{ text: '函数的扩展', link: '/frontend/es6/function' },
 				{ text: '数组的扩展', link: '/frontend/es6/array' },
 				{ text: '对象的扩展', link: '/frontend/es6/object' },
+				{ text: '解构赋值', link: '/frontend/es6/destructuring' },
 				{ text: '参考资料', link: '/frontend/es6/references' }
 			]
 		}
