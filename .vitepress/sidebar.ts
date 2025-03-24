@@ -21,9 +21,10 @@ export default {
 		{
 			text: 'TypeScript',
 			items: [
-        { text: '数据类型', link: '/frontend/typescript/data-types' },
-        { text: '数据类型', link: '/frontend/typescript/data-types' }
-      ]
+				{ text: '数据类型', link: '/frontend/typescript/data-types' },
+				{ text: '类型推断', link: '/frontend/typescript/type-inference' },
+				{ text: 'TS 类型', link: '/frontend/typescript/ts-type' }
+			]
 		}
 	]
 

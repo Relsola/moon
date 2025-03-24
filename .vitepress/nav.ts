@@ -23,6 +23,14 @@ export default [
 		]
 	},
 	{
+		text: 'Computer',
+		items: [
+			{ text: '数据结构与算法', link: '' },
+			{ text: 'Linux', link: '' },
+			{ text: 'Git', link: '' }
+		]
+	},
+	{
 		text: 'Interest',
 		items: [
 			{ text: '游戏记录', link: '/learn/frontend/es6' },
