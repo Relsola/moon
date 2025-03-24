@@ -23,7 +23,10 @@ export default {
 			items: [
 				{ text: '数据类型', link: '/frontend/typescript/data-types' },
 				{ text: '类型推断', link: '/frontend/typescript/type-inference' },
-				{ text: 'TS 类型', link: '/frontend/typescript/ts-type' }
+				{ text: 'TS 类型', link: '/frontend/typescript/ts-type' },
+				{ text: '接口', link: '/frontend/typescript/interface' },
+				{ text: '泛型', link: '/frontend/typescript/generics' },
+				{ text: '关键字', link: '/frontend/typescript/ts-keywords' }
 			]
 		}
 	]

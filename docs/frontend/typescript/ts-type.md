@@ -246,3 +246,50 @@ type ABC = A & B & C;
 
 const abc: ABC = { x: { d: true, e: '', f: 666 } }; // OK
 ```
+
+## 索引类型
+
+在实际开发中，我们经常能遇到这样的场景：在对象中获取一些属性的值，然后建立对应的集合。  
+可以用索引类型让 `TS` 报错 排除可以返回的 `undefined`，且让代码提示变得更加丰富
+
+```ts
+const getValue = <T, K extends keyof T>(person: T, keys: K[]) => keys.map(key => person[key]); // T[K][]
+
+interface Person {
+	name: string;
+	age: number;
+}
+
+const person: Person = {
+	name: 'tom',
+	age: 17
+};
+
+getValue(person, ['name', 'age']); // ['tom', 17]
+
+getValue(person, ['gender']); // Error
+```
+
+## 映射类型
+
+根据旧的类型创建出新的类型, 我们称之为映射类型
+
+```ts
+interface TestInterface {
+	name: string;
+	age: number;
+}
+// 我们可以通过 + / - 来指定添加还是删除
+
+type OptionalTestInterface<T> = {
+	+readonly [p in keyof T]+?: T[p];
+};
+
+type newTestInterface = OptionalTestInterface<TestInterface>;
+
+// 等价于
+type newTestInterfaceType = {
+	readonly name?: string;
+	readonly age?: number;
+};
+```
