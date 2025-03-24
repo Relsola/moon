@@ -27,7 +27,8 @@ export default {
 				{ text: '接口', link: '/frontend/typescript/interface' },
 				{ text: '泛型', link: '/frontend/typescript/generics' },
 				{ text: '关键字', link: '/frontend/typescript/ts-keywords' },
-				{ text: '泛型工具', link: '/frontend/typescript/generics-utility' }
+				{ text: '泛型工具', link: '/frontend/typescript/generics-utility' },
+				{ text: '项目配置', link: '/frontend/typescript/handbook' }
 			]
 		}
 	]
