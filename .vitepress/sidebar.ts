@@ -26,7 +26,8 @@ export default {
 				{ text: 'TS 类型', link: '/frontend/typescript/ts-type' },
 				{ text: '接口', link: '/frontend/typescript/interface' },
 				{ text: '泛型', link: '/frontend/typescript/generics' },
-				{ text: '关键字', link: '/frontend/typescript/ts-keywords' }
+				{ text: '关键字', link: '/frontend/typescript/ts-keywords' },
+				{ text: '泛型工具', link: '/frontend/typescript/generics-utility' }
 			]
 		}
 	]
