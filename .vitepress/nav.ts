@@ -26,7 +26,11 @@ export default [
 		text: 'Computer',
 		items: [
 			{ text: '数据结构与算法', link: '' },
+			{ text: '操作系统', link: '' },
+			{ text: '编译原理', link: '' },
 			{ text: 'Linux', link: '' },
+			{ text: 'Shell', link: '' },
+			{ text: 'Docker', link: '' },
 			{ text: 'Git', link: '' }
 		]
 	},
