@@ -10,16 +10,21 @@ export default [
 	{
 		text: 'Frontend',
 		items: [
+			{ text: '总论', link: '' },
 			{ text: 'ES6+', link: '/frontend/es6/block-scope' },
-			{ text: 'TypeScript', link: '/frontend/typescript/data-types' }
+			{ text: 'TypeScript', link: '/frontend/typescript/data-types' },
+			{ text: 'TS 类型挑战', link: '' },
+			{ text: 'Web API', link: '' }
 		]
 	},
 	{
 		text: 'Backend',
 		items: [
 			{ text: 'Java 知识体系', link: '' },
-			{ text: 'Spring Boot 开发', link: '' },
-			{ text: 'SQL 语言', link: '' }
+			{ text: '常用框架', link: '' },
+			{ text: '数据库', link: '' },
+			{ text: '系统设计', link: '' },
+			{ text: '分布式', link: '' }
 		]
 	},
 	{
@@ -38,8 +43,8 @@ export default [
 		text: 'Interest',
 		items: [
 			{ text: '游戏记录', link: '' },
-			{ text: 'C++ 知识体系', link: '' },
-			{ text: 'C# 知识体系', link: '' },
+			{ text: 'C++ 开发', link: '' },
+			{ text: 'C# 开发', link: '' },
 			{ text: 'Godot 开发', link: '' },
 			{ text: '概率论', link: '' },
 			{ text: '离散数学', link: '' }
