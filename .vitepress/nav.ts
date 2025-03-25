@@ -17,9 +17,9 @@ export default [
 	{
 		text: 'Backend',
 		items: [
-			{ text: 'Java 知识体系', link: '/learn/frontend/es6' },
-			{ text: 'Spring Boot 开发', link: '/learn/frontend/es6' },
-			{ text: 'SQL 语言', link: '/learn/frontend/es6' }
+			{ text: 'Java 知识体系', link: '' },
+			{ text: 'Spring Boot 开发', link: '' },
+			{ text: 'SQL 语言', link: '' }
 		]
 	},
 	{
@@ -37,10 +37,12 @@ export default [
 	{
 		text: 'Interest',
 		items: [
-			{ text: '游戏记录', link: '/learn/frontend/es6' },
-			{ text: 'C++ 知识体系', link: '/learn/frontend/es6' },
-			{ text: 'C# 知识体系', link: '/learn/frontend/es6' },
-			{ text: 'Godot 开发', link: '/learn/frontend/es6' }
+			{ text: '游戏记录', link: '' },
+			{ text: 'C++ 知识体系', link: '' },
+			{ text: 'C# 知识体系', link: '' },
+			{ text: 'Godot 开发', link: '' },
+			{ text: '概率论', link: '' },
+			{ text: '离散数学', link: '' }
 		]
 	},
 	{ text: 'Link', link: '/link/' },
