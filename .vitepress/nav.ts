@@ -7,7 +7,7 @@ export default [
 	{
 		text: 'Frontend',
 		items: [
-			{ text: '总论', link: '/frontend/general' },
+			{ text: '总论', link: '/frontend/general/best-practices' },
 			{ text: 'ES6+', link: '/frontend/es6/block-scope' },
 			{ text: 'TypeScript', link: '/frontend/typescript/data-types' },
 			{ text: 'TS 类型挑战', link: '/kt' },

@@ -6,6 +6,24 @@ export default {
 		}
 	],
 
+	'frontend/general': [
+		{
+			text: '最佳实践',
+			collapsed: false,
+			items: [{ text: '最佳实践', link: '/frontend/general/best-practices' }]
+		},
+		{
+			text: '用户体验优化',
+			collapsed: false,
+			items: []
+		},
+		{
+			text: '前端性能优化',
+			collapsed: false,
+			items: []
+		}
+	],
+
 	'frontend/es6': [
 		{
 			text: 'ES6+',
