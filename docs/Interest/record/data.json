@@ -1,0 +1,29 @@
+{
+	"game": [
+		{
+			"name": "Summer Pockets",
+			"link": "https://store.steampowered.com/app/897220/Summer_Pockets/",
+			"date": "2025-03-25",
+			"platform": "PC",
+			"score": "",
+			"thought": ""
+		},
+		{
+			"name": "Blood borne",
+			"link": "",
+			"date": "2024-04-28",
+			"platform": "PS5",
+			"score": "",
+			"thought": ""
+		},
+		{
+			"name": "Mahjong",
+			"link": "https://store.steampowered.com/app/1329410/MahjongSoul/",
+			"date": "2021-12-30",
+			"platform": "PC",
+			"score": "",
+			"thought": ""
+		}
+	],
+	"anime": []
+}

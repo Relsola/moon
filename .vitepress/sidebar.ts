@@ -38,16 +38,6 @@ export default {
 				{ text: '项目配置', link: '/frontend/typescript/handbook' }
 			]
 		}
-	],
-
-	'interest/record': [
-		{
-			text: '游戏记录',
-			items: [
-				{ text: '夏日口袋', link: '/interest/record/summer-pockets' },
-				{ text: '荒野大镖客 2', link: '/interest/record/red-dead-redemption-2' }
-			]
-		}
 	]
 
 	// 'archives/': [

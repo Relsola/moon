@@ -12,6 +12,7 @@
 		"skipLibCheck": true,
 		"jsx": "preserve",
 		"baseUrl": ".",
+		"types": ["element-plus/global"],
 		"paths": {
 			"@theme/*": [".vitepress/theme/*"],
 			"@/*": ["./*"]
