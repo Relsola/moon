@@ -1,9 +1,6 @@
 export default [
 	{ text: 'Home', link: '/' },
-	{
-		text: 'Archives',
-		items: [{ text: '2025', link: '/archives/2025/programming-and-life' }]
-	},
+	{ text: 'Archives', link: '/archives/2025/programming-and-life' },
 	{
 		text: 'Frontend',
 		items: [

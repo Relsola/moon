@@ -1,8 +1,8 @@
 export default {
 	'/archives/2025': [
 		{
-			text: 'ES6+',
-			items: [{ text: '编程与人生', link: '/archives/2025/' }]
+			text: '2025',
+			items: [{ text: '编程与人生', link: '/archives/2025/programming-and-life' }]
 		}
 	],
 
@@ -21,6 +21,11 @@ export default {
 			text: '前端性能优化',
 			collapsed: false,
 			items: []
+		},
+		{
+			text: 'DEMO',
+			collapsed: false,
+			items: [{ text: '微型编译器', link: '' }]
 		}
 	],
 
