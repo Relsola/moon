@@ -1,4 +1,11 @@
 export default {
+	'/archives/2025': [
+		{
+			text: 'ES6+',
+			items: [{ text: '编程与人生', link: '/archives/2025/' }]
+		}
+	],
+
 	'frontend/es6': [
 		{
 			text: 'ES6+',

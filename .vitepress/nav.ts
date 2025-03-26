@@ -2,10 +2,7 @@ export default [
 	{ text: 'Home', link: '/' },
 	{
 		text: 'Archives',
-		items: [
-			{ text: '2025', link: '/archives/2025' },
-			{ text: '2024', link: '/archives/2024' }
-		]
+		items: [{ text: '2025', link: '/archives/2025/programming-and-life' }]
 	},
 	{
 		text: 'Frontend',
