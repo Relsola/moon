@@ -3,26 +3,32 @@
 		{
 			"name": "Summer Pockets",
 			"link": "https://store.steampowered.com/app/897220/Summer_Pockets/",
-			"date": "2025-03-25",
+			"endTime": "2025-03-24",
 			"platform": "PC",
-			"score": "",
-			"thought": ""
+			"score": "90",
+			"time": "42h",
+			"evaluation": "",
+			"record": ""
 		},
 		{
 			"name": "Blood borne",
 			"link": "",
-			"date": "2024-04-28",
+			"endTime": "2024-04-28",
 			"platform": "PS5",
-			"score": "",
-			"thought": ""
+			"score": "95",
+			"time": "50h",
+			"evaluation": "",
+			"record": ""
 		},
 		{
 			"name": "Mahjong",
 			"link": "https://store.steampowered.com/app/1329410/MahjongSoul/",
-			"date": "2021-12-30",
+			"endTime": "/",
 			"platform": "PC",
-			"score": "",
-			"thought": ""
+			"score": "80",
+			"time": "500h+",
+			"evaluation": "",
+			"record": ""
 		}
 	],
 	"anime": []
