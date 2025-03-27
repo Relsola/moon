@@ -1,14 +1,14 @@
 export default [
 	{ text: 'Home', link: '/' },
 	{ text: 'Archives', link: '/archives/2025/programming-and-life' },
+	{ text: 'Link', link: '/link/' },
 	{
 		text: 'Frontend',
 		items: [
-			{ text: '总论', link: '/frontend/general/best-practices' },
+			{ text: '前端总论', link: '/frontend/general/best-practices' },
 			{ text: 'ES6+', link: '/frontend/es6/block-scope' },
 			{ text: 'TypeScript', link: '/frontend/typescript/data-types' },
-			{ text: 'TS 类型挑战', link: '/kt' },
-			{ text: 'Web API', link: '/kt' }
+			{ text: 'TS 类型挑战', link: '/kt' }
 		]
 	},
 	{
@@ -37,7 +37,7 @@ export default [
 	{
 		text: 'Interest',
 		items: [
-			{ text: '记录', link: '/interest/record/' },
+			{ text: '记录', link: '/Interest/record/' },
 			{ text: 'C++ 开发', link: '/kt' },
 			{ text: 'C# 开发', link: '/kt' },
 			{ text: 'Godot 开发', link: '/kt' },
@@ -45,7 +45,7 @@ export default [
 			{ text: '离散数学', link: '/kt' }
 		]
 	},
-	{ text: 'Link', link: '/link/' },
+
 	{
 		text: 'GitHub',
 		items: [
