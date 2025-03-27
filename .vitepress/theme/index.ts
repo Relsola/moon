@@ -6,7 +6,7 @@ import ElementPlus from 'element-plus';
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
 
 import 'virtual:uno.css';
-import './style/reset.css';
+// import './style/custom.css';
 
 export default {
 	extends: DefaultTheme,
