@@ -61,5 +61,17 @@ export default {
 				{ text: '项目配置', link: '/frontend/typescript/handbook' }
 			]
 		}
+	],
+
+	'backend/db': [
+		{
+			text: '数据库',
+			items: [
+				{ text: 'SQL 语法基础', link: '/backend/db/sql' },
+				{ text: 'SQL 语句优化', link: '/backend/db/sql-optimization' },
+				{ text: 'MySql', link: '/backend/db/mysql' },
+				{ text: 'Redis', link: '/backend/db/redis' }
+			]
+		}
 	]
 };

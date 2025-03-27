@@ -16,7 +16,7 @@ export default [
 		items: [
 			{ text: 'Java 知识体系', link: '/kt' },
 			{ text: '常用框架', link: '/kt' },
-			{ text: '数据库', link: '/kt' },
+			{ text: '数据库', link: '/backend/db/sql' },
 			{ text: '系统设计', link: '/kt' },
 			{ text: '分布式', link: '/kt' }
 		]
