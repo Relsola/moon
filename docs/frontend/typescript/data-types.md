@@ -21,17 +21,7 @@ const sym: symbol = Symbol('symbol');
 `null` 和 `undefined` 只能赋值给 `void` 和它们各自的类型
 :::
 
-## 其他类型
-
-- [`Array` 数组](#array)
-- [`Function` 函数](#function)
-- [`Tuple` 元组](#tuple)
-- [`void` 空类型](#void)
-- [`never` 不存在类型](#never)
-- [`any` 任意类型](#any)
-- [`unknown` 未知类型](#unknown)
-
-### Array
+## Array 数组
 
 对数组类型的定义有两种方式
 
@@ -41,7 +31,7 @@ const arr: string[] = ['1', '2'];
 const arr: Array<number> = [1, 2];
 ```
 
-### Function
+## Function 函数
 
 TS 的函数声明
 
@@ -49,6 +39,8 @@ TS 的函数声明
 function sum(x: number, y: number): number {
 	return x + y;
 }
+
+type sum = (ix: number, y: number) => number;
 ```
 
 用接口定义函数类型  
@@ -97,7 +89,7 @@ function add(x: number | string, y: number | string) {
 }
 ```
 
-### Tuple
+## Tuple 元组
 
 元组最重要的特性是可以限制数组元素的个数和类型，它特别适合用来实现多值返回。
 
@@ -124,7 +116,7 @@ const rt1: ResTuple = [666, '99', '88'];
 元祖用于保存定长定数据类型的数据，表示一个已知元素数量和类型的数组，长度已指定，越界访问会提示错误。如果一个数组中可能有多种类型，数量和类型都不确定，那就直接 `any[]`
 :::
 
-### void
+## void 空类型
 
 `void` 表示没有任何类型，和其他类型是平等关系，不能直接赋值，一般也只有在函数没有返回值时去声明。
 
@@ -138,7 +130,7 @@ const fun = (): void => {
 方法没有返回值将得到 `undefined`，但是我们需要定义成 `void` 类型，而不是 `undefined` 类型。
 :::
 
-### never
+## never 不存在类型
 
 `never` 类型表示的是那些永不存在的值的类型，值会永不存在的两种情况：
 
@@ -174,7 +166,7 @@ function controlFlowAnalysisWithNever(foo: Foo) {
 }
 ```
 
-### any
+## any 任意类型
 
 在 `TypeScript` 中，任何类型都可以被归为 `any` 类型，这让 `any` 类型成为了类型系统的顶级类型。
 
@@ -191,7 +183,7 @@ if (c.name === undefined) {
 }
 ```
 
-### unknown
+## unknown 未知类型
 
 `unknown` 与 `any` 一样，所有类型都可以分配给 `unknown`。
 
