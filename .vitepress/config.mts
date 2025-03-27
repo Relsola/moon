@@ -56,7 +56,10 @@ export default defineConfig({
 		],
 
 		resolve: {
-			alias: [{ find: '@', replacement: path('') }]
+			alias: [
+				{ find: '@', replacement: path('') },
+				{ find: '@demo', replacement: path('demo') }
+			]
 		},
 
 		ssr: {

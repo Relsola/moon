@@ -25,7 +25,7 @@ export default {
 		{
 			text: 'DEMO',
 			collapsed: false,
-			items: [{ text: '微型编译器', link: '' }]
+			items: [{ text: '微型编译器', link: '/frontend/general/tiny-compiler' }]
 		}
 	],
 
