@@ -25,7 +25,11 @@ export default {
 		{
 			text: 'DEMO',
 			collapsed: false,
-			items: [{ text: '微型编译器', link: '/frontend/general/tiny-compiler' }]
+			items: [
+				{ text: '微型编译器', link: '/frontend/general/tiny-compiler' },
+				{ text: '正则测试器', link: '/frontend/general/regex-tester' },
+				{ text: '拼图游戏', link: '/frontend/general/puzzle-game' }
+			]
 		}
 	],
 
@@ -60,6 +64,38 @@ export default {
 				{ text: '泛型工具', link: '/frontend/typescript/generics-utility' },
 				{ text: '项目配置', link: '/frontend/typescript/handbook' }
 			]
+		}
+	],
+
+	'backend/java': [
+		{
+			text: 'Java 基础',
+			collapsed: false,
+			items: [
+				{ text: '基础知识', link: '/backend/java/java-basic-knowledge' },
+				{ text: '泛型', link: '/backend/java/' },
+				{ text: '注解', link: '/backend/java/' },
+				{ text: '异常', link: '/backend/java/' },
+				{ text: '反射', link: '/backend/java/' }
+			]
+		},
+		{
+			text: 'Java 进阶',
+			collapsed: false,
+			items: [
+				{ text: '并发', link: '/backend/java/' },
+				{ text: 'IO/NIO', link: '/backend/java/' }
+			]
+		},
+		{
+			text: 'JVM',
+			collapsed: false,
+			items: []
+		},
+		{
+			text: '新版本特性',
+			collapsed: false,
+			items: []
 		}
 	],
 

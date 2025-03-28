@@ -19,7 +19,7 @@ const path = (path: string) => resolve(root, path);
 export default defineConfig({
 	title: 'Relsola',
 	description: "Relsola's blog.",
-	srcDir: 'docs/',
+	srcDir: 'src/docs/',
 	base: '/moon/',
 	head: [['link', { rel: 'icon', href: '/moon/favicon.jpg' }]],
 
@@ -45,22 +45,17 @@ export default defineConfig({
 		plugins: [
 			UnoCSS(),
 			AutoImport({
-				dts: path('types/auto-imports.d.ts'),
+				dts: path('src/types/auto-imports.d.ts'),
 				imports: ['vue'],
 				resolvers: [ElementPlusResolver()]
 			}),
 			Components({
 				resolvers: [ElementPlusResolver()],
-				dts: path('types/components.d.ts')
+				dts: path('src/types/components.d.ts')
 			})
 		],
 
-		resolve: {
-			alias: [
-				{ find: '@', replacement: path('') },
-				{ find: '@demo', replacement: path('demo') }
-			]
-		},
+		resolve: { alias: [{ find: '@', replacement: path('src') }] },
 
 		ssr: {
 			noExternal: [/element-plus/]

@@ -14,7 +14,7 @@ export default [
 	{
 		text: 'Backend',
 		items: [
-			{ text: 'Java 知识体系', link: '/kt' },
+			{ text: 'Java 知识体系', link: '/backend/java/java-basic-knowledge' },
 			{ text: '常用框架', link: '/kt' },
 			{ text: '数据库', link: '/backend/db/sql' },
 			{ text: '系统设计', link: '/kt' },
