@@ -9,7 +9,7 @@ type AST = {
 	body: ASTParams[];
 };
 
-export function tokenizer(input: string): Tokens {
+function tokenizer(input: string): Tokens {
 	let current: number = 0;
 
 	const tokens: Tokens = [];
@@ -82,7 +82,7 @@ export function tokenizer(input: string): Tokens {
 	return tokens;
 }
 
-export function parser(tokens: Tokens): AST {
+function parser(tokens: Tokens): AST {
 	let current = 0;
 
 	function walk(): ASTParams {
@@ -131,7 +131,7 @@ export function parser(tokens: Tokens): AST {
 	return ast;
 }
 
-export function transformer(ast) {
+function transformer(ast: AST): AST {
 	function traverser(ast, visitor) {
 		function traverseArray(array, parent) {
 			array.forEach(child => {
@@ -225,7 +225,7 @@ export function transformer(ast) {
 	return newAst;
 }
 
-export function codeGenerator(node) {
+function codeGenerator(node: any): any {
 	switch (node.type) {
 		case 'Program':
 			return node.body.map(codeGenerator).join('\n');
@@ -252,7 +252,7 @@ export function codeGenerator(node) {
 	}
 }
 
-export function compiler(input) {
+export default function compiler(input: any): string {
 	let tokens = tokenizer(input);
 	let ast = parser(tokens);
 	let newAst = transformer(ast);

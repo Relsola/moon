@@ -1,10 +1,9 @@
-<script setup>
-// import Regex from '@components/Regex/index.vue'
-</script>
+# 正则测试器
 
-## 正则测试器
-
-<!-- <Regex /> -->
+> 参考资料
+>
+> 1. [JS 正则表达式完整教程](https://juejin.cn/post/6844903487155732494?searchId=202412221741358057531E480441E6BB82)
+> 2. [正则表达式](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Regular_expressions)
 
 ## 字符组
 
@@ -58,7 +57,10 @@
 | `u`  | 使用 Unicode 码的模式进行匹配。                      |
 | `y`  | 执行粘性(sticky)搜索，匹配从目标字符串的当前位置开始 |
 
-## 学习参考
+## 测试 Demo
 
-1. [JS 正则表达式完整教程](https://juejin.cn/post/6844903487155732494?searchId=202412221741358057531E480441E6BB82)
-2. [正则表达式](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Regular_expressions)
+<script setup>
+import RegexTester from '@/demo/ts-regex-tester/index.vue'
+</script>
+
+<RegexTester />

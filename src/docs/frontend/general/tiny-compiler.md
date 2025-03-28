@@ -9,7 +9,7 @@
 ## 测试 Demo
 
 <script setup>
-import TinyCompiler from '@demo/tiny-compiler/index.vue'
+import TinyCompiler from '@/demo/ts-tiny-compiler/index.vue'
 </script>
 
 <TinyCompiler />
