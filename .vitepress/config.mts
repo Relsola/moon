@@ -55,7 +55,9 @@ export default defineConfig({
 			})
 		],
 
-		resolve: { alias: [{ find: '@', replacement: path('src') }] },
+		resolve: {
+			alias: [{ find: '@', replacement: path('src') }]
+		},
 
 		ssr: {
 			noExternal: [/element-plus/]

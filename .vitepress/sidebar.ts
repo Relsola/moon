@@ -21,15 +21,6 @@ export default {
 			text: '前端性能优化',
 			collapsed: false,
 			items: []
-		},
-		{
-			text: 'DEMO',
-			collapsed: false,
-			items: [
-				{ text: '微型编译器', link: '/frontend/general/tiny-compiler' },
-				{ text: '正则测试器', link: '/frontend/general/regex-tester' },
-				{ text: '拼图游戏', link: '/frontend/general/puzzle-game' }
-			]
 		}
 	],
 
