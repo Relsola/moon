@@ -37,20 +37,13 @@ export default [
 	{
 		text: 'Interest',
 		items: [
-			{ text: '记录', link: '/Interest/record/' },
-			{ text: 'C++ 开发', link: '/kt' },
+			{ text: 'Rust 开发', link: '/kt' },
 			{ text: 'C# 开发', link: '/kt' },
+			{ text: 'C/C++ 开发', link: '/kt' },
 			{ text: 'Godot 开发', link: '/kt' },
 			{ text: '概率论', link: '/kt' },
+			{ text: '向量数学', link: '/kt' },
 			{ text: '离散数学', link: '/kt' }
-		]
-	},
-
-	{
-		text: 'GitHub',
-		items: [
-			{ text: 'cmd-games', link: 'https://github.com/Relsola/sudoku' },
-			{ text: 'osu!', link: 'https://github.com/ppy/osu' }
 		]
 	}
 ];
